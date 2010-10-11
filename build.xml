@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="NetflixAS3 Build File" basedir="." default="build">
+
+	<!-- Set Up    ============================================================================= -->
+	<!-- file description -->
+	<description>Build Script</description>
+
+	<!--location of property file -->
+	<property file="./build.properties" description="set the initial build properties common to all builds" />
+
+	<!-- timestamp -->
+	<tstamp>
+		<format property="timestamp" pattern="yyyyMMdd" />
+	</tstamp>
+
+	<!-- additional tasks -->
+	<taskdef resource="flexTasks.tasks" classpath="${FlexTasksLib.file}" />
+	<!-- ======================================================================================= -->
+	
+	<!-- MAIN COMPILE ========================================================================== -->
+	<target name="build">
+		<antcall target="clean"/>
+		<antcall target="compile"/>
+		<antcall target="asdoc"/>
+		<antcall target="zip"/>
+	</target>
+	<!-- ======================================================================================= -->
+	
+	
+	
+	<!-- COMPILE LIBRARIES ===================================================================== -->
+	<target name="compile">
+		<compc debug="${Debug.boolean}" output="${bin.dir}/${swc.name}.swc">
+			<source-path path-element="${src.dir}" />
+			<include-sources dir="${src.dir}" includes="*"/>
+			<compiler.library-path dir="${library.dir}" append="true">
+				<include name="*.swc" />
+			</compiler.library-path>
+			<metadata>
+				<creator>Jonathan Campos</creator>
+				<publisher>UnitedMindset</publisher>
+				<language>EN</language>
+			</metadata>
+		</compc>
+	</target>
+
+	<target name="clean">
+		<delete dir="${bin.dir}" failOnError="false" includeEmptyDirs="true" />
+		<mkdir dir="${bin.dir}" />
+	</target>
+	<!-- ======================================================================================= -->
+	
+	<!-- ASDOC ================================================================================= -->
+	<target name="asdoc" description="build of asdoc">
+		<exec executable="${asdocs.exe}" failonerror="true">
+			<arg line="-doc-sources '${src.dir}'" />
+			<arg line="-external-library-path '${library.dir}'" />
+			<arg line="-main-title '${library.name}'" />
+			<arg line="-window-title '${windowTitle.name}'" />
+			<arg line="-output '${output.dir}'" />
+			<arg line="-footer '${footerText.name}'" />
+		</exec>
+	</target>
+	<!-- ======================================================================================= -->
+	
+	<!-- ZIP =================================================================================== -->
+	<target name="zip">
+		<zip destfile="${bin.dir}/${swc.name}.zip">
+			<fileset dir="${bin.dir}" />
+		</zip>
+	</target>
+	<!-- ======================================================================================= -->
+
+</project>
