@@ -23,6 +23,7 @@ package com.netflix.webapis.params
 {
 	import com.netflix.webapis.models.CatalogItemModel;
 	import com.netflix.webapis.models.QueueItemModel;
+	import com.netflix.webapis.services.QueueService;
 	import com.netflix.webapis.services.ServiceStorage;
 	
 	/**
@@ -121,8 +122,19 @@ package com.netflix.webapis.params
 			if(updatedMin)
 				o.updated_min = updatedMin.time;
 			//etag
-			if(ServiceStorage.getInstance().lastQueueETag)
-				o.etag = ServiceStorage.getInstance().lastQueueETag;
+			switch(type)
+			{
+				case QueueService.DISC_QUEUE_SERVICE:
+				case QueueService.UPDATE_DISC_SERVICE:
+				case QueueService.DELETE_DISC_SERVICE:
+					o.etag = ServiceStorage.getInstance().lastDiscQueueETag;
+					break;
+				case QueueService.INSTANT_QUEUE_SERVICE:
+				case QueueService.UPDATE_INSTANT_SERVICE:
+				case QueueService.DELETE_INSTANT_SERVICE:
+					o.etag = ServiceStorage.getInstance().lastInstantQueueETag;
+					break;
+			}
 			return o;
 		}
 		
@@ -139,7 +151,20 @@ package com.netflix.webapis.params
 			if(!isNaN(position))
 				o.position = position;
 			//etag
-			o.etag = ServiceStorage.getInstance().lastQueueETag;
+			//etag
+			switch(type)
+			{
+				case QueueService.DISC_QUEUE_SERVICE:
+				case QueueService.UPDATE_DISC_SERVICE:
+				case QueueService.DELETE_DISC_SERVICE:
+					o.etag = ServiceStorage.getInstance().lastDiscQueueETag;
+					break;
+				case QueueService.INSTANT_QUEUE_SERVICE:
+				case QueueService.UPDATE_INSTANT_SERVICE:
+				case QueueService.DELETE_INSTANT_SERVICE:
+					o.etag = ServiceStorage.getInstance().lastInstantQueueETag;
+					break;
+			}
 			return o;
 		}
 		

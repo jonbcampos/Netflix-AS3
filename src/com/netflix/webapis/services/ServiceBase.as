@@ -959,14 +959,14 @@ package com.netflix.webapis.services
 			{
 				if(checkForUser()==false)
 					return false;
-				if(!storage.lastQueueETag)
+				if(!storage.lastDiscQueueETag || !storage.lastInstantQueueETag)
 				{
 					dispatchFault(new ServiceFault("fault","ETag Error","Missing Netflix Etag, use the Queue Service and discQueueService() and instantQueueService() prior to making this call."));
 					return false;
 				}
 				return true;
 			} else {
-				if(storage.lastQueueETag)
+				if(storage.lastDiscQueueETag && storage.lastInstantQueueETag)
 				{
 					dispatchFault(new ServiceFault("fault","ETAG Error","ETag Exists."));
 					return true;

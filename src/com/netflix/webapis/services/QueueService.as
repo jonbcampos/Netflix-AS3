@@ -316,16 +316,24 @@ package com.netflix.webapis.services
 			switch(type)
 			{
 				case DISC_QUEUE_SERVICE:
-				case INSTANT_QUEUE_SERVICE:
 				case UPDATE_DISC_SERVICE:
+					if (returnedXML..etag != null)
+						ServiceStorage.getInstance().lastDiscQueueETag = NetflixXMLUtil.handleETagNode(returnedXML..etag[0]);
+					for each (resultNode in returnedXML..queue_item) {
+						resultsArray.push( NetflixXMLUtil.handleXMLToCatalogItemModel(resultNode, new QueueItemModel()) );
+					}
+					break;
+				case INSTANT_QUEUE_SERVICE:
 				case UPDATE_INSTANT_SERVICE:
 					if (returnedXML..etag != null)
-						NetflixXMLUtil.handleETagNode(returnedXML..etag[0]);
+						ServiceStorage.getInstance().lastInstantQueueETag = NetflixXMLUtil.handleETagNode(returnedXML..etag[0]);
 					for each (resultNode in returnedXML..queue_item) {
 						resultsArray.push( NetflixXMLUtil.handleXMLToCatalogItemModel(resultNode, new QueueItemModel()) );
 					}
 					break;
 				case DELETE_DISC_SERVICE:
+					resultsArray.push((request as QueueParams).titleRef);
+					break;
 				case DELETE_INSTANT_SERVICE:
 					resultsArray.push((request as QueueParams).titleRef);
 					break;

@@ -212,7 +212,8 @@ package com.netflix.webapis.services
 		/**
 		 * Last returned netflix etag. 
 		 */		
-		public var lastQueueETag:String;
+		public var lastDiscQueueETag:String;
+		public var lastInstantQueueETag:String;
 		
 		[Bindable]
 		/**

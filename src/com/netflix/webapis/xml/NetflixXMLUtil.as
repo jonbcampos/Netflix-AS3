@@ -136,9 +136,6 @@ package com.netflix.webapis.xml
 					case ID:
 						model.id = handleIDNode(resultNode);
 					break;
-					case ETAG_NODE:
-						handleETagNode(resultNode);
-					break;
 					case TITLE:
 						model.titleShort = resultNode.@short;
 						model.titleRegular = resultNode.@regular;
@@ -546,9 +543,9 @@ package com.netflix.webapis.xml
 		 * @param xml
 		 * 
 		 */		
-		public static function handleETagNode(xml:XML):void
+		public static function handleETagNode(xml:XML):String
 		{
-			ServiceStorage.getInstance().lastQueueETag = xml.valueOf().toString();
+			return xml.valueOf().toString();
 		}
 		
 		/**
