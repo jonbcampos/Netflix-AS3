@@ -76,8 +76,10 @@ package com.netflix.webapis.services
 			
 			var requestToken:OAuthToken = new OAuthToken(oauthToken,oauthTokenSecret);
 			var tokenRequest:OAuthRequest = new OAuthRequest("GET",NETFLIX_BASE_URL+"oauth/access_token",null,consumer,requestToken);
-			trace(tokenRequest.buildRequest(SIG_METHOD));
-			_urlLoader.load(new URLRequest(tokenRequest.buildRequest(SIG_METHOD)));
+			var request:String = tokenRequest.buildRequest(SIG_METHOD);
+			request = updateOAuthTimestamp(request);
+			trace(request);
+			_urlLoader.load(new URLRequest(request));
 		}
 		
 		/**

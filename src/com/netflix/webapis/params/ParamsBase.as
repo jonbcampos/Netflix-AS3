@@ -92,6 +92,15 @@ package com.netflix.webapis.params
 		// Public Methods
 		//
 		//---------------------------------------------------------------------
+		public function toOdataString():String
+		{
+			var returnString:String = "";
+			if(startIndex) returnString += "&$skip=" + escape(startIndex.toString());
+			if(maxResults) returnString += "&$top=" + escape(maxResults.toString());
+			if(expansions) returnString += "&$expand=" + expansions;
+			returnString += "&$inlinecount=allpages";
+			return returnString;
+		}
 		/**
 		 * Creates the string of parameters to send to Netflix.
 		 * @return string of parameters

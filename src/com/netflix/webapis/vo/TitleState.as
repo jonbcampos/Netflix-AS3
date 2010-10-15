@@ -45,6 +45,9 @@ package com.netflix.webapis.vo
 		 */		
 		public var titleStates:Array;
 		
+		public var dvdQueueLink:String;
+		public var instantQueueLink:String;
+		
 		[Bindable]
 		/**
 		 * Flag to signify if you can add to instant queue. 

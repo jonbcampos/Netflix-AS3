@@ -50,6 +50,7 @@ package com.netflix.webapis.xml
 		public static const TITLE:String = "title";
 		public static const BOX_ART:String = "box_art";
 		public static const LINK : String = "link";
+		public static const FORMAT : String = "format";
 		public static const RELEASE_YEAR:String = "release_year";
 		public static const CATEGORY:String = "category";
 		public static const RUNTIME:String = "runtime";
@@ -130,11 +131,12 @@ package com.netflix.webapis.xml
 			model.categories = [];
 			model.links = [];
 			
-			for each (resultNode in xml.children()) {
+			for each (resultNode in xml.children())
+			{
 				var nodeType:String = String(resultNode.name());
 				switch (nodeType) {
 					case ID:
-						model.id = handleIDNode(resultNode);
+						model.id = handleStringNode(resultNode);
 					break;
 					case TITLE:
 						model.titleShort = resultNode.@short;
@@ -228,10 +230,10 @@ package com.netflix.webapis.xml
 						}
 						break;
 					case RELEASE_YEAR:
-						model.releaseYear = handleReleaseYear(resultNode);
+						model.releaseYear = handleNumber(resultNode);
 						break;
 					case RUNTIME:
-						model.runtime = handleRuntime(resultNode);
+						model.runtime = handleNumber(resultNode);
 						break;
 					case CATEGORY:
 						var category:CategoryItem = handleCategory(resultNode); 
@@ -246,23 +248,23 @@ package com.netflix.webapis.xml
 						
 						break;
 					case AVERAGE_RATING:
-						model.averageRating = handleRating(resultNode);
+						model.averageRating = handleNumber(resultNode);
 						break;
 					case USER_RATING:
 						if(model is RatingsItemModel)
-							(model as RatingsItemModel).userRating = handleRating(resultNode);
+							(model as RatingsItemModel).userRating = handleNumber(resultNode);
 						break;
 					case PREDICTED_RATING:
 						if(model is RatingsItemModel)
-							(model as RatingsItemModel).predictedRating = handleRating(resultNode);
+							(model as RatingsItemModel).predictedRating = handleNumber(resultNode);
 						break;
 					case POSITION_NODE:
 						if (model is QueueItemModel)
-							(model as QueueItemModel).queuePosition = handlePosition(resultNode);
+							(model as QueueItemModel).queuePosition = handleNumber(resultNode);
 						break;
 					case UPDATED_NODE:
 						if (model is QueueItemModel)
-							(model as QueueItemModel).lastUpdated = handleUpdatedDate(resultNode);
+							(model as QueueItemModel).lastUpdated = handleDate(resultNode);
 						break;
 				}
 			}
@@ -303,13 +305,13 @@ package com.netflix.webapis.xml
 						}
 					break;
 					case BIO:
-						personVO.bio = handleBio(resultNode);
+						personVO.bio = handleStringNode(resultNode);
 					break;
 					case NAME:
-						personVO.name = handleName(resultNode);
+						personVO.name = handleStringNode(resultNode);
 					break;
 					case ID:
-						personVO.id = handleIDNode(resultNode);
+						personVO.id = handleStringNode(resultNode);
 					break;
 				}
 			}
@@ -322,7 +324,7 @@ package com.netflix.webapis.xml
 		 * @return 
 		 * 
 		 */		
-		public static function handleIDNode(xml:XML):String {
+		public static function handleStringNode(xml:XML):String {
 			return xml.valueOf().toString();
 		}
 		
@@ -332,31 +334,11 @@ package com.netflix.webapis.xml
 		 * @return 
 		 * 
 		 */		
-		public static function handleReleaseYear(xml:XML):Number {
+		public static function handleNumber(xml:XML):Number {
 			return Number(xml.valueOf());
 		}
 		
-		/**
-		 * Handles the Runtime node parsing. 
-		 * @param xml
-		 * @return 
-		 * 
-		 */		
-		public static function handleRuntime(xml:XML):Number {
-			return Number(xml.valueOf());
-		}
-		
-		/**
-		 * Handles the Rating node parsing. 
-		 * @param xml
-		 * @return 
-		 * 
-		 */		
-		public static function handleRating(xml:XML):Number {
-			return Number(xml.valueOf());
-		}
-		
-		public static function handlePreferredFormat(xml:XML):Boolean
+		public static function handleBoolean(xml:XML):Boolean
 		{
 			return (xml.valueOf() == "true")?true:false;
 		}
@@ -400,40 +382,12 @@ package com.netflix.webapis.xml
 		}
 		
 		/**
-		 * Handles the Bio node parsing. 
-		 * @param xml
-		 * @return 
-		 * 
-		 */		
-		public static function handleBio(xml:XML):String {
-			return xml.valueOf().toString();
-		}
-		
-		/**
-		 * Handles the Name node parsing. 
-		 * @param xml
-		 * @return 
-		 * 
-		 */		
-		public static function handleName(xml:XML):String {
-			return xml.valueOf().toString();
-		}
-		/**
-		 * Handle position parsing. 
-		 * @param xml
-		 * @return 
-		 * 
-		 */		
-		public static function handlePosition(xml:XML):Number {
-			return Number(xml.valueOf().toString());
-		}
-		/**
 		 * Handle Updated Date parsing. 
 		 * @param xml
 		 * @return 
 		 * 
 		 */		
-		public static function handleUpdatedDate(xml:XML):Date {
+		public static function handleDate(xml:XML):Date {
 			return new Date(Number(xml.valueOf().toString()));
 		}
 		
@@ -539,16 +493,6 @@ package com.netflix.webapis.xml
 		}
 		
 		/**
-		 * Handles the parsing of etag.
-		 * @param xml
-		 * 
-		 */		
-		public static function handleETagNode(xml:XML):String
-		{
-			return xml.valueOf().toString();
-		}
-		
-		/**
 		 * Handles the parsing of Review Results.
 		 * @param xml
 		 * @return 
@@ -616,19 +560,19 @@ package com.netflix.webapis.xml
 						
 						break;
 					case RELEASE_YEAR:
-						itemVO.releaseYear = handleReleaseYear(resultNode);
+						itemVO.releaseYear = handleNumber(resultNode);
 						break;
 					case CATEGORY:
 						itemVO.categories.push(handleCategory(resultNode));
 						break;
 					case AVERAGE_RATING:
-						itemVO.averageRating = handleRating(resultNode);
+						itemVO.averageRating = handleNumber(resultNode);
 						break;
 					case USER_RATING:
-						itemVO.userRating = handleRating(resultNode);
+						itemVO.userRating = handleNumber(resultNode);
 						break;
 					case UPDATED_NODE:
-						itemVO.lastUpdated = handleUpdatedDate(resultNode);
+						itemVO.lastUpdated = handleDate(resultNode);
 						break;
 				}
 			}
@@ -656,39 +600,53 @@ package com.netflix.webapis.xml
 				for each(var titleStateXML:XML in titleStates)
 				{
 					var titleStateItem:TitleStateItem = new TitleStateItem();
-					titleStateItem.url = titleStateXML.link.@href;
-					titleStateItem.rel = titleStateXML.link.@rel;
-					titleStateItem.title = titleStateXML.link.@title;
-					titleStateItem.formats = [];
-					var categoryItem:CategoryItem;
-					var type:String;
-					for each(var resultNode:XML in titleStateXML.format.children())
+					for each (var titleStateNode:XML in titleStateXML.children())
 					{
-						var nodeType:String = String(resultNode.name());
-						switch(nodeType)
+						var titleStateNodeType:String = String(titleStateNode.name());
+						switch(titleStateNodeType)
 						{
-							case CATEGORY:
-								categoryItem = handleCategory(resultNode);
-								titleStateItem.formats.push( categoryItem );
-								if(categoryItem.scheme==TITLE_FORMAT_SCHEME)
+							case LINK:
+								if(String(titleStateNode.@title).indexOf("item")>-1)
 								{
-									if(categoryItem.term==TITLE_TYPE_DVD)
+									titleStateItem.url = titleStateNode.@href;
+									titleStateItem.rel = titleStateNode.@rel;
+									titleStateItem.title = titleStateNode.@title;
+								}
+								break;
+							case FORMAT:
+								titleStateItem.formats = [];
+								var categoryItem:CategoryItem;
+								var type:String;
+								for each(var resultNode:XML in titleStateXML.format.children())
+								{
+									var nodeType:String = String(resultNode.name());
+									switch(nodeType)
 									{
-										type = TITLE_TYPE_DVD;
-										titleState.isDvd = true;
-									} else if(categoryItem.term==TITLE_TYPE_INSTANT)
-									{
-										type = TITLE_TYPE_INSTANT;
-										titleState.isInstant = true;
+										case CATEGORY:
+											categoryItem = handleCategory(resultNode);
+											titleStateItem.formats.push( categoryItem );
+											if(categoryItem.scheme==TITLE_FORMAT_SCHEME)
+											{
+												if(categoryItem.term==TITLE_TYPE_DVD)
+												{
+													type = TITLE_TYPE_DVD;
+													titleState.isDvd = true;
+												} else if(categoryItem.term==TITLE_TYPE_INSTANT)
+												{
+													type = TITLE_TYPE_INSTANT;
+													titleState.isInstant = true;
+												}
+											}
+										break;
+										case PREFERRED_FORMAT:
+											titleStateItem.preferredFormat = handleBoolean(resultNode);
+										break;
 									}
 								}
-							break;
-							case PREFERRED_FORMAT:
-								titleStateItem.preferredFormat = handlePreferredFormat(resultNode);
-							break;
+								titleState.titleStates.push(titleStateItem);
+								break;
 						}
 					}
-					titleState.titleStates.push(titleStateItem);
 					//title state item transform
 					var i:int = -1;
 					var n:int = titleStateItem.formats.length;

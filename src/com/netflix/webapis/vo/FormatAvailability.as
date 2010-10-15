@@ -57,6 +57,8 @@ package com.netflix.webapis.vo
 		 * Netflix Term. 
 		 */		
 		public var term:String;
+		
+		public var highDefinitionAvailable:Boolean;
 
 	}
 }

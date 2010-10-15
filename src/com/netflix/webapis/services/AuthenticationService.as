@@ -194,8 +194,10 @@ package com.netflix.webapis.services
 			_timeLoader.addEventListener(Event.COMPLETE,_onTimeLoader_CompleteHandler);
 			
 			var tokenRequest:OAuthRequest = new OAuthRequest("GET",NETFLIX_BASE_URL+"oauth/clock/time",null,consumer);
-			trace(tokenRequest.buildRequest(SIG_METHOD));
-			_timeLoader.load(new URLRequest(tokenRequest.buildRequest(SIG_METHOD)));
+			var request:String = tokenRequest.buildRequest(SIG_METHOD);
+			request = updateOAuthTimestamp(request);
+			trace(request);
+			_timeLoader.load(new URLRequest(request));
 		}
 		
 		private function _clearTimeLoader():void

@@ -84,6 +84,10 @@ package com.netflix.webapis.params
 		 */		
 		public var updatedMin:Date;
 		/**
+		 * Pulled from either the title states or the queueitemmodel netflixId. 
+		 */		
+		public var queueId:String;
+		/**
 		 * The catalog title to be added to the queue.
 		 */		
 		public var titleRef:CatalogItemModel;

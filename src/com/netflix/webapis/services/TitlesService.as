@@ -28,11 +28,13 @@ package com.netflix.webapis.services
 	import com.netflix.webapis.params.ParamsBase;
 	import com.netflix.webapis.params.TitlesParams;
 	import com.netflix.webapis.vo.AutoCompleteItem;
+	import com.netflix.webapis.xml.NetflixOdataUtil;
 	import com.netflix.webapis.xml.NetflixXMLUtil;
 	
 	import flash.events.Event;
 	import flash.events.IEventDispatcher;
 	import flash.net.URLLoader;
+	import flash.net.URLRequestMethod;
 
 	/**
 	 * Catalog Services under the <i>Titles</i> category. This is the main catagory for retrieving movie and series information.
@@ -54,6 +56,7 @@ package com.netflix.webapis.services
 		public static const AUTOCOMPLETE_SERVICE:String = "autoComplete";
 		public static const CATALOG_SERVICE:String = "catalog";		
 		public static const TITLE_SERVICE:String = "title";		
+		public static const GENRE_SERVICE:String = "genre";		
 		
 		//---------------------------------------------------------------------
 		//
@@ -62,7 +65,14 @@ package com.netflix.webapis.services
 		//---------------------------------------------------------------------
 		protected static const TITLES_AUTOCOMPLETE_URL:String = NETFLIX_BASE_URL+"catalog/titles/autocomplete";
 		protected static const TITLES_CATALOG_URL:String = NETFLIX_BASE_URL+"catalog/titles";
-		
+		protected static const TITLES_GENRE_URL:String = "http://odata.netflix.com/Catalog/Genres";
+		//---------------------------------------------------------------------
+		//
+		// Private Properties
+		//
+		//---------------------------------------------------------------------
+		private namespace atom = "http://www.w3.org/2005/Atom";
+		use namespace atom;
 		//---------------------------------------------------------------------
 		//
 		// Public Methods
@@ -86,6 +96,9 @@ package com.netflix.webapis.services
 				break;
 				case TITLE_SERVICE:
 					titleService( parameters );
+				break;
+				case GENRE_SERVICE:
+					genreService( parameters );
 				break;
 			}
 		}
@@ -144,6 +157,10 @@ package com.netflix.webapis.services
 			handleServiceLoading(TITLES_CATALOG_URL,determineParams(params,TITLE_SERVICE));
 		}
 		
+		public function genreService(params:ParamsBase=null):void
+		{
+			handleServiceLoading(TITLES_GENRE_URL,determineParams(params,GENRE_SERVICE));
+		}
 		
 		//---------------------------------------------------------------------
 		//
@@ -161,6 +178,7 @@ package com.netflix.webapis.services
 			if(checkForConsumerKey()==false)
 				return;
 			
+			var method:String = URLRequestMethod.GET;
 			var sendQuery:String = methodString;
 			var typeQuery:String;
 			
@@ -170,10 +188,10 @@ package com.netflix.webapis.services
 				{
 					case AUTOCOMPLETE_SERVICE:
 						// do no adjustment
-					break;
+						break;
 					case CATALOG_SERVICE:
 						// do no adjustment
-					break;
+						break;
 					case TITLE_SERVICE:
 						TitlesParams(params).term = null;
 						if(params.netflixId)
@@ -182,11 +200,16 @@ package com.netflix.webapis.services
 							sendQuery = TitlesParams(params).title.id;
 						if(TitlesParams(params).retrieveExpansionOnly && TitlesParams(params).expand)
 							sendQuery += "/"+TitlesParams(params).expand;
-					break;
+						break;
+					case GENRE_SERVICE:
+						method = "odata";
+						var genre:String = TitlesParams(params).genre.replace(/\s/g,"%20");
+						sendQuery += "('"+genre+"')/Titles/?";
+						break;
 				}
 			}
 			
-			createLoader(sendQuery, params, _titlesService_CompleteHandler);
+			createLoader(sendQuery, params, _titlesService_CompleteHandler, method);
 		}
 		
 		/**
@@ -230,14 +253,23 @@ package com.netflix.webapis.services
 				break;
 				case CATALOG_SERVICE:
 					for each (resultNode in returnedXML..catalog_title) {
-						resultsArray.push(NetflixXMLUtil.handleXMLToCatalogItemModel(resultNode, new CatalogItemModel()));
+						resultsArray.push(NetflixXMLUtil.handleXMLToCatalogItemModel(resultNode));
 					}
 				break;
 				case TITLE_SERVICE:
 					if(request && TitlesParams(request).retrieveExpansionOnly && TitlesParams(request).expand){
 						resultsArray = handleExpansionOptions(request,returnedXML);
 					} else {
-						resultsArray.push( NetflixXMLUtil.handleXMLToCatalogItemModel(returnedXML, new CatalogItemModel()) );
+						resultsArray.push( NetflixXMLUtil.handleXMLToCatalogItemModel(returnedXML) );
+					}
+				break;
+				case GENRE_SERVICE:
+					_currentIndex = request.startIndex;
+					_resultsPerPage = request.maxResults;
+					_numberOfResults = NetflixOdataUtil.handleCount(returnedXML);
+					for each (resultNode in returnedXML..entry)
+					{
+						resultsArray.push( NetflixOdataUtil.handleOdataToCatalogItemModel(resultNode) );
 					}
 				break;
 			}
@@ -403,6 +435,17 @@ package com.netflix.webapis.services
 			if(expansions)
 				params.expansions = expansions;
 			titleService(params);
+		}
+		
+		public function getTitlesByGenre(genre:String, startIndex:uint=0, maxResults:uint=25, expansions:String=null):void
+		{
+			var params:TitlesParams = new TitlesParams();
+			params.startIndex = startIndex;
+			params.maxResults = maxResults;
+			params.genre = genre;
+			if(expansions)
+				params.expansions = expansions;
+			genreService(params);
 		}
 		
 	}

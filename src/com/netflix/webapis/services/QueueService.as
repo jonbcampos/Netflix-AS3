@@ -28,6 +28,8 @@ package com.netflix.webapis.services
 	import com.netflix.webapis.models.QueueItemModel;
 	import com.netflix.webapis.params.ParamsBase;
 	import com.netflix.webapis.params.QueueParams;
+	import com.netflix.webapis.vo.TitleState;
+	import com.netflix.webapis.vo.TitleStateItem;
 	import com.netflix.webapis.xml.NetflixXMLUtil;
 	
 	import flash.events.Event;
@@ -266,13 +268,13 @@ package com.netflix.webapis.services
 				case DELETE_DISC_SERVICE:
 					if(!QueueParams(params).titleRef)
 						return;
-					sendQuery = (params as QueueParams).titleRef.id;
+					sendQuery = (params as QueueParams).queueId;
 					method = ServiceBase.DELETE_REQUEST_METHOD;
 					break;
 				case DELETE_INSTANT_SERVICE:
 					if(!QueueParams(params).titleRef)
 						return;
-					sendQuery = (params as QueueParams).titleRef.id;
+					sendQuery = (params as QueueParams).queueId;
 					method = ServiceBase.DELETE_REQUEST_METHOD;
 					break;
 			}
@@ -318,7 +320,7 @@ package com.netflix.webapis.services
 				case DISC_QUEUE_SERVICE:
 				case UPDATE_DISC_SERVICE:
 					if (returnedXML..etag != null)
-						ServiceStorage.getInstance().lastDiscQueueETag = NetflixXMLUtil.handleETagNode(returnedXML..etag[0]);
+						ServiceStorage.getInstance().lastDiscQueueETag = NetflixXMLUtil.handleStringNode(returnedXML..etag[0]);
 					for each (resultNode in returnedXML..queue_item) {
 						resultsArray.push( NetflixXMLUtil.handleXMLToCatalogItemModel(resultNode, new QueueItemModel()) );
 					}
@@ -326,7 +328,7 @@ package com.netflix.webapis.services
 				case INSTANT_QUEUE_SERVICE:
 				case UPDATE_INSTANT_SERVICE:
 					if (returnedXML..etag != null)
-						ServiceStorage.getInstance().lastInstantQueueETag = NetflixXMLUtil.handleETagNode(returnedXML..etag[0]);
+						ServiceStorage.getInstance().lastInstantQueueETag = NetflixXMLUtil.handleStringNode(returnedXML..etag[0]);
 					for each (resultNode in returnedXML..queue_item) {
 						resultsArray.push( NetflixXMLUtil.handleXMLToCatalogItemModel(resultNode, new QueueItemModel()) );
 					}
@@ -524,8 +526,13 @@ package com.netflix.webapis.services
 		 */
 		public function deleteTitleFromDiscQueue(title:QueueItemModel):void
 		{
+			deleteTitleFromDiscQueueById(title.netflixId);
+		}
+		
+		public function deleteTitleFromDiscQueueById(queueId:String):void
+		{
 			var params:QueueParams = new QueueParams();
-			params.titleRef = title;
+			params.queueId = queueId;
 			deleteDiscQueueService(params);
 		}
 		
@@ -544,9 +551,24 @@ package com.netflix.webapis.services
 		 */
 		public function deleteTitleFromInstantQueue(title:QueueItemModel):void
 		{
+			deleteTitleFromInstantQueueById(title.netflixId);
+		}
+		
+		public function deleteTitleFromInstantQueueById(queueId:String):void
+		{
 			var params:QueueParams = new QueueParams();
-			params.titleRef = title;
+			params.queueId = queueId;
 			deleteInstantQueueService(params);
+		}
+		
+		public static function getDvdQueueId(titleState:TitleState):String
+		{
+			return null;
+		}
+		
+		public static function getInstantQueueId(titleState:TitleState):String
+		{
+			return null;
 		}
 		
 		//---------------------------------------------------------------------

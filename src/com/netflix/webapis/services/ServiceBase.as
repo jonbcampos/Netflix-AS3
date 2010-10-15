@@ -458,7 +458,7 @@ package com.netflix.webapis.services
 		// Requests Storage
 		//
 		//---------------------------------------------------------------------
-		private var _numberOfResults:uint;
+		internal var _numberOfResults:uint;
 		/**
 		 * The total amount of results available 
 		 */
@@ -467,7 +467,7 @@ package com.netflix.webapis.services
 			return _numberOfResults;
 		}
 		
-		private var _resultsPerPage:uint;
+		internal var _resultsPerPage:uint;
 		/**
 		 * The total amount of results returned.
 		 */
@@ -493,7 +493,7 @@ package com.netflix.webapis.services
 		
 		private var _httpStatusResponse:String;
 		
-		private var _currentIndex:uint = 0;
+		internal var _currentIndex:uint = 0;
 		/**
 		 * Current start index.
 		 */
@@ -605,6 +605,20 @@ package com.netflix.webapis.services
 			dispatchEvent(new NetflixFaultEvent(NetflixFaultEvent.FAULT,fault, _currentURL, _currentParams));
 		}
 		
+		protected function updateOAuthTimestamp(request:String):String
+		{
+			return request;
+			var index:int = request.indexOf("&oauth_timestamp=");
+			if(index > -1)
+			{
+				if(isNaN(timeOffset))
+					timeOffset = 0;
+				var newTime:Number = Number(new Date().time.toString().substr(0,10)) - timeOffset;
+				return request.replace(/\&oauth_timestamp=\d+/,"&oauth_timestamp="+newTime);
+			}
+			return request;
+		}
+		
 		/**
 		 * Creates and handles loading for requests. 
 		 * @param sendQuery
@@ -644,9 +658,17 @@ package com.netflix.webapis.services
 			_currentParams = ObjectUtil.copy(finalParams);
 			_currentURL = sendQuery;
 			//make request
-			var tokenRequest:OAuthRequest;
-			tokenRequest = new OAuthRequest(finalHttpMethod,sendQuery,finalParams,consumer,accessToken);
-			var requestString:String = tokenRequest.buildRequest(SIG_METHOD);
+			var requestString:String; 
+			if(httpMethod!="odata")
+			{
+				var tokenRequest:OAuthRequest;
+				tokenRequest = new OAuthRequest(finalHttpMethod,sendQuery,finalParams,consumer,accessToken);
+				requestString = tokenRequest.buildRequest(SIG_METHOD);
+			} else {
+				requestString = sendQuery + ParamsBase(params).toOdataString();
+				finalHttpMethod = URLRequestMethod.GET;
+			}
+			requestString = updateOAuthTimestamp(requestString);
 			trace(requestString);
 			//make request
 			var urlRequest:URLRequest = new URLRequest(requestString);
@@ -693,7 +715,7 @@ package com.netflix.webapis.services
 		protected function faultHandler(event:IOErrorEvent):void
 		{
 			var errorText:String = (_httpStatusResponse)?_httpStatusResponse:event.text;
-			dispatchFault(new ServiceFault(event.type,"IO Service Error: "+type+ " Error",errorText));
+			dispatchFault(new ServiceFault(event.type,"IO Service Error: "+type+ " Error",errorText, event.text));
 			clearLoader();
 		}
 		
@@ -714,7 +736,7 @@ package com.netflix.webapis.services
 		 */		
 		protected function securityErrorHandler(event:SecurityErrorEvent):void
 		{
-			dispatchFault(new ServiceFault(event.type,"Security Service Error: "+type+ " Error",event.text));
+			dispatchFault(new ServiceFault(event.type,"Security Service Error: "+type+ " Error",event.text, event.text));
 			clearLoader();
 		}
 		

@@ -60,14 +60,21 @@ package com.netflix.webapis
 		{
 			return _faultDetail;
 		}
+		
+		private var _faultMessage:String;
+		public function get faultMessage():String
+		{
+			return _faultMessage;
+		}
 
 		
-		public function ServiceFault(faultCode:String, faultString:String, faultDetail:String = null)
+		public function ServiceFault(faultCode:String, faultString:String, faultDetail:String = null, faultMessage:String = null)
 		{
+			super(faultCode);
 			_faultCode = faultCode;
 			_faultString = faultString;
 			_faultDetail = faultDetail;
-			super(faultCode);
+			_faultMessage = faultMessage;
 		}
 		
 	}
