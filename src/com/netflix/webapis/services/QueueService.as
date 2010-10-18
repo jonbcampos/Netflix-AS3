@@ -266,13 +266,13 @@ package com.netflix.webapis.services
 					method = URLRequestMethod.POST;
 					break;
 				case DELETE_DISC_SERVICE:
-					if(!QueueParams(params).titleRef)
+					if(!QueueParams(params).queueId)
 						return;
 					sendQuery = (params as QueueParams).queueId;
 					method = ServiceBase.DELETE_REQUEST_METHOD;
 					break;
 				case DELETE_INSTANT_SERVICE:
-					if(!QueueParams(params).titleRef)
+					if(!QueueParams(params).queueId)
 						return;
 					sendQuery = (params as QueueParams).queueId;
 					method = ServiceBase.DELETE_REQUEST_METHOD;
@@ -334,10 +334,10 @@ package com.netflix.webapis.services
 					}
 					break;
 				case DELETE_DISC_SERVICE:
-					resultsArray.push((request as QueueParams).titleRef);
+					resultsArray.push((request as QueueParams).queueId);
 					break;
 				case DELETE_INSTANT_SERVICE:
-					resultsArray.push((request as QueueParams).titleRef);
+					resultsArray.push((request as QueueParams).queueId);
 					break;
 			}
 			lastNetflixResult = resultsArray;
@@ -526,7 +526,18 @@ package com.netflix.webapis.services
 		 */
 		public function deleteTitleFromDiscQueue(title:QueueItemModel):void
 		{
-			deleteTitleFromDiscQueueById(title.netflixId);
+			deleteTitleFromDiscQueueById(title.id);
+		}
+		
+		public function deleteCatalogTitleFromDiscQueue(title:CatalogItemModel):void
+		{
+			var queueId:String = getDvdQueueId(title);
+			if(!queueId)
+			{
+				dispatchFault(new ServiceFault("unknown", "Missing Title State","CatalogItemModel doesn't have a titleState. Call for the title state prior to using this call."));
+				return;
+			}
+			deleteTitleFromDiscQueueById(queueId);
 		}
 		
 		public function deleteTitleFromDiscQueueById(queueId:String):void
@@ -551,7 +562,18 @@ package com.netflix.webapis.services
 		 */
 		public function deleteTitleFromInstantQueue(title:QueueItemModel):void
 		{
-			deleteTitleFromInstantQueueById(title.netflixId);
+			deleteTitleFromInstantQueueById(title.id);
+		}
+		
+		public function deleteCatalogTitleFromInstantQueue(title:CatalogItemModel):void
+		{
+			var queueId:String = getInstantQueueId(title);
+			if(!queueId)
+			{
+				dispatchFault(new ServiceFault("unknown", "Missing Title State","CatalogItemModel doesn't have a titleState. Call for the title state prior to using this call."));
+				return;
+			}
+			deleteTitleFromInstantQueueById(queueId);
 		}
 		
 		public function deleteTitleFromInstantQueueById(queueId:String):void
@@ -561,13 +583,53 @@ package com.netflix.webapis.services
 			deleteInstantQueueService(params);
 		}
 		
-		public static function getDvdQueueId(titleState:TitleState):String
+		public static function getDvdQueueId(title:CatalogItemModel):String
 		{
+			//double check it isn't a queueitemmodel
+			if(title is QueueItemModel)
+				return QueueItemModel(title).id;
+			if(!title || !title.titleState)
+				return null;
+			//title state exists, continue
+			var titleState:TitleState = title.titleState;
+			var i:int = -1;
+			var n:int = titleState.titleStates.length;
+			while(++i<n)
+			{
+				if(titleState.titleStates[i] is TitleStateItem)
+				{
+					var titleStateItem:TitleStateItem = titleState.titleStates[i] as TitleStateItem;
+					if(titleStateItem.isDvd)
+					{
+						return titleStateItem.queueId;
+					}
+				}
+			}
 			return null;
 		}
 		
-		public static function getInstantQueueId(titleState:TitleState):String
+		public static function getInstantQueueId(title:CatalogItemModel):String
 		{
+			//double check it isn't a queueitemmodel
+			if(title is QueueItemModel)
+				return QueueItemModel(title).id;
+			if(!title || !title.titleState)
+				return null;
+			//title state exists, continue
+			var titleState:TitleState = title.titleState;
+			var i:int = -1;
+			var n:int = titleState.titleStates.length;
+			while(++i<n)
+			{
+				if(titleState.titleStates[i] is TitleStateItem)
+				{
+					var titleStateItem:TitleStateItem = titleState.titleStates[i] as TitleStateItem;
+					if(titleStateItem.isInstant)
+					{
+						return titleStateItem.queueId;
+					}
+				}
+			}
 			return null;
 		}
 		

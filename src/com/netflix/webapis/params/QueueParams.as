@@ -125,6 +125,9 @@ package com.netflix.webapis.params
 			//updatedMin
 			if(updatedMin)
 				o.updated_min = updatedMin.time;
+			//queueId
+			if(queueId)
+				o.queueId = queueId;
 			//etag
 			switch(type)
 			{

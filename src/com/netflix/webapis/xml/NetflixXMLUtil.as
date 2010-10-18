@@ -608,7 +608,7 @@ package com.netflix.webapis.xml
 							case LINK:
 								if(String(titleStateNode.@title).indexOf("item")>-1)
 								{
-									titleStateItem.url = titleStateNode.@href;
+									titleStateItem.queueId = titleStateItem.url = titleStateNode.@href;
 									titleStateItem.rel = titleStateNode.@rel;
 									titleStateItem.title = titleStateNode.@title;
 								}
@@ -616,7 +616,6 @@ package com.netflix.webapis.xml
 							case FORMAT:
 								titleStateItem.formats = [];
 								var categoryItem:CategoryItem;
-								var type:String;
 								for each(var resultNode:XML in titleStateXML.format.children())
 								{
 									var nodeType:String = String(resultNode.name());
@@ -629,12 +628,10 @@ package com.netflix.webapis.xml
 											{
 												if(categoryItem.term==TITLE_TYPE_DVD)
 												{
-													type = TITLE_TYPE_DVD;
-													titleState.isDvd = true;
+													titleState.isDvd = titleStateItem.isDvd = true;
 												} else if(categoryItem.term==TITLE_TYPE_INSTANT)
 												{
-													type = TITLE_TYPE_INSTANT;
-													titleState.isInstant = true;
+													titleState.isInstant = titleStateItem.isInstant = true;
 												}
 											}
 										break;
@@ -653,7 +650,7 @@ package com.netflix.webapis.xml
 					while(++i<n)
 					{
 						categoryItem = titleStateItem.formats[i] as CategoryItem;
-						if(type==TITLE_TYPE_DVD)
+						if(titleStateItem.isDvd)
 						{
 							if(categoryItem.term==TITLE_STATE_ADD)
 								titleState.addToDvd = true;
@@ -661,7 +658,7 @@ package com.netflix.webapis.xml
 								titleState.isAtHome = true;
 							else if(categoryItem.term==TITLE_STATE_IN_QUEUE)
 								titleState.isInDVDQueue = true;
-						} else if(type==TITLE_TYPE_INSTANT)
+						} else if(titleStateItem.isInstant)
 						{
 							if(categoryItem.term==TITLE_STATE_ADD)
 								titleState.addToInstant = true;

@@ -49,6 +49,10 @@ package com.netflix.webapis.vo
 		 * The different formats of the states. 
 		 */		
 		public var formats:Array;
+		
+		public var isDvd:Boolean;
+		public var isInstant:Boolean;
+		public var queueId:String
 
 	}
 }
