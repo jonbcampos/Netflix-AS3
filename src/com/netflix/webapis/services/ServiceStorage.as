@@ -108,6 +108,7 @@ package com.netflix.webapis.services
 		 */
 		internal var secret:String;
 		
+		internal var callBackUrl:String;
 		//-----------------------------
 		//  oauth consumer
 		//-----------------------------

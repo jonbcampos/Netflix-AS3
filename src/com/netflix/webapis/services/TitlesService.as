@@ -197,7 +197,7 @@ package com.netflix.webapis.services
 						if(params.netflixId)
 							sendQuery = params.netflixId;
 						else
-							sendQuery = TitlesParams(params).title.id;
+							sendQuery = TitlesParams(params).title.netflixId;
 						if(TitlesParams(params).retrieveExpansionOnly && TitlesParams(params).expand)
 							sendQuery += "/"+TitlesParams(params).expand;
 						break;

@@ -154,6 +154,15 @@ package com.netflix.webapis.services
 			storage.secret = value;
 		}
 		
+		protected function get callBackUrl():String
+		{
+			return storage.callBackUrl;
+		}
+		
+		protected function set callBackUrl(value:String):void
+		{
+			storage.callBackUrl = value;
+		}
 		//---------------------
 		// Consumer
 		//---------------------
@@ -604,7 +613,7 @@ package com.netflix.webapis.services
 		{
 			dispatchEvent(new NetflixFaultEvent(NetflixFaultEvent.FAULT,fault, _currentURL, _currentParams));
 		}
-		
+		/*
 		protected function updateOAuthTimestamp(request:String):String
 		{
 			return request;
@@ -618,7 +627,7 @@ package com.netflix.webapis.services
 			}
 			return request;
 		}
-		
+		*/
 		/**
 		 * Creates and handles loading for requests. 
 		 * @param sendQuery
@@ -661,14 +670,12 @@ package com.netflix.webapis.services
 			var requestString:String; 
 			if(httpMethod!="odata")
 			{
-				var tokenRequest:OAuthRequest;
-				tokenRequest = new OAuthRequest(finalHttpMethod,sendQuery,finalParams,consumer,accessToken);
-				requestString = tokenRequest.buildRequest(SIG_METHOD);
+				var tokenRequest:OAuthRequest = new OAuthRequest(finalHttpMethod,sendQuery,finalParams,consumer,accessToken);
+				requestString = tokenRequest.buildRequest(SIG_METHOD, OAuthRequest.RESULT_TYPE_URL_STRING, "", timeOffset);
 			} else {
 				requestString = sendQuery + ParamsBase(params).toOdataString();
 				finalHttpMethod = URLRequestMethod.GET;
 			}
-			requestString = updateOAuthTimestamp(requestString);
 			trace(requestString);
 			//make request
 			var urlRequest:URLRequest = new URLRequest(requestString);

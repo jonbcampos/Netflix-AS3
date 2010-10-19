@@ -31,7 +31,9 @@ package com.netflix.webapis.services
 	import flash.net.URLLoader;
 	import flash.net.URLLoaderDataFormat;
 	import flash.net.URLRequest;
+	import flash.net.URLRequestMethod;
 	import flash.net.navigateToURL;
+	import flash.sampler.stopSampling;
 	
 	import org.iotashan.oauth.OAuthRequest;
 
@@ -65,10 +67,11 @@ package com.netflix.webapis.services
 		 * @see com.netflix.webapis.events.AuthenticationResultEvent#RESULT
 		 * @see com.netflix.webapis.events.NetflixFaultEvent#FAULT
 		 */		
-		public function requestToken(key:String,secret:String):void
+		public function requestToken(key:String,secret:String, callBackUrl:String=null):void
 		{
 			this.key = key;
 			this.secret = secret;
+			this.callBackUrl = callBackUrl;
 			_clearLoader();
 			//don't get if exists
 			if(checkForAuthToken(false)==true)
@@ -106,9 +109,11 @@ package com.netflix.webapis.services
 			oauthTokenSecret = o.oauth_token_secret as String;
 			applicationName = o.application_name as String;
 			loginURL = unescape( o.login_url as String );
-			authorizationURL = unescape(loginURL) + "&application_name=" + applicationName + "&oauth_consumer_key=" + key;
-			
-			lastNetflixResult = {"token":oauthToken, "tokenSecret":oauthTokenSecret, "applicationName":applicationName, "loginURL":loginURL,"key":key};
+			authorizationURL = unescape(loginURL) + "&application_name=" + applicationName + "&oauth_consumer_key=" + consumer.key;
+			if(callBackUrl)
+				authorizationURL += "&oauth_callback=" + escape(callBackUrl);
+				
+			lastNetflixResult = {"token":oauthToken, "tokenSecret":oauthTokenSecret, "applicationName":applicationName, "loginURL":loginURL,"key":consumer.key};
 			dispatchEvent(new AuthenticationResultEvent(AuthenticationResultEvent.RESULT, oauthToken, oauthTokenSecret, applicationName, loginURL, authorizationURL, ServiceStorage.getInstance().accessTokenExists));
 		}
 		
@@ -146,9 +151,10 @@ package com.netflix.webapis.services
 		private function _getRequestUrl():String
 		{
 			var reqUrl:String = NETFLIX_BASE_URL + "oauth/request_token";
-			var tokenRequest:OAuthRequest = new OAuthRequest("GET",reqUrl,null,consumer);
-			trace(tokenRequest.buildRequest(SIG_METHOD));
-			return tokenRequest.buildRequest(SIG_METHOD);
+			var tokenRequest:OAuthRequest = new OAuthRequest(URLRequestMethod.GET,reqUrl,null,consumer);
+			var request:String = tokenRequest.buildRequest(SIG_METHOD, OAuthRequest.RESULT_TYPE_URL_STRING, "", timeOffset);
+			trace(request);
+			return request;
 		}
 		
 		/**
@@ -193,9 +199,8 @@ package com.netflix.webapis.services
 			_timeLoader.addEventListener(IOErrorEvent.IO_ERROR,_onTimeLoader_IOErrorHandler);
 			_timeLoader.addEventListener(Event.COMPLETE,_onTimeLoader_CompleteHandler);
 			
-			var tokenRequest:OAuthRequest = new OAuthRequest("GET",NETFLIX_BASE_URL+"oauth/clock/time",null,consumer);
-			var request:String = tokenRequest.buildRequest(SIG_METHOD);
-			request = updateOAuthTimestamp(request);
+			var tokenRequest:OAuthRequest = new OAuthRequest(URLRequestMethod.GET,NETFLIX_BASE_URL+"oauth/clock/time",null,consumer);
+			var request:String = tokenRequest.buildRequest(SIG_METHOD, OAuthRequest.RESULT_TYPE_URL_STRING, "", timeOffset);
 			trace(request);
 			_timeLoader.load(new URLRequest(request));
 		}
@@ -221,7 +226,7 @@ package com.netflix.webapis.services
 			_clearTimeLoader();
 			var serverTime:Number = Number(result.valueOf());
 			var cur:Number = Number(new Date().time.toString().substr(0,10));
-			timeOffset =  serverTime - cur;
+			timeOffset =  cur - serverTime;
 			lastNetflixResult = {"time":serverTime};
 			dispatchEvent(new NetflixResultEvent(NetflixResultEvent.SERVER_TIME_COMPLETE, serverTime, null, result));
 		}

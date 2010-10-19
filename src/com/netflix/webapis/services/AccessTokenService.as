@@ -30,6 +30,7 @@ package com.netflix.webapis.services
 	import flash.net.URLLoader;
 	import flash.net.URLLoaderDataFormat;
 	import flash.net.URLRequest;
+	import flash.net.URLRequestMethod;
 	
 	import org.iotashan.oauth.OAuthRequest;
 	import org.iotashan.oauth.OAuthToken;
@@ -75,9 +76,8 @@ package com.netflix.webapis.services
 			_urlLoader.addEventListener(Event.COMPLETE,_accessTokenService_CompleteHandler);
 			
 			var requestToken:OAuthToken = new OAuthToken(oauthToken,oauthTokenSecret);
-			var tokenRequest:OAuthRequest = new OAuthRequest("GET",NETFLIX_BASE_URL+"oauth/access_token",null,consumer,requestToken);
-			var request:String = tokenRequest.buildRequest(SIG_METHOD);
-			request = updateOAuthTimestamp(request);
+			var tokenRequest:OAuthRequest = new OAuthRequest(URLRequestMethod.GET,NETFLIX_BASE_URL+"oauth/access_token",null,consumer,requestToken);
+			var request:String = tokenRequest.buildRequest(SIG_METHOD, OAuthRequest.RESULT_TYPE_URL_STRING, "", timeOffset);
 			trace(request);
 			_urlLoader.load(new URLRequest(request));
 		}
