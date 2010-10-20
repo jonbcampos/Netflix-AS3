@@ -50,7 +50,7 @@ package com.netflix.webapis.vo
 		 */		
 		public var formats:Array;
 		
-		public var isDvd:Boolean;
+		public var isDisc:Boolean;
 		public var isInstant:Boolean;
 		public var queueId:String
 

@@ -599,7 +599,7 @@ package com.netflix.webapis.services
 				if(titleState.titleStates[i] is TitleStateItem)
 				{
 					var titleStateItem:TitleStateItem = titleState.titleStates[i] as TitleStateItem;
-					if(titleStateItem.isDvd)
+					if(titleStateItem.isDisc)
 					{
 						return titleStateItem.queueId;
 					}

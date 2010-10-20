@@ -633,7 +633,7 @@ package com.netflix.webapis.xml
 											{
 												if(categoryItem.term==TITLE_TYPE_DVD)
 												{
-													titleState.isDvd = titleStateItem.isDvd = true;
+													titleState.isDisc = titleStateItem.isDisc = true;
 												} else if(categoryItem.term==TITLE_TYPE_INSTANT)
 												{
 													titleState.isInstant = titleStateItem.isInstant = true;
@@ -655,14 +655,14 @@ package com.netflix.webapis.xml
 					while(++i<n)
 					{
 						categoryItem = titleStateItem.formats[i] as CategoryItem;
-						if(titleStateItem.isDvd)
+						if(titleStateItem.isDisc)
 						{
 							if(categoryItem.term==TITLE_STATE_ADD)
-								titleState.addToDvd = true;
+								titleState.addToDisc = true;
 							else if(categoryItem.term==TITLE_STATE_AT_HOME)
 								titleState.isAtHome = true;
 							else if(categoryItem.term==TITLE_STATE_IN_QUEUE)
-								titleState.isInDVDQueue = true;
+								titleState.isInDiscQueue = true;
 						} else if(titleStateItem.isInstant)
 						{
 							if(categoryItem.term==TITLE_STATE_ADD)

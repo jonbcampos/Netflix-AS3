@@ -53,9 +53,9 @@ package com.netflix.webapis.vo
 		
 		[Bindable]
 		/**
-		 * Flag to signify if you can add to dvd queue. 
+		 * Flag to signify if you can add to disc queue. 
 		 */		
-		public var addToDvd:Boolean;
+		public var addToDisc:Boolean;
 		
 		[Bindable]
 		/**
@@ -77,9 +77,9 @@ package com.netflix.webapis.vo
 		
 		[Bindable]
 		/**
-		 * Flag to signify if the title is a dvd title. 
+		 * Flag to signify if the title is a disc title. 
 		 */		
-		public var isDvd:Boolean;
+		public var isDisc:Boolean;
 		
 		[Bindable]
 		/**
@@ -89,9 +89,9 @@ package com.netflix.webapis.vo
 		
 		[Bindable]
 		/**
-		 * Flag to signify if the title is in the user's dvd queue. 
+		 * Flag to signify if the title is in the user's disc queue. 
 		 */	
-		public var isInDVDQueue:Boolean;
+		public var isInDiscQueue:Boolean;
 
 	}
 }
