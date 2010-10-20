@@ -57,6 +57,7 @@ package com.netflix.webapis.services
 		public static const CATALOG_SERVICE:String = "catalog";		
 		public static const TITLE_SERVICE:String = "title";		
 		public static const GENRE_SERVICE:String = "genre";		
+		public static const ADVANCED_TITLE_SERVICE:String = "advancedTitle";		
 		
 		//---------------------------------------------------------------------
 		//
@@ -66,6 +67,7 @@ package com.netflix.webapis.services
 		protected static const TITLES_AUTOCOMPLETE_URL:String = NETFLIX_BASE_URL+"catalog/titles/autocomplete";
 		protected static const TITLES_CATALOG_URL:String = NETFLIX_BASE_URL+"catalog/titles";
 		protected static const TITLES_GENRE_URL:String = "http://odata.netflix.com/Catalog/Genres";
+		protected static const ADVANCED_TITLES_CATALOG_URL:String = "http://odata.netflix.com/Catalog/Titles";
 		//---------------------------------------------------------------------
 		//
 		// Private Properties
@@ -100,6 +102,9 @@ package com.netflix.webapis.services
 				case GENRE_SERVICE:
 					genreService( parameters );
 				break;
+				case ADVANCED_TITLE_SERVICE:
+					advancedTitleService( parameters );
+					break;
 			}
 		}
 		
@@ -162,6 +167,11 @@ package com.netflix.webapis.services
 			handleServiceLoading(TITLES_GENRE_URL,determineParams(params,GENRE_SERVICE));
 		}
 		
+		public function advancedTitleService(params:ParamsBase=null):void
+		{
+			handleServiceLoading(ADVANCED_TITLES_CATALOG_URL, determineParams(params, ADVANCED_TITLE_SERVICE));
+		}
+		
 		//---------------------------------------------------------------------
 		//
 		// Override Methods: ServiceBase
@@ -182,31 +192,37 @@ package com.netflix.webapis.services
 			var sendQuery:String = methodString;
 			var typeQuery:String;
 			
-			if(params != null)
+			if(!params)
+				return;
+			
+			switch(type)
 			{
-				switch(type)
-				{
-					case AUTOCOMPLETE_SERVICE:
-						// do no adjustment
-						break;
-					case CATALOG_SERVICE:
-						// do no adjustment
-						break;
-					case TITLE_SERVICE:
-						TitlesParams(params).term = null;
-						if(params.netflixId)
-							sendQuery = params.netflixId;
-						else
-							sendQuery = TitlesParams(params).title.netflixId;
-						if(TitlesParams(params).retrieveExpansionOnly && TitlesParams(params).expand)
-							sendQuery += "/"+TitlesParams(params).expand;
-						break;
-					case GENRE_SERVICE:
-						method = "odata";
-						var genre:String = TitlesParams(params).genre.replace(/\s/g,"%20");
-						sendQuery += "('"+genre+"')/Titles/?";
-						break;
-				}
+				case AUTOCOMPLETE_SERVICE:
+					// do no adjustment
+					break;
+				case CATALOG_SERVICE:
+					// do no adjustment
+					break;
+				case TITLE_SERVICE:
+					TitlesParams(params).term = null;
+					if(params.netflixId)
+						sendQuery = params.netflixId;
+					else
+						sendQuery = TitlesParams(params).title.netflixId;
+					if(TitlesParams(params).retrieveExpansionOnly && TitlesParams(params).expand)
+						sendQuery += "/"+TitlesParams(params).expand;
+					break;
+				case GENRE_SERVICE:
+					method = "odata";
+					var genre:String = TitlesParams(params).genre.replace(/\s/g,"%20");
+					sendQuery += "('"+genre+"')/Titles/?";
+					break;
+				case ADVANCED_TITLE_SERVICE:
+					method = "odata";
+					if(!params.filter)
+						params.filter = "";
+					params.filter += "Name eq '"+TitlesParams(params).term+"'";
+					break;
 			}
 			
 			createLoader(sendQuery, params, _titlesService_CompleteHandler, method);
@@ -437,7 +453,7 @@ package com.netflix.webapis.services
 			titleService(params);
 		}
 		
-		public function getTitlesByGenre(genre:String, startIndex:uint=0, maxResults:uint=25, expansions:String=null):void
+		public function getTitlesByGenre(genre:String, startIndex:uint=0, maxResults:uint=25, filter:String=null, orderBy:String=null, expansions:String=null):void
 		{
 			var params:TitlesParams = new TitlesParams();
 			params.startIndex = startIndex;
@@ -445,7 +461,25 @@ package com.netflix.webapis.services
 			params.genre = genre;
 			if(expansions)
 				params.expansions = expansions;
+			if(filter)
+				params.filter = filter;
+			if(orderBy)
+				params.orderBy = orderBy;
 			genreService(params);
+		}
+		
+		public function getTitlesByAdvancedSearch(term:String, startIndex:uint=0, maxResults:uint=25, filter:String=null, orderBy:String=null, expansions:String=null):void
+		{
+			var params:TitlesParams = new TitlesParams();
+			params.startIndex = startIndex;
+			params.maxResults = maxResults;
+			if(filter)
+				params.filter = filter;
+			if(orderBy)
+				params.orderBy = orderBy;
+			if(expansions)
+				params.expansions = expansions;
+			advancedTitleService( params );
 		}
 		
 	}

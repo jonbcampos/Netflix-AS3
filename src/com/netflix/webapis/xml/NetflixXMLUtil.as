@@ -157,28 +157,30 @@ package com.netflix.webapis.xml
 							break;
 							case CAST_ATTR:
 								model.cast = handleLink(resultNode);
-								if(resultNode.people)
+								if(resultNode.people != undefined)
 								{
 									model.castList = [];
 									for each(child in resultNode..link)
-									{
 										model.castList.push(handleLink(child));
-									}
 								}
 							break;
 							case DIRECTOR_ATTR:
 								model.directors = handleLink(resultNode);
-								if(resultNode.people)
+								if(resultNode.people != undefined)
 								{
 									model.directorList = [];
 									for each(child in resultNode..link)
-									{
 										model.directorList.push(handleLink(child));
-									}
 								}
 							break;
 							case FORMATS_ATTR:
 								model.formats = handleLink(resultNode);
+								if(resultNode.delivery_formats != undefined)
+								{
+									model.formatsList = [];
+									for each(child in resultNode..availability)
+										model.formatsList.push(handleFormatAvailability(child));
+								}
 							break;
 							case SCREEN_FORMATS_ATTR:
 								model.screenFormats = handleLink(resultNode);
@@ -194,13 +196,11 @@ package com.netflix.webapis.xml
 							break;
 							case SIMILARS_ATTR:
 								model.similars = handleLink(resultNode);
-								if(resultNode.catalog_titles)
+								if(resultNode.catalog_titles != undefined)
 								{
 									model.similarsList = [];
 									for each(child in resultNode..link)
-									{
 										model.similarsList.push(handleLink(child));
-									}
 								}
 							break;
 							case OFFICIAL_SITE_ATTR:
@@ -211,13 +211,11 @@ package com.netflix.webapis.xml
 							break;
 							case DISCS_ATTR:
 								model.discs = handleLink(resultNode);
-								if(resultNode.catalog_titles)
+								if(resultNode.catalog_titles != undefined)
 								{
 									model.discsList = [];
 									for each(child in resultNode..link)
-									{
 										model.discsList.push(handleLink(child));
-									}
 								}
 							break;
 							default:
@@ -387,8 +385,14 @@ package com.netflix.webapis.xml
 		 * @return 
 		 * 
 		 */		
-		public static function handleDate(xml:XML):Date {
-			return new Date(Number(xml.valueOf().toString()));
+		public static function handleDate(xml:XML):Date
+		{
+			return handleDateValue(xml.valueOf().toString());
+		}
+		
+		public static function handleDateValue(value:String):Date
+		{
+			return new Date(Number(value)*1000);
 		}
 		
 		/**
@@ -402,10 +406,11 @@ package com.netflix.webapis.xml
 			var availability:FormatAvailability = new FormatAvailability();
 			availability.label = xml.category.@label;
 			availability.term = xml.category.@term;
-			availability.availableFromAvailable = (xml.@available_from!=undefined)?true:false;
+			availability.scheme = xml.category.@scheme;
 			availability.availableUntilAvailable = (xml.@available_until!=undefined)?true:false;
-			availability.availableUntil = (xml.@available_until)?new Date(Number(xml.@available_until)*1000):null;
-			availability.availableFrom = (xml.@available_from)?new Date(Number(xml.@available_from)*1000):null;
+			availability.availableUntil = (availability.availableUntilAvailable)?handleDateValue(xml.@available_until):null;
+			availability.availableFromAvailable = (xml.@available_from!=undefined)?true:false;
+			availability.availableFrom = (availability.availableFromAvailable)?handleDateValue(xml.@available_from):null;
 			return availability;
 		}
 		/**

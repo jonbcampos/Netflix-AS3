@@ -87,6 +87,11 @@ package com.netflix.webapis.params
 		public var type:String = null;
 		
 		public var expansions:String;
+		
+		public var filter:String;
+		
+		public var orderBy:String;
+		
 		//---------------------------------------------------------------------
 		//
 		// Public Methods
@@ -98,6 +103,8 @@ package com.netflix.webapis.params
 			if(startIndex) returnString += "&$skip=" + escape(startIndex.toString());
 			if(maxResults) returnString += "&$top=" + escape(maxResults.toString());
 			if(expansions) returnString += "&$expand=" + expansions;
+			if(filter) returnString += "&$filter=" + filter;
+			if(orderBy) returnString += "&$orderby=" + orderBy;
 			returnString += "&$inlinecount=allpages";
 			return returnString;
 		}

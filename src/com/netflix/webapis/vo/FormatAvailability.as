@@ -27,7 +27,7 @@ package com.netflix.webapis.vo
 	 * 
 	 * @author jonbcampos
 	 */
-	public class FormatAvailability
+	public class FormatAvailability extends CategoryItem
 	{
 		public function FormatAvailability()
 		{
@@ -49,14 +49,6 @@ package com.netflix.webapis.vo
 		 * Includes To Date. 
 		 */		
 		public var availableUntilAvailable:Boolean;
-		/**
-		 * Visual Label. 
-		 */		
-		public var label:String;
-		/**
-		 * Netflix Term. 
-		 */		
-		public var term:String;
 		
 		public var highDefinitionAvailable:Boolean;
 

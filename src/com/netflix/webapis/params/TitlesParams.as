@@ -83,6 +83,7 @@ package com.netflix.webapis.params
 		public var retrieveExpansionOnly:Boolean = false;
 		
 		public var genre:String;
+		
 		//---------------------------------------------------------------------
 		//
 		// Public Methods

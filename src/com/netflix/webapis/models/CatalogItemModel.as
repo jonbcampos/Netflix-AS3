@@ -81,11 +81,11 @@ package com.netflix.webapis.models
 		
 		//static properties
 		public static const EXPAND_SYNOPSIS:String = "synopsis";
-		public static const EXPAND_FORMATS:String = "format_availability";
-		public static const EXPAND_SCREEN_FORMATS:String = "screen_formats";
+		public static const EXPAND_FORMATS:String = "formats";
+		public static const EXPAND_SCREEN_FORMATS:String = "screen formats";
 		public static const EXPAND_CAST:String = "cast";
 		public static const EXPAND_DIRECTORS:String = "directors";
-		public static const EXPAND_LANGUAGES_AND_AUDIO:String = "languages_and_audio";
+		public static const EXPAND_LANGUAGES_AND_AUDIO:String = "languages and audio";
 		public static const EXPAND_SEASONS:String = "seasons";
 		public static const EXPAND_EPISODES:String = "episodes";
 		public static const EXPAND_DISCS:String = "discs";
