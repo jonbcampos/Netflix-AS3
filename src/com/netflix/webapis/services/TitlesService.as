@@ -431,6 +431,20 @@ package com.netflix.webapis.services
 			titleService(params);
 		}
 		
+		public function getTitleExpansion(title:CatalogItemModel, expandItem:String):void
+		{
+			getTitleExpansionByNetflixId(title.netflixId, expandItem);
+		}
+		
+		public function getTitleExpansionByNetflixId(netflixId:String, expandItem:String):void
+		{
+			var params:TitlesParams = new TitlesParams();
+			params.expand = expandItem;
+			params.netflixId = netflixId;
+			params.retrieveExpansionOnly = true;
+			titleService(params);
+		}
+		
 		/**
 		 * Calls for the title Service, details about a specific title.
 		 * 
