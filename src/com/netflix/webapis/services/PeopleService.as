@@ -215,7 +215,7 @@ package com.netflix.webapis.services
 				break;
 				case FILMOGRAPHY_SERVICE:
 					for each(resultNode in returnedXML..filmography_item){
-						resultsArray.push(NetflixXMLUtil.handleXMLToCatalogItemModel(resultNode, new CatalogItemModel()));
+						resultsArray.push(NetflixXMLUtil.handleXMLToCatalogItemModel(resultNode));
 					}
 			}
 			lastNetflixResult = resultsArray;

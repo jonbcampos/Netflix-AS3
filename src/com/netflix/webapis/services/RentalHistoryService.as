@@ -250,23 +250,17 @@ package com.netflix.webapis.services
 			{
 				case AT_HOME_SERVICE:
 					for each(resultNode in returnedXML..at_home_item)
-					{
-						resultsArray.push( NetflixXMLUtil.handleXMLToCatalogItemModel(resultNode, new CatalogItemModel()) );
-					}
+						resultsArray.push( NetflixXMLUtil.handleXMLToCatalogItemModel(resultNode) );
 					break;
 				case SHIPPED_SERVICE:
 				case WATCHED_SERVICE:
 				case RETURNED_SERVICE:
 					for each(resultNode in returnedXML..rental_history_item)
-					{
-						resultsArray.push( NetflixXMLUtil.handleXMLToCatalogItemModel(resultNode, new CatalogItemModel()) );
-					}
+						resultsArray.push( NetflixXMLUtil.handleXMLToCatalogItemModel(resultNode) );
 					break;
 				case GET_USER_REVIEWS_SERVICE:
 					for each(resultNode in returnedXML..review)
-					{
 						resultsArray.push( NetflixXMLUtil.handleReviewNode(resultNode) );
-					}
 					break;
 			}
 			

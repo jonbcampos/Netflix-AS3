@@ -67,7 +67,7 @@ package com.netflix.webapis.services
 		protected static const TITLES_AUTOCOMPLETE_URL:String = NETFLIX_BASE_URL+"catalog/titles/autocomplete";
 		protected static const TITLES_CATALOG_URL:String = NETFLIX_BASE_URL+"catalog/titles";
 		protected static const TITLES_GENRE_URL:String = "http://odata.netflix.com/Catalog/Genres";
-		protected static const ADVANCED_TITLES_CATALOG_URL:String = "http://odata.netflix.com/Catalog/Titles";
+		protected static const ADVANCED_TITLES_CATALOG_URL:String = "http://odata.netflix.com/Catalog/Titles?";
 		//---------------------------------------------------------------------
 		//
 		// Private Properties
@@ -221,7 +221,9 @@ package com.netflix.webapis.services
 					method = "odata";
 					if(!params.filter)
 						params.filter = "";
-					params.filter += "Name eq '"+TitlesParams(params).term+"'";
+					if(params.filter.length>0)
+						params.filter += "%20and%20";
+					params.filter += "Name%20eq%20trim('"+escape(TitlesParams(params).term)+"')";
 					break;
 			}
 			
@@ -284,10 +286,15 @@ package com.netflix.webapis.services
 					_resultsPerPage = request.maxResults;
 					_numberOfResults = NetflixOdataUtil.handleCount(returnedXML);
 					for each (resultNode in returnedXML..entry)
-					{
 						resultsArray.push( NetflixOdataUtil.handleOdataToCatalogItemModel(resultNode) );
-					}
 				break;
+				case ADVANCED_TITLE_SERVICE:
+					_currentIndex = request.startIndex;
+					_resultsPerPage = request.maxResults;
+					_numberOfResults = NetflixOdataUtil.handleCount(returnedXML);
+					for each (resultNode in returnedXML..entry)
+						resultsArray.push( NetflixOdataUtil.handleOdataToCatalogItemModel(resultNode) );
+					break;
 			}
 			lastNetflixResult = resultsArray;
 			dispatchResult(resultsArray,type,returnedXML);
@@ -322,11 +329,11 @@ package com.netflix.webapis.services
 				case CatalogItemModel.EXPAND_EPISODES:
 				case CatalogItemModel.EXPAND_DISCS:
 					for each (resultNode in returnedXML..catalog_title)
-						resultsArray.push(NetflixXMLUtil.handleXMLToCatalogItemModel(resultNode, new CatalogItemModel()));
+						resultsArray.push(NetflixXMLUtil.handleXMLToCatalogItemModel(resultNode));
 				break;
 				case CatalogItemModel.EXPAND_SIMILARS:
 					for each(resultNode in returnedXML..similars_item)
-						resultsArray.push(NetflixXMLUtil.handleXMLToCatalogItemModel(resultNode, new CatalogItemModel()));
+						resultsArray.push(NetflixXMLUtil.handleXMLToCatalogItemModel(resultNode));
 				break;
 				case CatalogItemModel.EXPAND_FILMOGRAPHY:
 				break;
@@ -487,6 +494,7 @@ package com.netflix.webapis.services
 			var params:TitlesParams = new TitlesParams();
 			params.startIndex = startIndex;
 			params.maxResults = maxResults;
+			params.term = term;
 			if(filter)
 				params.filter = filter;
 			if(orderBy)
