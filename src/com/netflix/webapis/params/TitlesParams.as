@@ -69,14 +69,6 @@ package com.netflix.webapis.params
 		 */		
 		public var title:CatalogItemModel;
 		
-		//-----------------------------
-		// expand
-		//-----------------------------
-		/**
-		 * Parameter that will expand sections of the response to prevent the need for n additional calls.
-		 * Multiple selections can be specified by using a comma delimiter.
-		 */		
-		public var expand:String;
 		/**
 		 * Flag to get just the expansion list rather than the entire item. 
 		 */		
@@ -97,7 +89,6 @@ package com.netflix.webapis.params
 		{
 			var returnString:String = super.toString();
 			if(term && term!="") returnString += "&term=" + escape(term);
-			if(expand) returnString += "&expand=" + escape(expand);
 			return returnString;
 		}
 		/**
@@ -107,7 +98,6 @@ package com.netflix.webapis.params
 		{
 			var o:Object = super.toObject();
 			if(term) o.term = term;
-			if(expand) o.expand = expand;
 			return o;
 		}
 		/**

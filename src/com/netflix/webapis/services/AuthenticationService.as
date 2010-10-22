@@ -98,18 +98,27 @@ package com.netflix.webapis.services
 			_clearLoader();
 			var s:Array = String(result).split("&");  
 			var array:Array;  
-			var o:Object = {};  
 			for each(var item:String in s)  
 			{  
-				array = item.split("=");  
-				o[array[0]] = array[1];  
+				array = item.split("=");
+				switch(array[0])
+				{
+					case "oauth_token":
+						oauthToken = array[1];
+						break;
+					case "oauth_token_secret":
+						oauthTokenSecret = array[1];
+						break;
+					case "application_name":
+						applicationName = array[1];
+						break;
+					case "login_url":
+						loginURL = unescape(array[1]);
+						break;
+				}
 			}
 			
-			oauthToken = o.oauth_token as String;
-			oauthTokenSecret = o.oauth_token_secret as String;
-			applicationName = o.application_name as String;
-			loginURL = unescape( o.login_url as String );
-			authorizationURL = unescape(loginURL) + "&application_name=" + applicationName + "&oauth_consumer_key=" + consumer.key;
+			authorizationURL = loginURL + "&application_name=" + applicationName + "&oauth_consumer_key=" + consumer.key;
 			if(callBackUrl)
 				authorizationURL += "&oauth_callback=" + escape(callBackUrl);
 				

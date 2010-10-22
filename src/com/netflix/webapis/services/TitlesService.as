@@ -209,8 +209,8 @@ package com.netflix.webapis.services
 						sendQuery = params.netflixId;
 					else
 						sendQuery = TitlesParams(params).title.netflixId;
-					if(TitlesParams(params).retrieveExpansionOnly && TitlesParams(params).expand)
-						sendQuery += "/"+TitlesParams(params).expand;
+					if(TitlesParams(params).retrieveExpansionOnly && TitlesParams(params).expansions)
+						sendQuery += "/"+TitlesParams(params).expansions;
 					break;
 				case GENRE_SERVICE:
 					method = "odata";
@@ -275,7 +275,7 @@ package com.netflix.webapis.services
 					}
 				break;
 				case TITLE_SERVICE:
-					if(request && TitlesParams(request).retrieveExpansionOnly && TitlesParams(request).expand){
+					if(request && TitlesParams(request).retrieveExpansionOnly && TitlesParams(request).expansions){
 						resultsArray = handleExpansionOptions(request,returnedXML);
 					} else {
 						resultsArray.push( NetflixXMLUtil.handleXMLToCatalogItemModel(returnedXML) );
@@ -304,7 +304,7 @@ package com.netflix.webapis.services
 		{
 			var resultsArray:Array = [];
 			var resultNode:XML;
-			switch(TitlesParams(request).expand){
+			switch(TitlesParams(request).expansions){
 				case CatalogItemModel.EXPAND_SYNOPSIS:
 					resultsArray.push(returnedXML.toString());
 				break;
@@ -446,7 +446,7 @@ package com.netflix.webapis.services
 		public function getTitleExpansionByNetflixId(netflixId:String, expandItem:String):void
 		{
 			var params:TitlesParams = new TitlesParams();
-			params.expand = expandItem;
+			params.expansions = expandItem;
 			params.netflixId = netflixId;
 			params.retrieveExpansionOnly = true;
 			titleService(params);

@@ -103,6 +103,7 @@ package com.netflix.webapis.xml
 		private static const TITLE_STATE_AT_HOME:String = "At Home";
 		
 		public static const TITLE_SCHEMA:String = "http://schemas.netflix.com/catalog/title";
+		public static const SERIES_TITLE_SCHEMA:String = "http://schemas.netflix.com/catalog/titles.series";
 		public static const AVAILABLE_QUEUE_SCHEMA:String = "http://schemas.netflix.com/queues.available";
 		public static const AWARDS_SCHEMA:String = "http://schemas.netflix.com/catalog/titles/awards";
 		
@@ -224,6 +225,8 @@ package com.netflix.webapis.xml
 								
 								if(link.rel == TITLE_SCHEMA)
 									model.netflixId = link.url;
+								else if(link.rel == SERIES_TITLE_SCHEMA)
+									model.groupId = link.url;
 							break;
 						}
 						break;
@@ -269,6 +272,9 @@ package com.netflix.webapis.xml
 			
 			if(!model.netflixId)
 				model.netflixId = model.id;
+			
+			if(!model.groupId)
+				model.groupId = model.netflixId;
 
 			return model;
 			

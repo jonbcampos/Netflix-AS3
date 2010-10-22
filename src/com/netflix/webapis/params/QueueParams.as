@@ -92,7 +92,7 @@ package com.netflix.webapis.params
 		 */		
 		public var titleRef:CatalogItemModel;
 		
-		[Inspectable(enumeration="DVD,Blu-ray",defaultValue="DVD")]
+		[Inspectable(enumeration="DVD,Blu-ray")]
 		/**
 		 * Either DVD or Blu-ray format. (Applies to discs only.)
 		 * 
@@ -101,7 +101,7 @@ package com.netflix.webapis.params
 		 * is Blu-ray and the title is not available in Blu-ray format but it 
 		 * is available in DVD format.
 		 */		
-		public var formatType:String = FORMAT_DVD;
+		public var formatType:String;
 		/**
 		 * The position within the queue in which to insert or move the title.
 		 */		

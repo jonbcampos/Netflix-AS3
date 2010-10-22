@@ -85,7 +85,10 @@ package com.netflix.webapis.params
 		 * Type of service. 
 		 */		
 		public var type:String = null;
-		
+		/**
+		 * Parameter that will expand sections of the response to prevent the need for n additional calls.
+		 * Multiple selections can be specified by using a comma delimiter. 
+		 */		
 		public var expansions:String;
 		
 		public var filter:String;

@@ -105,6 +105,7 @@ package com.netflix.webapis.models
 		 * Unique title id. 
 		 */		
 		public var netflixId:String;
+		public var groupId:String;
 		/**
 		 * Type of Catalog item such as movie, season, etc. 
 		 */		
@@ -731,7 +732,7 @@ package com.netflix.webapis.models
 			_clearService(expandItem);
 			var service:TitlesService = new TitlesService();
 			_services[expandItem] = service;
-			params.expand = expandItem;
+			params.expansions = expandItem;
 			params.netflixId = netflixId;
 			params.retrieveExpansionOnly = true;
 			service.addEventListener(NetflixResultEvent.RESULT,_onExpandResult);
@@ -743,7 +744,7 @@ package com.netflix.webapis.models
 		private function _onExpandResult(event:NetflixResultEvent):void
 		{
 			var service:TitlesService = event.target as TitlesService;
-			var expandItem:String = TitlesParams(service.request).expand;
+			var expandItem:String = TitlesParams(service.request).expansions;
 			_clearService(expandItem);
 			//set expansion list
 			switch(expandItem){
@@ -797,7 +798,7 @@ package com.netflix.webapis.models
 		private function _onExpandFault(event:NetflixFaultEvent):void
 		{
 			var service:TitlesService = event.target as TitlesService;
-			var expandItem:String = TitlesParams(service.request).expand;
+			var expandItem:String = TitlesParams(service.request).expansions;
 			_clearService(expandItem);
 			dispatchEvent(event);
 		}
