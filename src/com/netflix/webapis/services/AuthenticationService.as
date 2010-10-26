@@ -26,6 +26,7 @@ package com.netflix.webapis.services
 	import com.netflix.webapis.events.NetflixResultEvent;
 	
 	import flash.events.Event;
+	import flash.events.HTTPStatusEvent;
 	import flash.events.IEventDispatcher;
 	import flash.events.IOErrorEvent;
 	import flash.net.URLLoader;
@@ -36,6 +37,7 @@ package com.netflix.webapis.services
 	import flash.sampler.stopSampling;
 	
 	import org.iotashan.oauth.OAuthRequest;
+	import org.iotashan.utils.URLEncoding;
 
 	/**
 	* Result Event.
@@ -67,18 +69,17 @@ package com.netflix.webapis.services
 		 * @see com.netflix.webapis.events.AuthenticationResultEvent#RESULT
 		 * @see com.netflix.webapis.events.NetflixFaultEvent#FAULT
 		 */		
-		public function requestToken(key:String,secret:String, callBackUrl:String=null):void
+		public function requestToken(callBackUrl:String=null):void
 		{
-			this.key = key;
-			this.secret = secret;
 			this.callBackUrl = callBackUrl;
-			_clearLoader();
 			//don't get if exists
 			if(checkForAuthToken(false)==true)
 				return;
 			//run if doesn't exist
+			_clearLoader();
 			_urlLoader = new URLLoader();
 			_urlLoader.dataFormat = URLLoaderDataFormat.TEXT;
+			_urlLoader.addEventListener(HTTPStatusEvent.HTTP_STATUS, httpStatusHandler);
 			_urlLoader.addEventListener(IOErrorEvent.IO_ERROR,_authenticationService_IOErrorHandler);
 			_urlLoader.addEventListener(Event.COMPLETE,_authenticationService_CompleteHandler);
 			_urlLoader.load(new URLRequest(_getRequestUrl()));
@@ -95,7 +96,7 @@ package com.netflix.webapis.services
 		{
 			var loader:URLLoader = event.target as URLLoader;
 			var result:String = loader.data as String;
-			_clearLoader();
+			//_clearLoader();
 			var s:Array = String(result).split("&");  
 			var array:Array;  
 			for each(var item:String in s)  
@@ -113,14 +114,14 @@ package com.netflix.webapis.services
 						applicationName = array[1];
 						break;
 					case "login_url":
-						loginURL = unescape(array[1]);
+						loginURL = URLEncoding.decode(array[1]);
 						break;
 				}
 			}
 			
 			authorizationURL = loginURL + "&application_name=" + applicationName + "&oauth_consumer_key=" + consumer.key;
 			if(callBackUrl)
-				authorizationURL += "&oauth_callback=" + escape(callBackUrl);
+				authorizationURL += "&oauth_callback=" + URLEncoding.encode(callBackUrl);
 				
 			lastNetflixResult = {"token":oauthToken, "tokenSecret":oauthTokenSecret, "applicationName":applicationName, "loginURL":loginURL,"key":consumer.key};
 			dispatchEvent(new AuthenticationResultEvent(AuthenticationResultEvent.RESULT, oauthToken, oauthTokenSecret, applicationName, loginURL, authorizationURL, ServiceStorage.getInstance().accessTokenExists));
@@ -129,7 +130,7 @@ package com.netflix.webapis.services
 		private function _authenticationService_IOErrorHandler(event:IOErrorEvent):void
 		{
 			_clearLoader();
-			dispatchFault(new ServiceFault(event.type,"Token Request Error",event.text));
+			dispatchFault(new ServiceFault(event.type,"Token Request Error",event.text, lastHttpStatusResponse));
 		}
 		
 		/**
@@ -145,6 +146,7 @@ package com.netflix.webapis.services
 				} catch (e:Error){
 					//no stream open
 				}
+				_urlLoader.removeEventListener(HTTPStatusEvent.HTTP_STATUS, httpStatusHandler);
 				_urlLoader.removeEventListener(IOErrorEvent.IO_ERROR,_authenticationService_IOErrorHandler);
 				_urlLoader.removeEventListener(Event.COMPLETE,_authenticationService_CompleteHandler);
 				_urlLoader = null;
@@ -197,14 +199,16 @@ package com.netflix.webapis.services
 		//---------------------------------------------------------------------
 		private var _timeLoader:URLLoader;
 		
-		public function setServerTimeOffset():void
+		public function setServerTimeOffset(key:String,secret:String):void
 		{
+			this.key = key;
+			this.secret = secret;
+			
 			_clearTimeLoader();
-			if(!checkForAuthToken())
-				return;
 			
 			_timeLoader = new URLLoader();
 			_timeLoader.dataFormat = URLLoaderDataFormat.TEXT;
+			_timeLoader.addEventListener(HTTPStatusEvent.HTTP_STATUS, httpStatusHandler);
 			_timeLoader.addEventListener(IOErrorEvent.IO_ERROR,_onTimeLoader_IOErrorHandler);
 			_timeLoader.addEventListener(Event.COMPLETE,_onTimeLoader_CompleteHandler);
 			
@@ -222,6 +226,7 @@ package com.netflix.webapis.services
 				} catch (e:Error){
 					//no stream open
 				}
+				_timeLoader.removeEventListener(HTTPStatusEvent.HTTP_STATUS, httpStatusHandler);
 				_timeLoader.removeEventListener(IOErrorEvent.IO_ERROR,_onTimeLoader_CompleteHandler);
 				_timeLoader.removeEventListener(Event.COMPLETE,_onTimeLoader_IOErrorHandler);
 				_timeLoader = null;
@@ -233,9 +238,9 @@ package com.netflix.webapis.services
 			var loader:URLLoader = event.target as URLLoader;
 			var result:XML = XML(loader.data);
 			_clearTimeLoader();
-			var serverTime:Number = Number(result.valueOf());
-			var cur:Number = Number(new Date().time.toString().substr(0,10));
-			timeOffset =  cur - serverTime;
+			var serverTime:Number = Number(result.valueOf())*1000;
+			var cur:Number = new Date().time;
+			timeOffset =  serverTime - cur;
 			lastNetflixResult = {"time":serverTime};
 			dispatchEvent(new NetflixResultEvent(NetflixResultEvent.SERVER_TIME_COMPLETE, serverTime, null, result));
 		}
@@ -243,7 +248,7 @@ package com.netflix.webapis.services
 		private function _onTimeLoader_IOErrorHandler(event:IOErrorEvent):void
 		{
 			_clearTimeLoader();
-			dispatchFault(new ServiceFault(event.type,"Server Time Error",event.text));
+			dispatchFault(new ServiceFault(event.type,"Server Time Error",event.text, lastHttpStatusResponse));
 		}
 		
 	}

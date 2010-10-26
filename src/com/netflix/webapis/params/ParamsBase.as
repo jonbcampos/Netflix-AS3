@@ -21,6 +21,8 @@
  * */
 package com.netflix.webapis.params
 {
+	import org.iotashan.utils.URLEncoding;
+
 	/**
 	 * Base of Parameters Class.
 	 * @author jonbcampos
@@ -103,11 +105,11 @@ package com.netflix.webapis.params
 		public function toOdataString():String
 		{
 			var returnString:String = "";
-			if(startIndex) returnString += "&$skip=" + escape(startIndex.toString());
-			if(maxResults) returnString += "&$top=" + escape(maxResults.toString());
-			if(expansions) returnString += "&$expand=" + expansions;
-			if(filter) returnString += "&$filter=" + filter;
-			if(orderBy) returnString += "&$orderby=" + orderBy;
+			if(startIndex) returnString += "&$skip=" + URLEncoding.encode(startIndex.toString());
+			if(maxResults) returnString += "&$top=" + URLEncoding.encode(maxResults.toString());
+			if(expansions) returnString += "&$expand=" + URLEncoding.encode(expansions);
+			if(filter) returnString += "&$filter=" + URLEncoding.encode(filter);
+			if(orderBy) returnString += "&$orderby=" + URLEncoding.encode(orderBy);
 			returnString += "&$inlinecount=allpages";
 			return returnString;
 		}

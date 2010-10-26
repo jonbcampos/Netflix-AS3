@@ -35,6 +35,8 @@ package com.netflix.webapis.services
 	import flash.events.IEventDispatcher;
 	import flash.net.URLLoader;
 	import flash.net.URLRequestMethod;
+	
+	import org.iotashan.utils.URLEncoding;
 
 	/**
 	 * Catalog Services under the <i>Titles</i> category. This is the main catagory for retrieving movie and series information.
@@ -215,15 +217,16 @@ package com.netflix.webapis.services
 				case GENRE_SERVICE:
 					method = "odata";
 					var genre:String = TitlesParams(params).genre.replace(/\s/g,"%20");
-					sendQuery += "('"+genre+"')/Titles/?";
+					sendQuery += "('"+URLEncoding.encode(genre)+"')/Titles/?";
 					break;
 				case ADVANCED_TITLE_SERVICE:
 					method = "odata";
 					if(!params.filter)
 						params.filter = "";
-					if(params.filter.length>0)
-						params.filter += "%20and%20";
-					params.filter += "Name%20eq%20trim('"+escape(TitlesParams(params).term)+"')";
+					if(TitlesParams(params).term && params.filter.length>0)
+						params.filter += " and ";
+					if(TitlesParams(params).term)
+						params.filter += "Name eq trim('"+URLEncoding.encode(TitlesParams(params).term)+"')";
 					break;
 			}
 			

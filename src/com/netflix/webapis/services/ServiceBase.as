@@ -50,6 +50,7 @@ package com.netflix.webapis.services
 	import org.iotashan.oauth.OAuthRequest;
 	import org.iotashan.oauth.OAuthSignatureMethod_HMAC_SHA1;
 	import org.iotashan.oauth.OAuthToken;
+	import org.iotashan.utils.URLEncoding;
 
 	/**
 	* Result Event.
@@ -501,6 +502,10 @@ package com.netflix.webapis.services
 		private var _currentParams:Object;
 		
 		private var _httpStatusResponse:String;
+		protected function get lastHttpStatusResponse():String
+		{
+			return _httpStatusResponse;
+		}
 		
 		internal var _currentIndex:uint = 0;
 		/**
@@ -654,6 +659,10 @@ package com.netflix.webapis.services
 			_resultFunction = result;
 			//make final params
 			var finalParams:Object;
+			//null check
+			if(!params)
+				params = {};
+			//adjust params
 			if(params is ParamsBase){
 				if(finalHttpMethod==URLRequestMethod.POST || finalHttpMethod==URLRequestMethod.PUT)
 					finalParams = ParamsBase(params).toPostObject();
