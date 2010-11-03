@@ -413,8 +413,7 @@ package com.netflix.webapis.services
 			params.term = term;
 			params.startIndex = startIndex;
 			params.maxResults = maxResults;
-			if(expansions)
-				params.expansions = expansions;
+			params.expansions = expansions;
 			catalogService(params);
 		}
 		
@@ -472,8 +471,7 @@ package com.netflix.webapis.services
 		{
 			var params:TitlesParams = new TitlesParams();
 			params.netflixId = id;
-			if(expansions)
-				params.expansions = expansions;
+			params.expansions = expansions;
 			titleService(params);
 		}
 		
@@ -483,12 +481,9 @@ package com.netflix.webapis.services
 			params.startIndex = startIndex;
 			params.maxResults = maxResults;
 			params.genre = genre;
-			if(expansions)
-				params.expansions = expansions;
-			if(filter)
-				params.filter = filter;
-			if(orderBy)
-				params.orderBy = orderBy;
+			params.expansions = expansions;
+			params.filter = filter;
+			params.orderBy = orderBy;
 			genreService(params);
 		}
 		
@@ -498,12 +493,9 @@ package com.netflix.webapis.services
 			params.startIndex = startIndex;
 			params.maxResults = maxResults;
 			params.term = term;
-			if(filter)
-				params.filter = filter;
-			if(orderBy)
-				params.orderBy = orderBy;
-			if(expansions)
-				params.expansions = expansions;
+			params.filter = filter;
+			params.orderBy = orderBy;
+			params.expansions = expansions;
 			advancedTitleService( params );
 		}
 		

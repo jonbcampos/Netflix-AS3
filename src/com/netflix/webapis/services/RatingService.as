@@ -278,8 +278,7 @@ package com.netflix.webapis.services
 		{
 			var params:RatingParams = new RatingParams();
 			params.titleRefs = titles;
-			if(expansions)
-				params.expansions = expansions;
+			params.expansions = expansions;
 			titleRatingsService(params);
 		}
 		

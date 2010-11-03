@@ -360,11 +360,12 @@ package com.netflix.webapis.services
 		 * @see com.netflix.webapis.events.NetflixFaultEvent#FAULT
 		 * @see com.netflix.webapis.models.CatalogItemModel
 		 */	
-		public function getUserDiscQueue(startIndex:uint=0, maxResults:uint=25):void
+		public function getUserDiscQueue(startIndex:uint=0, maxResults:uint=25, expansions:String=null):void
 		{
 			var q:QueueParams = new QueueParams();
 			q.startIndex = startIndex;
 			q.maxResults = maxResults;
+			q.expansions = expansions;
 			discQueueService(q);
 		}
 		
@@ -379,12 +380,13 @@ package com.netflix.webapis.services
 		 * @see com.netflix.webapis.events.NetflixFaultEvent#FAULT
 		 * @see com.netflix.webapis.models.CatalogItemModel
 		 */	
-		public function getUserAvailableDiscQueue(startIndex:uint=0, maxResults:uint=25):void
+		public function getUserAvailableDiscQueue(startIndex:uint=0, maxResults:uint=25, expansions:String=null):void
 		{
 			var q:QueueParams = new QueueParams();
 			q.startIndex = startIndex;
 			q.maxResults = maxResults;
 			q.status = QueueParams.STATUS_AVAILABLE;
+			q.expansions = expansions;
 			discQueueService(q);
 		}
 		
@@ -399,12 +401,13 @@ package com.netflix.webapis.services
 		 * @see com.netflix.webapis.events.NetflixFaultEvent#FAULT
 		 * @see com.netflix.webapis.models.CatalogItemModel
 		 */	
-		public function getUserSavedDiscQueue(startIndex:uint=0, maxResults:uint=25):void
+		public function getUserSavedDiscQueue(startIndex:uint=0, maxResults:uint=25, expansions:String=null):void
 		{
 			var q:QueueParams = new QueueParams();
 			q.startIndex = startIndex;
 			q.maxResults = maxResults;
 			q.status = QueueParams.STATUS_SAVED;
+			q.expansions = expansions;
 			discQueueService(q);
 		}
 		
@@ -419,11 +422,12 @@ package com.netflix.webapis.services
 		 * @see com.netflix.webapis.events.NetflixFaultEvent#FAULT
 		 * @see com.netflix.webapis.models.CatalogItemModel
 		 */	
-		public function getUserInstantQueue(startIndex:uint=0, maxResults:uint=25):void
+		public function getUserInstantQueue(startIndex:uint=0, maxResults:uint=25, expansions:String=null):void
 		{
 			var q:QueueParams = new QueueParams();
 			q.startIndex = startIndex;
 			q.maxResults = maxResults;
+			q.expansions = expansions;
 			instantQueueService(q);
 		}
 		
@@ -438,12 +442,13 @@ package com.netflix.webapis.services
 		 * @see com.netflix.webapis.events.NetflixFaultEvent#FAULT
 		 * @see com.netflix.webapis.models.CatalogItemModel
 		 */	
-		public function getUserAvailableInstantQueue(startIndex:uint=0, maxResults:uint=25):void
+		public function getUserAvailableInstantQueue(startIndex:uint=0, maxResults:uint=25, expansions:String=null):void
 		{
 			var q:QueueParams = new QueueParams();
 			q.startIndex = startIndex;
 			q.maxResults = maxResults;
 			q.status = QueueParams.STATUS_AVAILABLE;
+			q.expansions = expansions;
 			instantQueueService(q);
 		}
 		
@@ -458,12 +463,13 @@ package com.netflix.webapis.services
 		 * @see com.netflix.webapis.events.NetflixFaultEvent#FAULT
 		 * @see com.netflix.webapis.models.CatalogItemModel
 		 */	
-		public function getUserSavedInstantQueue(startIndex:uint=0, maxResults:uint=25):void
+		public function getUserSavedInstantQueue(startIndex:uint=0, maxResults:uint=25, expansions:String=null):void
 		{
 			var q:QueueParams = new QueueParams();
 			q.startIndex = startIndex;
 			q.maxResults = maxResults;
 			q.status = QueueParams.STATUS_SAVED;
+			q.expansions = expansions;
 			instantQueueService(q);
 		}
 		

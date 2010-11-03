@@ -67,9 +67,10 @@ package com.netflix.webapis.services
 				{
 					if(lso.data.userId)
 						userId = lso.data.userId;
-					if(lso.data.accessToken && lso.data.accessToken.key && lso.data.accessToken.secret){
+					if(lso.data.accessToken && lso.data.accessToken.key && lso.data.accessToken.secret)
 						accessToken = new OAuthToken(lso.data.accessToken.key, lso.data.accessToken.secret);
-					}
+					if(lso.data.user)
+						user = lso.data.user;
 				}
 			}
 		}
@@ -258,6 +259,7 @@ package com.netflix.webapis.services
 			if(value){
 				lso = SharedObject.getLocal(LSO_NAME);
 				lso.data.userId = userId;
+				lso.data.user = user;
 				lso.data.accessToken = accessToken;
 				lso.flush();
 			} else {

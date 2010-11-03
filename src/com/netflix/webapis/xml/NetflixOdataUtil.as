@@ -64,6 +64,8 @@ package com.netflix.webapis.xml
 			model.categories = [];
 			model.links = [];
 			
+			var format:FormatAvailability;
+			
 			for each (resultNode in xml.children())
 			{
 				var nodeType:String = String(resultNode.name());
@@ -124,6 +126,45 @@ package com.netflix.webapis.xml
 										}
 									}
 									break;
+								case INSTANT:
+									if(!model.formatsList)
+										model.formatsList = [];
+									format = handleDeliveryFormat(child);
+									
+									if(format)
+									{
+										model.formatsList.push(format);
+										
+										if(format.availableFromAvailable)
+											model.isInstant = true;
+									}
+									break;
+								case DVD:
+									if(!model.formatsList)
+										model.formatsList = [];
+									format = handleDeliveryFormat(child);
+									
+									if(format)
+									{
+										model.formatsList.push(format);
+										
+										if(format.availableFromAvailable)
+											model.isDvd = true;
+									}
+									break;
+								case BLURAY:
+									if(!model.formatsList)
+										model.formatsList = [];
+									format = handleDeliveryFormat(child);
+									
+									if(format)
+									{
+										model.formatsList.push(format);
+										
+										if(format.availableFromAvailable)
+											model.isBluray = true;
+									}
+									break;
 							}
 						}
 						break;
@@ -148,13 +189,49 @@ package com.netflix.webapis.xml
 			return uint(xml.valueOf());
 		}
 		
+		public static function handleBooleanNode(xml:XML):Boolean
+		{
+			return (xml.valueOf()=="true")?true:false;
+		}
+		
 		public static function handleDateNode(xml:XML):Date
 		{
 			var dateString:String = xml.valueOf().toString();
+			//empty check
+			if(dateString=="")
+				return null;
 			var cleanString:String = dateString.replace("T"," ");
-			cleanString = cleanString.replace("Z", " ");
+			cleanString = cleanString.replace("Z", "");
 			cleanString = cleanString.replace(/-/g, "/");
 			return new Date(cleanString);
+		}
+		
+		public static function handleDeliveryFormat(xml:XML):FormatAvailability
+		{
+			var resultNode:XML;
+			var format:FormatAvailability = new FormatAvailability();
+			
+			for each (resultNode in xml.children())
+			{
+				var nodeType:String = String(resultNode.name());
+				switch(nodeType)
+				{
+					case AVAILABLE_FROM:
+						format.availableFrom = handleDateNode(resultNode);
+						if(format.availableFrom)
+							format.availableFromAvailable = true;
+						break;
+					case AVAILABLE_TO:
+						format.availableUntil = handleDateNode(resultNode);
+						if(format.availableUntil)
+							format.availableUntilAvailable = true;
+						break;
+					case HIGH_DEFINITION_AVAILABLE:
+						format.highDefinitionAvailable = handleBooleanNode(resultNode);
+						break;
+				}
+			}
+			return format;
 		}
 		
 		public static function handleCount(xml:XML):uint

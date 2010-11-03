@@ -300,12 +300,13 @@ package com.netflix.webapis.services
 		 * @see com.netflix.webapis.events.NetflixFaultEvent#FAULT
 		 * @see com.netflix.webapis.models.CatalogItemModel
 		 */
-		public function getAtHomeItems(sinceDate:Date=null, startIndex:int=0, maxResults:int=25):void
+		public function getAtHomeItems(sinceDate:Date=null, startIndex:int=0, maxResults:int=25, expansions:String=null):void
 		{
 			var params:RentalHistoryParams = new RentalHistoryParams();
 			params.updatedMin = sinceDate;
 			params.startIndex = startIndex;
 			params.maxResults = maxResults;
+			params.expansions = expansions;
 			atHomeService(params);
 		}
 		
@@ -338,12 +339,13 @@ package com.netflix.webapis.services
 		 * @see com.netflix.webapis.events.NetflixFaultEvent#FAULT
 		 * @see com.netflix.webapis.models.CatalogItemModel
 		 */
-		public function getShippedItems(sinceDate:Date=null, startIndex:int=0, maxResults:int=25):void
+		public function getShippedItems(sinceDate:Date=null, startIndex:int=0, maxResults:int=25, expansions:String=null):void
 		{
 			var params:RentalHistoryParams = new RentalHistoryParams();
 			params.updatedMin = sinceDate;
 			params.startIndex = startIndex;
 			params.maxResults = maxResults;
+			params.expansions = expansions;
 			shippedService(params);
 		}
 		
@@ -374,12 +376,13 @@ package com.netflix.webapis.services
 		 * @see com.netflix.webapis.events.NetflixFaultEvent#FAULT
 		 * @see com.netflix.webapis.models.CatalogItemModel
 		 */
-		public function getWatchedItems(sinceDate:Date=null, startIndex:int=0, maxResults:int=25):void
+		public function getWatchedItems(sinceDate:Date=null, startIndex:int=0, maxResults:int=25, expansions:String=null):void
 		{
 			var params:RentalHistoryParams = new RentalHistoryParams();
 			params.updatedMin = sinceDate;
 			params.startIndex = startIndex;
 			params.maxResults = maxResults;
+			params.expansions = expansions;
 			watchedService(params);
 		}
 		
@@ -409,12 +412,13 @@ package com.netflix.webapis.services
 		 * @see com.netflix.webapis.events.NetflixFaultEvent#FAULT
 		 * @see com.netflix.webapis.models.CatalogItemModel
 		 */
-		public function getReturnedItems(sinceDate:Date=null, startIndex:int=0, maxResults:int=25):void
+		public function getReturnedItems(sinceDate:Date=null, startIndex:int=0, maxResults:int=25, expansions:String=null):void
 		{
 			var params:RentalHistoryParams = new RentalHistoryParams();
 			params.updatedMin = sinceDate;
 			params.startIndex = startIndex;
 			params.maxResults = maxResults;
+			params.expansions = expansions;
 			returnedService(params);
 		}
 		

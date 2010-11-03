@@ -1025,6 +1025,7 @@ package com.netflix.webapis.services
 				token = null;
 				tokenSecret = null;
 				userId = null;
+				user = null;
 				lso.clear();
 				lso.flush();
 			}

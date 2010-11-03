@@ -226,14 +226,12 @@ package com.netflix.webapis.services
 			switch(type)
 			{
 				case RECOMMENDATION_SERVICE:
-					for each (resultNode in returnedXML..recommendation) {
-						resultsArray.push( NetflixXMLUtil.handleXMLToCatalogItemModel(resultNode, new CatalogItemModel()) );
-					}
+					for each (resultNode in returnedXML..recommendation)
+						resultsArray.push( NetflixXMLUtil.handleXMLToCatalogItemModel(resultNode) );
 					break;
 				case TITLES_STATES_SERVICE:
-					for each (resultNode in returnedXML..title_state) {
+					for each (resultNode in returnedXML..title_state)
 						resultsArray.push( NetflixXMLUtil.handleTitleState(resultNode) );
-					}
 					break;
 				default:
 					user = new NetflixUser();
@@ -283,6 +281,13 @@ package com.netflix.webapis.services
 						}
 					}
 					lastNetflixResult = user;
+					//store user for later
+					if(autoSaveAuthorization)
+					{
+						lso.data.user = user;
+						lso.flush();
+					}
+					
 					dispatchEvent(new UsersResultEvent(UsersResultEvent.USER_RESULT,user));
 					return;
 					break;
@@ -309,11 +314,12 @@ package com.netflix.webapis.services
 		 * @see com.netflix.webapis.events.NetflixResultEvent#RECOMMENDATION_RESULT
 		 * @see com.netflix.webapis.events.NetflixFaultEvent#FAULT
 		 */		
-		public function getRecommendedTitles(startIndex:int=0, maxResults:int=25):void
+		public function getRecommendedTitles(startIndex:int=0, maxResults:int=25, expansions:String=null):void
 		{
 			var params:UserParams = new UserParams();
 			params.startIndex = startIndex;
 			params.maxResults = maxResults;
+			params.expansions = expansions;
 			recommendationService(params);
 		}
 		

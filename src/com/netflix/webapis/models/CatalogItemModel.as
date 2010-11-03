@@ -27,6 +27,7 @@ package com.netflix.webapis.models
 	import com.netflix.webapis.params.TitlesParams;
 	import com.netflix.webapis.services.TitlesService;
 	import com.netflix.webapis.services.UserService;
+	import com.netflix.webapis.vo.FormatAvailability;
 	import com.netflix.webapis.vo.LinkItem;
 	import com.netflix.webapis.vo.TitleState;
 	import com.netflix.webapis.xml.NetflixXMLUtil;
@@ -346,7 +347,25 @@ package com.netflix.webapis.models
 		 */		
 		public var webPage:LinkItem;
 		private var _formats:LinkItem;
-
+		
+		[Bindable]
+		/**
+		 * Flag to signify if the title is an instant view title. 
+		 */		
+		public var isInstant:Boolean;
+		
+		[Bindable]
+		/**
+		 * Flag to signify if the title is a disc title. 
+		 */		
+		public var isDvd:Boolean;
+		
+		[Bindable]
+		/**
+		 * Flag to signify if the title is a bluray title. 
+		 */		
+		public var isBluray:Boolean;
+		
 		/**
 		 * Catalog Item's Formats Link Item.
 		 */		
@@ -746,6 +765,8 @@ package com.netflix.webapis.models
 			var service:TitlesService = event.target as TitlesService;
 			var expandItem:String = TitlesParams(service.request).expansions;
 			_clearService(expandItem);
+			var i:int = -1;
+			var n:int = -1;
 			//set expansion list
 			switch(expandItem){
 				case EXPAND_SYNOPSIS:
@@ -754,6 +775,20 @@ package com.netflix.webapis.models
 				break;
 				case EXPAND_FORMATS:
 					formatsList = event.result as Array;
+					
+					i = -1;
+					n = formatsList.length;
+					var format:FormatAvailability;
+					while(++i<n)
+					{
+						format = formatsList[i] as FormatAvailability;
+						if(format.label == NetflixXMLUtil.TITLE_FORMAT_INSTANT)
+							isInstant = true;
+						else if(format.label == NetflixXMLUtil.TITLE_FORMAT_DVD)
+							isDvd = true;
+						else if(format.label == NetflixXMLUtil.TITLE_FORMAT_BLURAY)
+							isBluray = true;
+					}
 				break;
 				case EXPAND_SCREEN_FORMATS:
 					screenFormatsList = event.result as Array;

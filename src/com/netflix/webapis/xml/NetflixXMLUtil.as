@@ -97,6 +97,10 @@ package com.netflix.webapis.xml
 		private static const TITLE_TYPE_INSTANT:String = "Instant";
 		private static const TITLE_TYPE_DVD:String = "DVD";
 		
+		public static const TITLE_FORMAT_INSTANT:String = "instant";
+		public static const TITLE_FORMAT_DVD:String = "DVD";
+		public static const TITLE_FORMAT_BLURAY:String = "Blu-ray";
+		
 		private static const TITLE_STATE_IN_QUEUE:String = "In Queue";
 		private static const TITLE_STATE_PLAY:String = "Play";
 		private static const TITLE_STATE_ADD:String = "Add";
@@ -131,6 +135,8 @@ package com.netflix.webapis.xml
 			var child:XML;
 			model.categories = [];
 			model.links = [];
+			var i:int = -1;
+			var n:int = -1;
 			
 			for each (resultNode in xml.children())
 			{
@@ -181,6 +187,20 @@ package com.netflix.webapis.xml
 									model.formatsList = [];
 									for each(child in resultNode..availability)
 										model.formatsList.push(handleFormatAvailability(child));
+										
+									i = -1;
+									n = model.formatsList.length;
+									var format:FormatAvailability;
+									while(++i<n)
+									{
+										format = model.formatsList[i] as FormatAvailability;
+										if(format.label == TITLE_FORMAT_INSTANT)
+											model.isInstant = true;
+										else if(format.label == TITLE_FORMAT_DVD)
+											model.isDvd = true;
+										else if(format.label == TITLE_FORMAT_BLURAY)
+											model.isBluray = true;
+									}
 								}
 							break;
 							case SCREEN_FORMATS_ATTR:
