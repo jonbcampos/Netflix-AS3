@@ -69,6 +69,8 @@ package com.netflix.webapis.params
 		 */		
 		public var title:CatalogItemModel;
 		
+		public var expandItem:String;
+		
 		/**
 		 * Flag to get just the expansion list rather than the entire item. 
 		 */		

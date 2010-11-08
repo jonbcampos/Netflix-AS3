@@ -744,14 +744,17 @@ package com.netflix.webapis.models
 		/**
 		 * @inheritDoc
 		 */		
-		public function expandProperty(expandItem:String,params:TitlesParams=null):void
+		public function expandProperty(expandItem:String,params:TitlesParams=null, startIndex:uint=0, maxResults:uint=25, expansions:String=null):void
 		{
 			if(!params)
 				params = new TitlesParams();
 			_clearService(expandItem);
 			var service:TitlesService = new TitlesService();
 			_services[expandItem] = service;
-			params.expansions = expandItem;
+			params.expandItem = expandItem;
+			params.startIndex = startIndex;
+			params.maxResults = maxResults;
+			params.expansions = expansions;
 			params.netflixId = netflixId;
 			params.retrieveExpansionOnly = true;
 			service.addEventListener(NetflixResultEvent.RESULT,_onExpandResult);

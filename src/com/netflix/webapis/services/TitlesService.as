@@ -211,8 +211,8 @@ package com.netflix.webapis.services
 						sendQuery = params.netflixId;
 					else
 						sendQuery = TitlesParams(params).title.netflixId;
-					if(TitlesParams(params).retrieveExpansionOnly && TitlesParams(params).expansions)
-						sendQuery += "/"+TitlesParams(params).expansions;
+					if(TitlesParams(params).retrieveExpansionOnly && TitlesParams(params).expandItem)
+						sendQuery += "/"+TitlesParams(params).expandItem;
 					break;
 				case GENRE_SERVICE:
 					method = "odata";
@@ -278,7 +278,7 @@ package com.netflix.webapis.services
 					}
 				break;
 				case TITLE_SERVICE:
-					if(request && TitlesParams(request).retrieveExpansionOnly && TitlesParams(request).expansions){
+					if(request && TitlesParams(request).retrieveExpansionOnly && TitlesParams(request).expandItem){
 						resultsArray = handleExpansionOptions(request,returnedXML);
 					} else {
 						resultsArray.push( NetflixXMLUtil.handleXMLToCatalogItemModel(returnedXML) );
@@ -307,7 +307,7 @@ package com.netflix.webapis.services
 		{
 			var resultsArray:Array = [];
 			var resultNode:XML;
-			switch(TitlesParams(request).expansions){
+			switch(TitlesParams(request).expandItem){
 				case CatalogItemModel.EXPAND_SYNOPSIS:
 					resultsArray.push(returnedXML.toString());
 				break;
@@ -440,15 +440,18 @@ package com.netflix.webapis.services
 			titleService(params);
 		}
 		
-		public function getTitleExpansion(title:CatalogItemModel, expandItem:String):void
+		public function getTitleExpansion(title:CatalogItemModel, expandItem:String, startIndex:uint=0, maxResults:uint=25, expansions:String=null):void
 		{
-			getTitleExpansionByNetflixId(title.netflixId, expandItem);
+			getTitleExpansionByNetflixId(title.netflixId, expandItem, startIndex, maxResults, expansions);
 		}
 		
-		public function getTitleExpansionByNetflixId(netflixId:String, expandItem:String):void
+		public function getTitleExpansionByNetflixId(netflixId:String, expandItem:String, startIndex:uint=0, maxResults:uint=25, expansions:String=null):void
 		{
 			var params:TitlesParams = new TitlesParams();
-			params.expansions = expandItem;
+			params.expandItem = expandItem;
+			params.expansions = expansions;
+			params.startIndex = startIndex;
+			params.maxResults = maxResults;
 			params.netflixId = netflixId;
 			params.retrieveExpansionOnly = true;
 			titleService(params);
