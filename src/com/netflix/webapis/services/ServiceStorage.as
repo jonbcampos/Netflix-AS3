@@ -233,6 +233,10 @@ package com.netflix.webapis.services
 			return false;
 		}
 		//-----------------------------
+		//  enable trace
+		//-----------------------------
+		public var enableTraceStatements:Boolean;
+		//-----------------------------
 		//  shared object
 		//-----------------------------
 		private var LSO_NAME:String = "com.netflix.webapis.storage";

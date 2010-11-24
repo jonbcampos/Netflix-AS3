@@ -376,6 +376,19 @@ package com.netflix.webapis.services
 		}
 		
 		//---------------------
+		// enableTrace
+		//---------------------
+		public function get enableTraceStatements():Boolean
+		{
+			return storage.enableTraceStatements;
+		}
+		
+		public function set enableTraceStatements(value:Boolean):void
+		{
+			storage.enableTraceStatements = value;
+		}
+		
+		//---------------------
 		// user
 		//---------------------
 		[Inspectable(category="General")]
@@ -616,23 +629,11 @@ package com.netflix.webapis.services
 		 */	
 		protected function dispatchFault(fault:ServiceFault):void
 		{
+			if(enableTraceStatements)
+				trace(fault.toString());
 			dispatchEvent(new NetflixFaultEvent(NetflixFaultEvent.FAULT,fault, _currentURL, _currentParams));
 		}
-		/*
-		protected function updateOAuthTimestamp(request:String):String
-		{
-			return request;
-			var index:int = request.indexOf("&oauth_timestamp=");
-			if(index > -1)
-			{
-				if(isNaN(timeOffset))
-					timeOffset = 0;
-				var newTime:Number = Number(new Date().time.toString().substr(0,10)) - timeOffset;
-				return request.replace(/\&oauth_timestamp=\d+/,"&oauth_timestamp="+newTime);
-			}
-			return request;
-		}
-		*/
+		
 		/**
 		 * Creates and handles loading for requests. 
 		 * @param sendQuery
@@ -685,7 +686,8 @@ package com.netflix.webapis.services
 				requestString = sendQuery + ParamsBase(params).toOdataString();
 				finalHttpMethod = URLRequestMethod.GET;
 			}
-			trace(requestString);
+			if(enableTraceStatements)
+				trace(requestString);
 			//make request
 			var urlRequest:URLRequest = new URLRequest(requestString);
 			if(finalHttpMethod==URLRequestMethod.POST)
@@ -730,6 +732,8 @@ package com.netflix.webapis.services
 		 */		
 		protected function faultHandler(event:IOErrorEvent):void
 		{
+			if(enableTraceStatements)
+				trace(event.toString());
 			var errorText:String = (_httpStatusResponse)?_httpStatusResponse:event.text;
 			dispatchFault(new ServiceFault(event.type,"IO Service Error: "+type+ " Error",errorText, event.text));
 			clearLoader();
@@ -742,6 +746,8 @@ package com.netflix.webapis.services
 		 */		
 		protected function progressHandler(event:ProgressEvent):void
 		{
+			if(enableTraceStatements)
+				trace(event.toString());
 			dispatchEvent(event.clone());
 		}
 		
@@ -752,6 +758,8 @@ package com.netflix.webapis.services
 		 */		
 		protected function securityErrorHandler(event:SecurityErrorEvent):void
 		{
+			if(enableTraceStatements)
+				trace(event.toString());
 			dispatchFault(new ServiceFault(event.type,"Security Service Error: "+type+ " Error",event.text, event.text));
 			clearLoader();
 		}

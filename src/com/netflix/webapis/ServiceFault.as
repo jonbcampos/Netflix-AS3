@@ -77,5 +77,13 @@ package com.netflix.webapis
 			_faultMessage = faultMessage;
 		}
 		
+		public function toString():String
+		{
+			return "Code: "+faultCode+"\n" +
+				"String: "+faultString+"\n" +
+				"Detail: "+faultDetail+"\n" +
+				"Message: "+faultMessage+"\n";
+		}
+		
 	}
 }
