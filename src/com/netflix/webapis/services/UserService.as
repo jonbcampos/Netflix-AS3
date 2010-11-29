@@ -33,7 +33,6 @@ package com.netflix.webapis.services
 	import flash.events.Event;
 	import flash.events.IEventDispatcher;
 	import flash.net.URLLoader;
-	import flash.net.URLRequestMethod;
 
 	/**
 	* Result Event.
@@ -162,7 +161,7 @@ package com.netflix.webapis.services
 			
 			var sendQuery:String = methodString;
 			var typeQuery:String;
-			var method:String = URLRequestMethod.GET;
+			var method:String = ServiceBase.GET_REQUEST_METHOD;
 			
 			if(!params)
 				return;

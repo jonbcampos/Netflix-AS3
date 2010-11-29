@@ -35,7 +35,6 @@ package com.netflix.webapis.services
 	import flash.events.Event;
 	import flash.events.IEventDispatcher;
 	import flash.net.URLLoader;
-	import flash.net.URLRequestMethod;
 	
 	/**
 	 * Services under the Queue Category, including adding items into a
@@ -237,7 +236,7 @@ package com.netflix.webapis.services
 			
 			var sendQuery:String = methodString;
 			var typeQuery:String;
-			var method:String = URLRequestMethod.GET;
+			var method:String = ServiceBase.GET_REQUEST_METHOD;
 			
 			if(checkForUser()==false)
 				return;
@@ -257,13 +256,13 @@ package com.netflix.webapis.services
 					if(checkForETag()==false)
 						return;
 					sendQuery += "/" + DISC_PART;
-					method = URLRequestMethod.POST;
+					method = ServiceBase.POST_REQUEST_METHOD;
 					break;
 				case UPDATE_INSTANT_SERVICE:
 					if(checkForETag()==false)
 						return;
 					sendQuery += "/" + INSTANT_PART;
-					method = URLRequestMethod.POST;
+					method = ServiceBase.POST_REQUEST_METHOD;
 					break;
 				case DELETE_DISC_SERVICE:
 					if(!QueueParams(params).queueId)

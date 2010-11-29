@@ -32,7 +32,6 @@ package com.netflix.webapis.services
 	import flash.net.URLLoader;
 	import flash.net.URLLoaderDataFormat;
 	import flash.net.URLRequest;
-	import flash.net.URLRequestMethod;
 	import flash.net.navigateToURL;
 	import flash.sampler.stopSampling;
 	
@@ -162,7 +161,7 @@ package com.netflix.webapis.services
 		private function _getRequestUrl():String
 		{
 			var reqUrl:String = NETFLIX_BASE_URL + "oauth/request_token";
-			var tokenRequest:OAuthRequest = new OAuthRequest(URLRequestMethod.GET,reqUrl,null,consumer);
+			var tokenRequest:OAuthRequest = new OAuthRequest(ServiceBase.GET_REQUEST_METHOD,reqUrl,null,consumer);
 			var request:String = tokenRequest.buildRequest(SIG_METHOD, OAuthRequest.RESULT_TYPE_URL_STRING, "", timeOffset);
 			if(enableTraceStatements)
 				trace(request);
@@ -213,7 +212,7 @@ package com.netflix.webapis.services
 			_timeLoader.addEventListener(IOErrorEvent.IO_ERROR,_onTimeLoader_IOErrorHandler);
 			_timeLoader.addEventListener(Event.COMPLETE,_onTimeLoader_CompleteHandler);
 			
-			var tokenRequest:OAuthRequest = new OAuthRequest(URLRequestMethod.GET,NETFLIX_BASE_URL+"oauth/clock/time",null,consumer);
+			var tokenRequest:OAuthRequest = new OAuthRequest(ServiceBase.GET_REQUEST_METHOD,NETFLIX_BASE_URL+"oauth/clock/time",null,consumer);
 			var request:String = tokenRequest.buildRequest(SIG_METHOD, OAuthRequest.RESULT_TYPE_URL_STRING, "", timeOffset);
 			
 			if(enableTraceStatements)

@@ -34,7 +34,6 @@ package com.netflix.webapis.services
 	import flash.events.Event;
 	import flash.events.IEventDispatcher;
 	import flash.net.URLLoader;
-	import flash.net.URLRequestMethod;
 	
 	import org.iotashan.utils.URLEncoding;
 
@@ -190,7 +189,7 @@ package com.netflix.webapis.services
 			if(checkForConsumerKey()==false)
 				return;
 			
-			var method:String = URLRequestMethod.GET;
+			var method:String = ServiceBase.GET_REQUEST_METHOD;
 			var sendQuery:String = methodString;
 			var typeQuery:String;
 			
@@ -215,12 +214,12 @@ package com.netflix.webapis.services
 						sendQuery += "/"+TitlesParams(params).expandItem;
 					break;
 				case GENRE_SERVICE:
-					method = "odata";
+					method = ServiceBase.ODATA_REQUEST_METHOD;
 					var genre:String = TitlesParams(params).genre.replace(/\s/g,"%20");
 					sendQuery += "('"+URLEncoding.encode(genre)+"')/Titles/?";
 					break;
 				case ADVANCED_TITLE_SERVICE:
-					method = "odata";
+					method = ServiceBase.ODATA_REQUEST_METHOD;
 					if(!params.filter)
 						params.filter = "";
 					if(TitlesParams(params).term && params.filter.length>0)

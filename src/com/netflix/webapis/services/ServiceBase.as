@@ -40,7 +40,6 @@ package com.netflix.webapis.services
 	import flash.net.URLLoader;
 	import flash.net.URLLoaderDataFormat;
 	import flash.net.URLRequest;
-	import flash.net.URLRequestMethod;
 	import flash.net.URLVariables;
 	
 	import mx.utils.ObjectUtil;
@@ -77,7 +76,11 @@ package com.netflix.webapis.services
 	public class ServiceBase extends EventDispatcher
 	{
 		public static const NETFLIX_BASE_URL:String = "http://api.netflix.com/";
+		public static const GET_REQUEST_METHOD:String = "GET";
+		public static const POST_REQUEST_METHOD:String = "POST";
+		public static const PUT_REQUEST_METHOD:String = "PUT";
 		public static const DELETE_REQUEST_METHOD:String = "delete";
+		public static const ODATA_REQUEST_METHOD:String = "odata";
 		public static const SIG_METHOD:IOAuthSignatureMethod = new OAuthSignatureMethod_HMAC_SHA1();
 		
 		private static const LAST_RESULT_CHANGED:String = "lastResultChanged";
@@ -642,12 +645,12 @@ package com.netflix.webapis.services
 		 * @param httpMethod
 		 * 
 		 */		
-		protected function createLoader(sendQuery:String, params:Object, result:Function, httpMethod:String=URLRequestMethod.GET):void
+		protected function createLoader(sendQuery:String, params:Object, result:Function, httpMethod:String="GET"):void
 		{
 			//first clear
 			clearLoader();
 			//final http method
-			var finalHttpMethod:String = (httpMethod==DELETE_REQUEST_METHOD)?URLRequestMethod.GET:httpMethod;
+			var finalHttpMethod:String = (httpMethod==DELETE_REQUEST_METHOD)?GET_REQUEST_METHOD:httpMethod;
 			//then create
 			_urlLoader = new URLLoader();
 			_urlLoader.dataFormat = URLLoaderDataFormat.TEXT;
@@ -665,7 +668,7 @@ package com.netflix.webapis.services
 				params = {};
 			//adjust params
 			if(params is ParamsBase){
-				if(finalHttpMethod==URLRequestMethod.POST || finalHttpMethod==URLRequestMethod.PUT)
+				if(finalHttpMethod==POST_REQUEST_METHOD || finalHttpMethod==PUT_REQUEST_METHOD)
 					finalParams = ParamsBase(params).toPostObject();
 				else
 					finalParams = ParamsBase(params).toObject();
@@ -678,19 +681,19 @@ package com.netflix.webapis.services
 			_currentURL = sendQuery;
 			//make request
 			var requestString:String; 
-			if(httpMethod!="odata")
+			if(httpMethod!=ODATA_REQUEST_METHOD)
 			{
 				var tokenRequest:OAuthRequest = new OAuthRequest(finalHttpMethod,sendQuery,finalParams,consumer,accessToken);
 				requestString = tokenRequest.buildRequest(SIG_METHOD, OAuthRequest.RESULT_TYPE_URL_STRING, "", timeOffset);
 			} else {
 				requestString = sendQuery + ParamsBase(params).toOdataString();
-				finalHttpMethod = URLRequestMethod.GET;
+				finalHttpMethod = GET_REQUEST_METHOD;
 			}
 			if(enableTraceStatements)
 				trace(requestString);
 			//make request
 			var urlRequest:URLRequest = new URLRequest(requestString);
-			if(finalHttpMethod==URLRequestMethod.POST)
+			if(finalHttpMethod==POST_REQUEST_METHOD)
 			{
 				var postVars:URLVariables = new URLVariables();
 				for(var key:String in finalParams)
