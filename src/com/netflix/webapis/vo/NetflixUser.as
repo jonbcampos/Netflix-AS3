@@ -68,6 +68,10 @@ package com.netflix.webapis.vo
 		 * User Last Name. 
 		 */		
 		public var lastName:String;
+		
+		public var nickName:String;
+		
+		public var maxMaturityLevel:CategoryItem;
 		/**
 		 * Can watch instant movies. 
 		 */		

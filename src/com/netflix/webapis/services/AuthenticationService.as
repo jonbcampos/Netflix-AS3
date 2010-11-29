@@ -164,7 +164,8 @@ package com.netflix.webapis.services
 			var reqUrl:String = NETFLIX_BASE_URL + "oauth/request_token";
 			var tokenRequest:OAuthRequest = new OAuthRequest(URLRequestMethod.GET,reqUrl,null,consumer);
 			var request:String = tokenRequest.buildRequest(SIG_METHOD, OAuthRequest.RESULT_TYPE_URL_STRING, "", timeOffset);
-			trace(request);
+			if(enableTraceStatements)
+				trace(request);
 			return request;
 		}
 		
@@ -214,7 +215,9 @@ package com.netflix.webapis.services
 			
 			var tokenRequest:OAuthRequest = new OAuthRequest(URLRequestMethod.GET,NETFLIX_BASE_URL+"oauth/clock/time",null,consumer);
 			var request:String = tokenRequest.buildRequest(SIG_METHOD, OAuthRequest.RESULT_TYPE_URL_STRING, "", timeOffset);
-			trace(request);
+			
+			if(enableTraceStatements)
+				trace(request);
 			_timeLoader.load(new URLRequest(request));
 		}
 		

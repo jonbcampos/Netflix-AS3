@@ -38,6 +38,7 @@ package com.netflix.webapis.models
 		 * Queue Position. 
 		 */		
 		public var queuePosition:Number;
+		public var availabilityLabel:String;
 		
 		public function QueueItemModel(target:IEventDispatcher=null)
 		{

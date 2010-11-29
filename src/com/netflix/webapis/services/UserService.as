@@ -28,7 +28,6 @@ package com.netflix.webapis.services
 	import com.netflix.webapis.params.ParamsBase;
 	import com.netflix.webapis.params.UserParams;
 	import com.netflix.webapis.vo.NetflixUser;
-	import com.netflix.webapis.vo.PreferredFormat;
 	import com.netflix.webapis.xml.NetflixXMLUtil;
 	
 	import flash.events.Event;
@@ -65,6 +64,7 @@ package com.netflix.webapis.services
 		public static const RECOMMENDATION_SERVICE:String = "recommendation";
 		public static const USER_INFO_SERVICE:String = "userInfo";
 		public static const TITLES_STATES_SERVICE:String = "titleStates";
+		public static const USER_FEEDS_SERVICE:String = "userFeeds";
 		//---------------------------------------------------------------------
 		//
 		// Public Methods
@@ -87,6 +87,9 @@ package com.netflix.webapis.services
 					break;
 				case TITLES_STATES_SERVICE:
 					titleStatesService( parameters );
+					break;
+				case USER_FEEDS_SERVICE:
+					userFeedsService( parameters );
 					break;
 			}
 		}
@@ -145,6 +148,11 @@ package com.netflix.webapis.services
 			handleServiceLoading(USERS_URL,determineParams(params,TITLES_STATES_SERVICE));
 		}
 		
+		public function userFeedsService(params:ParamsBase=null):void
+		{
+			handleServiceLoading(USERS_URL,determineParams(params,USER_FEEDS_SERVICE));
+		}
+		
 		/**
 		 * @inheritDoc
 		 */
@@ -170,6 +178,11 @@ package com.netflix.webapis.services
 					if(checkForUser()==false)
 						return;
 					sendQuery = user.titleStatesLink;
+					break;
+				case USER_FEEDS_SERVICE:
+					if(checkForUser()==false)
+						return;
+					sendQuery = user.feedsLink;
 					break;
 				default:
 					//check if it exists, return current
@@ -233,20 +246,25 @@ package com.netflix.webapis.services
 					for each (resultNode in returnedXML..title_state)
 						resultsArray.push( NetflixXMLUtil.handleTitleState(resultNode) );
 					break;
+				case USER_FEEDS_SERVICE:
+					for each (resultNode in returnedXML..link)
+						resultsArray.push( NetflixXMLUtil.handleLink(resultNode) );
+					break;
 				default:
 					user = new NetflixUser();
 					//attributes
 					user.userId = returnedXML.user_id;
 					user.firstName = returnedXML.first_name;
 					user.lastName = returnedXML.last_name;
+					user.nickName = returnedXML.nickname;
 					user.canInstantWatch = Boolean(returnedXML.can_instant_watch);
 					//preferred formats
 					user.preferredFormats = [];
-					for each(var preferredFormatXML:XML in returnedXML..category){
-						var pvo:PreferredFormat = new PreferredFormat();
-						pvo.label = preferredFormatXML.@label;
-						pvo.term = preferredFormatXML.@term;
-						user.preferredFormats.push(pvo);
+					for each(var categoryXML:XML in returnedXML..category){
+						if(categoryXML.@scheme == NetflixXMLUtil.TITLE_FORMAT_SCHEME)
+							user.preferredFormats.push(NetflixXMLUtil.handleCategory(categoryXML));
+						else if(categoryXML.@scheme == NetflixXMLUtil.MATURITY_LEVEL_SCHEMA)
+							user.maxMaturityLevel = NetflixXMLUtil.handleCategory(categoryXML);
 					}
 					//links
 					for each(var linksXML:XML in returnedXML..link)
@@ -367,6 +385,12 @@ package com.netflix.webapis.services
 			var params:UserParams = new UserParams();
 			params.titleRefs = titles;
 			titleStatesService(params);
+		}
+		
+		public function getUserFeeds():void
+		{
+			var params:UserParams = new UserParams();
+			userFeedsService(params);
 		}
 	}
 }

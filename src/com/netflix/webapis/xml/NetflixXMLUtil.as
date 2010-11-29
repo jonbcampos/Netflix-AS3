@@ -92,7 +92,7 @@ package com.netflix.webapis.xml
 		public static const TV_RATING_SCHEME:String = "http://api.netflix.com/categories/tv_ratings";
 		public static const GENRES_SCHEME:String = "http://api.netflix.com/categories/genres";
 		
-		public static const AVAILABLE_NOW_SCHEME:String = "http://api.netflix.com/categories/queue_availability";
+		public static const AVAILABILITY_SCHEME:String = "http://api.netflix.com/categories/queue_availability";
 		
 		private static const TITLE_TYPE_INSTANT:String = "Instant";
 		private static const TITLE_TYPE_DVD:String = "DVD";
@@ -110,6 +110,7 @@ package com.netflix.webapis.xml
 		public static const SERIES_TITLE_SCHEMA:String = "http://schemas.netflix.com/catalog/titles.series";
 		public static const AVAILABLE_QUEUE_SCHEMA:String = "http://schemas.netflix.com/queues.available";
 		public static const AWARDS_SCHEMA:String = "http://schemas.netflix.com/catalog/titles/awards";
+		public static const MATURITY_LEVEL_SCHEMA:String = "http://api.netflix.com/categories/maturity_level";
 		
 		public static const QUEUES_SCHEMA:String = "http://schemas.netflix.com/queues";
 		public static const RENTAL_HISTORY_SCHEMA:String = "http://schemas.netflix.com/rental_history";
@@ -266,6 +267,8 @@ package com.netflix.webapis.xml
 							model.rating = category.label;
 						else if(category.scheme == TV_RATING_SCHEME && category.label!="null")
 							model.rating = category.label;
+						else if(model is QueueItemModel && category.scheme == AVAILABILITY_SCHEME)
+							QueueItemModel(model).availabilityLabel = resultNode.valueOf();
 						
 						break;
 					case AVERAGE_RATING:
