@@ -29,6 +29,7 @@ package com.netflix.webapis.services
 	import flash.events.HTTPStatusEvent;
 	import flash.events.IEventDispatcher;
 	import flash.events.IOErrorEvent;
+	import flash.events.ProgressEvent;
 	import flash.net.URLLoader;
 	import flash.net.URLLoaderDataFormat;
 	import flash.net.URLRequest;
@@ -79,6 +80,7 @@ package com.netflix.webapis.services
 			_urlLoader = new URLLoader();
 			_urlLoader.dataFormat = URLLoaderDataFormat.TEXT;
 			_urlLoader.addEventListener(HTTPStatusEvent.HTTP_STATUS, httpStatusHandler);
+			_urlLoader.addEventListener(ProgressEvent.PROGRESS, progressHandler);
 			_urlLoader.addEventListener(IOErrorEvent.IO_ERROR,_authenticationService_IOErrorHandler);
 			_urlLoader.addEventListener(Event.COMPLETE,_authenticationService_CompleteHandler);
 			_urlLoader.load(new URLRequest(_getRequestUrl()));

@@ -228,9 +228,7 @@ package com.netflix.webapis.services
 		//-----------------------------
 		public function get accessTokenExists():Boolean
 		{
-			if(userId&&accessToken)
-				return true;
-			return false;
+			return (userId && userId.length>0 && accessToken)
 		}
 		//-----------------------------
 		//  enable trace
@@ -268,6 +266,7 @@ package com.netflix.webapis.services
 				lso.flush();
 			} else {
 				lso.clear();
+				lso.flush();
 			}
 		}
 	}

@@ -200,7 +200,7 @@ package com.netflix.webapis.services
 			storage.token = value;
 			if(value && tokenSecret)
 				storage.accessToken = new OAuthToken(token,tokenSecret);
-			else if(!value)
+			else
 				storage.accessToken = null;
 		}
 		
@@ -223,7 +223,7 @@ package com.netflix.webapis.services
 			storage.tokenSecret = value;
 			if(value && token)
 				storage.accessToken = new OAuthToken(token,tokenSecret);
-			else if(!value)
+			else
 				storage.accessToken = null;
 		}
 		
