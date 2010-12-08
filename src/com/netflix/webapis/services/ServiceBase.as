@@ -880,149 +880,87 @@ package com.netflix.webapis.services
 		/**
 		 * Checks for Consumer key, returns true if exists, false if does not exist.
 		 * 
-		 * @param checkExists flips the error. true (default) throws error if 
-		 * doesn't exist, false throws error if does exist.
 		 * @return 
 		 * 
 		 */
-		protected function checkForConsumerKey(checkExists:Boolean=true):Boolean
+		protected function checkForConsumerKey():Boolean
 		{
-			if(checkExists)
-			{
-				if(!consumer){
-					dispatchFault(new ServiceFault("fault","OAuth Error","Missing Authentication Token, use the Authentication Token Service and requestToken() prior to making this call."));
-					return false;
-				} else {
-					return true;
-				}
+			if(!consumer){
+				dispatchFault(new ServiceFault("fault","OAuth Error","Missing Authentication Token, use the Authentication Token Service and requestToken() prior to making this call."));
+				return false;
 			} else {
-				if(consumer){
-					dispatchFault(new ServiceFault("fault","OAuth Error","Authentication Token Already Exists."));
-					return true;
-				} else {
-					return false;
-				}
+				return true;
 			}
 		}
 		
 		/**
 		 * Checks for AuthToken, returns true if exists, false if does not exist.
 		 * 
-		 * @param checkExists flips the error. true (default) throws error if 
-		 * doesn't exist, false throws error if does exist.
 		 * @return 
 		 * 
 		 */
-		protected function checkForAuthToken(checkExists:Boolean=true):Boolean
+		protected function checkForAuthToken():Boolean
 		{
-			if(checkExists)
-			{
-				if(checkForConsumerKey()==false)
-					return false;
-				if(oauthToken==null||oauthTokenSecret==null){
-					dispatchFault(new ServiceFault("fault","OAuth Error","Missing Authentication Token, use the Authentication Token Service and requestToken() prior to making this call."));
-					return false;
-				} else {
-					return true;
-				}
+			if(checkForConsumerKey()==false)
+				return false;
+			if(oauthToken==null||oauthTokenSecret==null){
+				dispatchFault(new ServiceFault("fault","OAuth Error","Missing Authentication Token, use the Authentication Token Service and requestToken() prior to making this call."));
+				return false;
 			} else {
-				if(oauthToken&&oauthTokenSecret){
-					dispatchFault(new ServiceFault("fault","OAuth Error","Authentication Token Already Exists."));
-					return true;
-				} else {
-					return false;
-				}
+				return true;
 			}
 		}
 		
 		/**
 		 * Checks for AccessToken, returns true if exists, false if does not exist.
 		 * 
-		 * @param checkExists flips the error. true (default) throws error if 
-		 * doesn't exist, false throws error if does exist.
 		 * @return 
 		 * 
 		 */		
-		protected function checkForAccessToken(checkExists:Boolean=true):Boolean
+		protected function checkForAccessToken():Boolean
 		{
-			if(checkExists)
-			{
-				if(checkForAuthToken()==false)
-					return false;
-				if(userId==null){
-					dispatchFault(new ServiceFault("fault","OAuth Error","Missing Access Token, use the Access Token Service and getAccessToken() prior to making this call."));
-					return false;
-				}
-				return true;
-			} else {
-				if(userId)
-				{
-					dispatchEvent(new AccessTokenResultEvent(AccessTokenResultEvent.RESULT,accessToken,userId));
-					return true;
-				} else {
-					return false;
-				}
+			if(checkForAuthToken()==false)
+				return false;
+			if(userId==null){
+				dispatchFault(new ServiceFault("fault","OAuth Error","Missing Access Token, use the Access Token Service and getAccessToken() prior to making this call."));
+				return false;
 			}
+			return true;
 		}
 		
 		/**
 		 * Checks for User Information, returns true if exists, false if does not exist.
 		 * 
-		 * @param checkExists flips the error. true (default) throws error if 
-		 * doesn't exist, false throws error if does exist.
 		 * @return 
 		 * 
 		 */		
-		protected function checkForUser(checkExists:Boolean=true):Boolean
+		protected function checkForUser():Boolean
 		{
-			if(checkExists)
-			{
-				if(checkForAccessToken()==false)
-					return false;
-				if(user==null){
-					dispatchFault(new ServiceFault("fault","User Error","Missing Netflix User, use the User Service and getUserInfo() prior to making this call."));
-					return false;
-				}
-				return true;
-			} else {
-				if(user){
-					dispatchEvent(new UsersResultEvent(UsersResultEvent.USER_RESULT,user));
-					return true;
-				} else {
-					return false;
-				}
+			if(checkForAccessToken()==false)
+				return false;
+			if(user==null){
+				dispatchFault(new ServiceFault("fault","User Error","Missing Netflix User, use the User Service and getUserInfo() prior to making this call."));
+				return false;
 			}
+			return true;
 		}
 		
 		/**
 		 * Checks for etag, returns true if exists, false if does not exist.
 		 *  
-		 * @param checkExists flips the error. true (default) throws error if 
-		 * doesn't exist, false throws error if does exist.
 		 * @return 
 		 * 
 		 */		
-		protected function checkForETag(checkExists:Boolean=true):Boolean
+		protected function checkForETag():Boolean
 		{
-			if(checkExists)
+			if(checkForUser()==false)
+				return false;
+			if(!storage.lastDiscQueueETag || !storage.lastInstantQueueETag)
 			{
-				if(checkForUser()==false)
-					return false;
-				if(!storage.lastDiscQueueETag || !storage.lastInstantQueueETag)
-				{
-					dispatchFault(new ServiceFault("fault","ETag Error","Missing Netflix Etag, use the Queue Service and discQueueService() and instantQueueService() prior to making this call."));
-					return false;
-				}
-				return true;
-			} else {
-				if(storage.lastDiscQueueETag && storage.lastInstantQueueETag)
-				{
-					dispatchFault(new ServiceFault("fault","ETAG Error","ETag Exists."));
-					return true;
-				} else {
-					return false;
-				}
+				dispatchFault(new ServiceFault("fault","ETag Error","Missing Netflix Etag, use the Queue Service and discQueueService() and instantQueueService() prior to making this call."));
+				return false;
 			}
+			return true;
 		}
 		
 		/**

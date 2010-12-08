@@ -67,8 +67,7 @@ package com.netflix.webapis.services
 			_clearLoader();
 			if(!checkForAuthToken())
 				return;
-			if(checkForAccessToken(false))
-				return;
+			//get access token
 			_urlLoader = new URLLoader();
 			_urlLoader.dataFormat = URLLoaderDataFormat.TEXT;
 			_urlLoader.addEventListener(IOErrorEvent.IO_ERROR,_accessTokenService_IOErrorHandler);

@@ -72,9 +72,6 @@ package com.netflix.webapis.services
 		public function requestToken(callBackUrl:String=null):void
 		{
 			this.callBackUrl = callBackUrl;
-			//don't get if exists
-			if(checkForAuthToken(false)==true)
-				return;
 			//run if doesn't exist
 			_clearLoader();
 			_urlLoader = new URLLoader();
