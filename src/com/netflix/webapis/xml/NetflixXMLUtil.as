@@ -708,6 +708,16 @@ package com.netflix.webapis.xml
 			return titleState;
 		}
 		
+		public static function handleRssResult(xml:XML):Array
+		{
+			var items:Array = [];
+			var itemNode:XML;
+			for each(itemNode in xml..item){
+				items.push( itemNode.link.toString() );
+			}
+			return items;
+		}
+		
 		//-----------------------------
 		//  handle generic xml result
 		//-----------------------------

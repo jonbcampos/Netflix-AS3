@@ -356,10 +356,11 @@ package com.netflix.webapis.services
 		 * @see com.netflix.webapis.events.NetflixFaultEvent#FAULT
 		 * @see com.netflix.webapis.models.RatingsItemModel
 		 */	
-		public function getPredictedRating(titles:Array):void
+		public function getPredictedRating(titles:Array, expansions:String=null):void
 		{
 			var params:RatingParams = new RatingParams();
 			params.titleRefs = titles;
+			params.expansions = expansions;
 			getPredictedRatingService(params);
 		}
 	}
