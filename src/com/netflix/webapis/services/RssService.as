@@ -61,25 +61,25 @@ package com.netflix.webapis.services
 		protected static const NEW_RELEASES_URL:String = "http://rss.netflix.com/NewReleasesRSS";
 		protected static const NEW_INSTANT_URL:String = "http://www.netflix.com/NewWatchInstantlyRSS";
 		protected static const ACTION_AND_ADVENTURE_TOP_25_URL:String = "http://rss.netflix.com/Top25RSS?gid=296";
-		protected static const ANIME_AND_ANIMATION_TOP_25_URL:String = "http://rss.netflix.com/Top25RSS?gid=296";
-		protected static const BLU_RAY_TOP_25_URL:String = "http://rss.netflix.com/Top25RSS?gid=296";
-		protected static const CHILDREN_AND_FAMILY_TOP_25_URL:String = "http://rss.netflix.com/Top25RSS?gid=296";
-		protected static const CLASSICS_TOP_25_URL:String = "http://rss.netflix.com/Top25RSS?gid=296";
-		protected static const COMEDY_TOP_25_URL:String = "http://rss.netflix.com/Top25RSS?gid=296";
-		protected static const DOCUMENTARY_TOP_25_URL:String = "http://rss.netflix.com/Top25RSS?gid=296";
-		protected static const DRAMA_TOP_25_URL:String = "http://rss.netflix.com/Top25RSS?gid=296";
-		protected static const FAITH_AND_SPIRITUALITY_TOP_25_URL:String = "http://rss.netflix.com/Top25RSS?gid=296";
-		protected static const FOREIGN_TOP_25_URL:String = "http://rss.netflix.com/Top25RSS?gid=296";
-		protected static const GAY_AND_LESBIAN_TOP_25_URL:String = "http://rss.netflix.com/Top25RSS?gid=296";
-		protected static const HORROR_TOP_25_URL:String = "http://rss.netflix.com/Top25RSS?gid=296";
-		protected static const INDEPENDENT_TOP_25_URL:String = "http://rss.netflix.com/Top25RSS?gid=296";
-		protected static const MUSIC_AND_MUSICALS_TOP_25_URL:String = "http://rss.netflix.com/Top25RSS?gid=296";
-		protected static const ROMANCE_TOP_25_URL:String = "http://rss.netflix.com/Top25RSS?gid=296";
-		protected static const SCI_FI_AND_FANTASY_TOP_25_URL:String = "http://rss.netflix.com/Top25RSS?gid=296";
-		protected static const SPECIAL_INTEREST_TOP_25_URL:String = "http://rss.netflix.com/Top25RSS?gid=296";
-		protected static const SPORTS_AND_FITNESS_TOP_25_URL:String = "http://rss.netflix.com/Top25RSS?gid=296";
-		protected static const TELEVISION_TOP_25_URL:String = "http://rss.netflix.com/Top25RSS?gid=296";
-		protected static const THRILLERS_TOP_25_URL:String = "http://rss.netflix.com/Top25RSS?gid=296";
+		protected static const ANIME_AND_ANIMATION_TOP_25_URL:String = "http://rss.netflix.com/Top25RSS?gid=623";
+		protected static const BLU_RAY_TOP_25_URL:String = "http://rss.netflix.com/Top25RSS?gid=2444";
+		protected static const CHILDREN_AND_FAMILY_TOP_25_URL:String = "http://rss.netflix.com/Top25RSS?gid=302";
+		protected static const CLASSICS_TOP_25_URL:String = "http://rss.netflix.com/Top25RSS?gid=306";
+		protected static const COMEDY_TOP_25_URL:String = "http://rss.netflix.com/Top25RSS?gid=307";
+		protected static const DOCUMENTARY_TOP_25_URL:String = "http://rss.netflix.com/Top25RSS?gid=864";
+		protected static const DRAMA_TOP_25_URL:String = "http://rss.netflix.com/Top25RSS?gid=315";
+		protected static const FAITH_AND_SPIRITUALITY_TOP_25_URL:String = "http://rss.netflix.com/Top25RSS?gid=2108";
+		protected static const FOREIGN_TOP_25_URL:String = "http://rss.netflix.com/Top25RSS?gid=2514";
+		protected static const GAY_AND_LESBIAN_TOP_25_URL:String = "http://rss.netflix.com/Top25RSS?gid=330";
+		protected static const HORROR_TOP_25_URL:String = "http://rss.netflix.com/Top25RSS?gid=338";
+		protected static const INDEPENDENT_TOP_25_URL:String = "http://rss.netflix.com/Top25RSS?gid=343";
+		protected static const MUSIC_AND_MUSICALS_TOP_25_URL:String = "http://rss.netflix.com/Top25RSS?gid=2310";
+		protected static const ROMANCE_TOP_25_URL:String = "http://rss.netflix.com/Top25RSS?gid=371";
+		protected static const SCI_FI_AND_FANTASY_TOP_25_URL:String = "http://rss.netflix.com/Top25RSS?gid=373";
+		protected static const SPECIAL_INTEREST_TOP_25_URL:String = "http://rss.netflix.com/Top25RSS?gid=2223";
+		protected static const SPORTS_AND_FITNESS_TOP_25_URL:String = "http://rss.netflix.com/Top25RSS?gid=2190";
+		protected static const TELEVISION_TOP_25_URL:String = "http://rss.netflix.com/Top25RSS?gid=2197";
+		protected static const THRILLERS_TOP_25_URL:String = "http://rss.netflix.com/Top25RSS?gid=387";
 		
 		//---------------------------------------------------------------------
 		//
