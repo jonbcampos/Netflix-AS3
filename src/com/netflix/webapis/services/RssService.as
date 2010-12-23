@@ -756,7 +756,7 @@ package com.netflix.webapis.services
 			params.startIndex = startIndex;
 			params.maxResults = maxResults;
 			params.expansions = expansions;
-			newInstantService(params);
+			feedService(params);
 		}
 		
 		
