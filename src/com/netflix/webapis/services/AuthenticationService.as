@@ -198,11 +198,8 @@ package com.netflix.webapis.services
 		//---------------------------------------------------------------------
 		private var _timeLoader:URLLoader;
 		
-		public function setServerTimeOffset(key:String,secret:String):void
+		public function setServerTimeOffset():void
 		{
-			this.key = key;
-			this.secret = secret;
-			
 			_clearTimeLoader();
 			
 			_timeLoader = new URLLoader();

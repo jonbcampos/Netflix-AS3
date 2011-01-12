@@ -315,9 +315,9 @@ package com.netflix.webapis.services
 		 * @see com.netflix.webapis.events.NetflixFaultEvent#FAULT
 		 * @see com.netflix.webapis.models.FilmographyItemModel
 		 */	
-		public function getFilmographyByPerson(person:Person):void
+		public function getFilmographyByPerson(person:Person, expansions:String=null):void
 		{
-			getFilmographyByPersonId(person.id);
+			getFilmographyByPersonId(person.id, expansions);
 		}
 		
 		/**
@@ -334,9 +334,10 @@ package com.netflix.webapis.services
 		 * @see com.netflix.webapis.events.NetflixFaultEvent#FAULT
 		 * @see com.netflix.webapis.models.FilmographyItemModel
 		 */	
-		public function getFilmographyByPersonId(personId:String):void
+		public function getFilmographyByPersonId(personId:String, expansions:String=null):void
 		{
 			var params:PeopleParams = new PeopleParams();
+			params.expansions = expansions;
 			params.personID = personId;
 			filmographyService(params);
 		}
@@ -355,9 +356,10 @@ package com.netflix.webapis.services
 		 * @see com.netflix.webapis.events.NetflixFaultEvent#FAULT
 		 * @see com.netflix.webapis.models.FilmographyItemModel
 		 */	
-		public function getFilmographyByNetflixId(netflixId:String):void
+		public function getFilmographyByNetflixId(netflixId:String, expansions:String=null):void
 		{
 			var params:PeopleParams = new PeopleParams();
+			params.expansions = expansions;
 			params.netflixId = netflixId;
 			filmographyService(params);
 		}

@@ -936,8 +936,6 @@ package com.netflix.webapis.services
 		 */		
 		protected function checkForUser():Boolean
 		{
-			if(checkForAccessToken()==false)
-				return false;
 			if(user==null){
 				dispatchFault(new ServiceFault("fault","User Error","Missing Netflix User, use the User Service and getUserInfo() prior to making this call."));
 				return false;
@@ -961,6 +959,20 @@ package com.netflix.webapis.services
 				return false;
 			}
 			return true;
+		}
+		
+		//---------------------------------------------------------------------
+		//
+		//  Public Function
+		//
+		//---------------------------------------------------------------------
+		
+		public function setConsumerKey(netflixKey:String, netflixSecret:String):void
+		{
+			if(netflixKey != key)
+				key = netflixKey;
+			if(netflixSecret != secret)
+				secret = netflixSecret;
 		}
 		
 		/**

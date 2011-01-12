@@ -560,6 +560,9 @@ package com.netflix.webapis.services
 		//---------------------------------------------------------------------
 		private var _ratingService:RatingService;
 		private var _urlLoader:URLLoader;
+		
+		private var _lastFeed:String;
+		private var _lastFeedReturn:Array;
 		//---------------------------------------------------------------------
 		//
 		// Public Methods
@@ -638,6 +641,15 @@ package com.netflix.webapis.services
 					break;
 			}
 			
+			//check cached
+			if(sendQuery == _lastFeed)
+			{
+				_getTitles( _lastFeedReturn );
+				return;
+			}
+			
+			_lastFeed = sendQuery;
+			
 			if(!_urlLoader)
 			{
 				_urlLoader = new URLLoader();
@@ -673,6 +685,11 @@ package com.netflix.webapis.services
 		
 		override protected function formatAndDispatch(returnedXML:XML):void
 		{
+			_getTitles( NetflixXMLUtil.handleRssResult(returnedXML) );
+		}
+		
+		private function _getTitles(list:Array):void
+		{
 			if(!_ratingService)
 			{
 				_ratingService = new RatingService();
@@ -680,12 +697,12 @@ package com.netflix.webapis.services
 				_ratingService.addEventListener(NetflixFaultEvent.FAULT, _onRatingService_FaultHandler);
 			}
 			
-			var titles:Array = NetflixXMLUtil.handleRssResult(returnedXML);
-			_numberOfResults = titles.length;
+			_lastFeedReturn = list;
+			_numberOfResults = _lastFeedReturn.length;
 			_currentIndex = request.startIndex;
 			_resultsPerPage = request.maxResults;
 			
-			_ratingService.getPredictedRating(titles.slice(request.startIndex,request.startIndex+request.maxResults), request.expansions);
+			_ratingService.getPredictedRating(_lastFeedReturn.slice(request.startIndex,request.startIndex+request.maxResults), request.expansions);
 		}
 		
 		private function _onRatingService_ResultHandler(event:NetflixResultEvent):void
