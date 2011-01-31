@@ -24,6 +24,7 @@ package com.netflix.webapis.services
 	import com.netflix.webapis.ServiceFault;
 	import com.netflix.webapis.events.AuthenticationResultEvent;
 	import com.netflix.webapis.events.NetflixResultEvent;
+	import com.netflix.webapis.xml.NetflixXMLUtil;
 	
 	import flash.events.Event;
 	import flash.events.HTTPStatusEvent;
@@ -236,9 +237,9 @@ package com.netflix.webapis.services
 			var loader:URLLoader = event.target as URLLoader;
 			var result:XML = XML(loader.data);
 			_clearTimeLoader();
-			var serverTime:Number = Number(result.valueOf())*1000;
-			var cur:Number = new Date().time;
-			timeOffset =  serverTime - cur;
+			var serverTime:Number = NetflixXMLUtil.handleNumber(result)*1000;
+			var cur:Date = new Date();
+			timeOffset =  serverTime - cur.time;
 			lastNetflixResult = {"time":serverTime};
 			dispatchEvent(new NetflixResultEvent(NetflixResultEvent.SERVER_TIME_COMPLETE, serverTime, null, result));
 		}
