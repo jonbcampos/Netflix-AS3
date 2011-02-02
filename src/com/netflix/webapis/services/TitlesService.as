@@ -242,12 +242,12 @@ package com.netflix.webapis.services
 		{
 			var loader:URLLoader = event.target as URLLoader;
 			var queryXML:XML = XML(loader.data);
+			clearLoader();
 			
 			if(queryXML.Error == undefined)
 				formatAndDispatch(queryXML);
 			else
 				dispatchFault(new ServiceFault(NetflixFaultEvent.API_RESPONSE, queryXML.Error, queryXML.Error.Message));
-			clearLoader();
 		}
 		
 		/**
