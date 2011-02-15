@@ -45,49 +45,41 @@ package com.netflix.webapis.vo
 		 */		
 		public var titleStates:Array;
 		
-		[Bindable]
 		/**
 		 * Flag to signify if you can add to instant queue. 
 		 */		
 		public var addToInstant:Boolean;
 		
-		[Bindable]
 		/**
 		 * Flag to signify if you can add to disc queue. 
 		 */		
 		public var addToDisc:Boolean;
 		
-		[Bindable]
 		/**
 		 * Flag to signify if the title is an instant view title. 
 		 */		
 		public var isInstant:Boolean;
 		
-		[Bindable]
 		/**
 		 * Flag to signify if the title can be played instantly. 
 		 */		
 		public var isInstantPlay:Boolean;
 		
-		[Bindable]
 		/**
 		 * Flag to signify if the title is in the user's instant queue. 
 		 */		
 		public var isInInstantQueue:Boolean;
 		
-		[Bindable]
 		/**
 		 * Flag to signify if the title is a disc title. 
 		 */		
 		public var isDisc:Boolean;
 		
-		[Bindable]
 		/**
 		 * Flag to signify if the title is at the user's home. 
 		 */
 		public var isAtHome:Boolean;
 		
-		[Bindable]
 		/**
 		 * Flag to signify if the title is in the user's disc queue. 
 		 */	

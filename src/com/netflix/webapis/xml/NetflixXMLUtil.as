@@ -181,6 +181,18 @@ package com.netflix.webapis.xml
 										model.directorList.push(handleLink(child));
 								}
 							break;
+							case AWARDS_ATTR:
+								model.awards = handleLink(resultNode);
+								if(resultNode.awards != undefined)
+								{
+									var list:Array = [];
+									for each(child in resultNode..award_winner)
+										list.push( handleAwards(child) );
+									for each(child in resultNode..award_nominee)
+										list.push( handleAwards(child) );
+									model.awardsList = list;
+								}
+								break;
 							case FORMATS_ATTR:
 								model.formats = handleLink(resultNode);
 								if(resultNode.delivery_formats != undefined)

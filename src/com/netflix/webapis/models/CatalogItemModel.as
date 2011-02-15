@@ -27,6 +27,8 @@ package com.netflix.webapis.models
 	import com.netflix.webapis.params.TitlesParams;
 	import com.netflix.webapis.services.TitlesService;
 	import com.netflix.webapis.services.UserService;
+	import com.netflix.webapis.vo.AwardNominee;
+	import com.netflix.webapis.vo.AwardWinner;
 	import com.netflix.webapis.vo.FormatAvailability;
 	import com.netflix.webapis.vo.LinkItem;
 	import com.netflix.webapis.vo.TitleState;
@@ -230,7 +232,6 @@ package com.netflix.webapis.models
 		}
 
 		private var _directors:LinkItem;
-		
 		/**
 		 * Catalog Item's Directors Link Item. 
 		 */		
@@ -244,6 +245,23 @@ package com.netflix.webapis.models
 			if(_directors==value)
 				return;
 			_directors = value;
+			dispatchEvent(new Event(AVAILABLE_EXPANSIONS_CHANGED));
+		}
+		
+		private var _awards:LinkItem;
+		/**
+		 * Catalog Item's Awards Link Item. 
+		 */		
+		public function get awards():LinkItem
+		{
+			return _awards;
+		}
+
+		public function set awards(value:LinkItem):void
+		{
+			if(_awards==value)
+				return;
+			_awards = value;
 			dispatchEvent(new Event(AVAILABLE_EXPANSIONS_CHANGED));
 		}
 
@@ -536,7 +554,22 @@ package com.netflix.webapis.models
 			dispatchEvent(new ExpansionEvent(ExpansionEvent.DIRECTORS_CHANGE, value, directors));
 		}
 		
-		private var _awardsList:Array;
+		private var _awardsWinnerList:Array;
+		[Bindable(event="awardsChange")]
+		[ArrayElementType("com.netflix.webapis.vo.AwardWinner")]
+		/**
+		 * Catalog Item's Award List Expansion. Array of AwardWinner.
+		 * 
+		 * @return 
+		 * 
+		 * @see com.netflix.webapis.vo.AwardWinner
+		 */
+		public function get awardsWinnerList():Array
+		{
+			return _awardsWinnerList;
+		}
+		
+		private var _awardsNomineeList:Array;
 		[Bindable(event="awardsChange")]
 		[ArrayElementType("com.netflix.webapis.vo.AwardNominee")]
 		/**
@@ -545,6 +578,21 @@ package com.netflix.webapis.models
 		 * @return 
 		 * 
 		 * @see com.netflix.webapis.vo.AwardNominee
+		 */
+		public function get awardsNomineeList():Array
+		{
+			return _awardsNomineeList;
+		}
+		
+		private var _awardsList:Array;
+		[Bindable(event="awardsChange")]
+		/**
+		 * Catalog Item's Award List Expansion. Array of AwardNominee && AwardWinner.
+		 * 
+		 * @return 
+		 * 
+		 * @see com.netflix.webapis.vo.AwardNominee
+		 * @see com.netflix.webapis.vo.AwardWinner
 		 */
 		public function get awardsList():Array
 		{
@@ -556,6 +604,29 @@ package com.netflix.webapis.models
 			if(_awardsList==value)
 				return;
 			_awardsList = value;
+			
+			_awardsNomineeList = null;
+			_awardsWinnerList = null;
+			if(value)
+			{
+				var i:int = -1;
+				var n:int = value.length;
+				while(++i<n)
+				{
+					if(value[i] is AwardNominee)
+					{
+						if(!_awardsNomineeList)
+							_awardsNomineeList = [];
+						_awardsNomineeList.push( value[i] );
+					} else if(value[i] is AwardWinner)
+					{
+						if(!_awardsWinnerList)
+							_awardsWinnerList = [];
+						_awardsWinnerList.push( value[i] );
+					}
+				}
+			}
+			
 			dispatchEvent(new ExpansionEvent(ExpansionEvent.AWARDS_CHANGE, value, null));
 		}
 		

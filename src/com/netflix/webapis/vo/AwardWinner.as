@@ -19,50 +19,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE. 
  * */
-package com.netflix.webapis.models
+package com.netflix.webapis.vo
 {
-	import com.netflix.webapis.vo.LinkItem;
-	import com.netflix.webapis.xml.NetflixXMLUtil;
-	
-	import flash.events.IEventDispatcher;
-	
-	[RemoteClass(alias="com.netflix.webapis.models.ReviewItemModel")]
+	[RemoteClass(alias="com.netflix.webapis.vo.AwardWinner")]
 	/**
-	 * Review Item Model. 
-	 * @author jonbcampos
+	 * AwardWinnerVO returned as part of the <code>TitlesService</code> <i>awards</i> expansion.</code>. 
 	 * 
-	 */	
-	public class ReviewItemModel extends CatalogItemModel
+	 * @author jonbcampos
+	 */		
+	public class AwardWinner
 	{
-		public function ReviewItemModel(target:IEventDispatcher=null)
+		public function AwardWinner()
 		{
-			super(target);
 		}
-		
 		/**
-		 * Review Writeup. 
+		 * Year of award. 
 		 */		
-		public var writeup:String;
+		public var year:int;
 		/**
-		 * User Rating. 
+		 * Award category. 
 		 */		
-		public var userRating:Number;
+		public var category:CategoryItem;
 		/**
-		 * Number that found this review helpful. 
+		 * Award Link Item. 
 		 */		
-		public var helpful:Number;
-		/**
-		 * Number that found this review not helpful. 
-		 */		
-		public var notHelpful:Number;
-		/**
-		 * Review Id. 
-		 */		
-		public var reviewId:String;
-		/**
-		 * Alternate Link. 
-		 */		
-		public var alternate:LinkItem;
-		
+		public var link:LinkItem;
 	}
 }
