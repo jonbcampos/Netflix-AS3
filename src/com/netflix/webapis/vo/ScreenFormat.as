@@ -38,5 +38,8 @@ package com.netflix.webapis.vo
 		 */		
 		public var categories:Array;
 		
+		public var titleFormat:String;
+		public var screenFormat:String;
+		
 	}
 }

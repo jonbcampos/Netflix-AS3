@@ -345,7 +345,9 @@ package com.netflix.webapis.services
 				break;
 				case CatalogItemModel.EXPAND_AWARDS:
 					for each(resultNode in returnedXML..award_nominee)
-						resultsArray.push(NetflixXMLUtil.handleAwards(resultNode));
+						resultsArray.push(NetflixXMLUtil.handleAwardNominees(resultNode));
+					for each(resultNode in returnedXML..award_nominee)
+						resultsArray.push( NetflixXMLUtil.handleAwardsWinners(resultNode) );	
 				break;
 				default:
 					resultsArray = [];

@@ -517,10 +517,10 @@ package com.netflix.webapis.services
 		 */		
 		private var _currentParams:Object;
 		
-		private var _httpStatusResponse:String;
+		protected var httpStatusResponse:String;
 		protected function get lastHttpStatusResponse():String
 		{
-			return _httpStatusResponse;
+			return httpStatusResponse;
 		}
 		
 		internal var _currentIndex:uint = 0;
@@ -613,7 +613,7 @@ package com.netflix.webapis.services
 			_numberOfResults = (returnedXML.number_of_results)?returnedXML.number_of_results:0;
 			_currentIndex = (returnedXML.start_index)?returnedXML.start_index:0;
 			_resultsPerPage = (returnedXML.results_per_page)?returnedXML.results_per_page:0;
-			_httpStatusResponse = (returnedXML.message)?returnedXML.message:_httpStatusResponse;
+			httpStatusResponse = (returnedXML.message)?returnedXML.message:httpStatusResponse;
 		}
 		/**
 		 * Dispatches the result. 
@@ -623,7 +623,7 @@ package com.netflix.webapis.services
 		 */	
 		protected function dispatchResult(result:Object, dispatchType:String, rawXML:XML = null):void
 		{
-			dispatchEvent(new NetflixResultEvent(NetflixResultEvent.RESULT, result, dispatchType, rawXML, _currentURL, _currentParams, _httpStatusResponse));
+			dispatchEvent(new NetflixResultEvent(NetflixResultEvent.RESULT, result, dispatchType, rawXML, _currentURL, _currentParams, httpStatusResponse));
 		}
 		/**
 		 * Dispatches Fault.
@@ -737,7 +737,7 @@ package com.netflix.webapis.services
 		{
 			if(enableTraceStatements)
 				trace(event.toString());
-			var errorText:String = (_httpStatusResponse)?_httpStatusResponse:event.text;
+			var errorText:String = (httpStatusResponse)?httpStatusResponse:event.text;
 			dispatchFault(new ServiceFault(event.type,"IO Service Error: "+type+ " Error",errorText, event.text));
 			clearLoader();
 		}
@@ -778,7 +778,7 @@ package com.netflix.webapis.services
 			switch(event.status)
 			{
 				case 200:
-					_httpStatusResponse = "The resource's representation is returned in the response.";
+					httpStatusResponse = "The resource's representation is returned in the response.";
 					break;
 				case 201:
 					//users/user_token/queues/disc and users/user_token/queues/instant
@@ -787,24 +787,24 @@ package com.netflix.webapis.services
 						type==QueueService.UPDATE_INSTANT_SERVICE||
 						type==QueueService.UPDATE_DISC_SERVICE
 					)
-						_httpStatusResponse = "Only some titles in series or disc set were added.";
+						httpStatusResponse = "Only some titles in series or disc set were added.";
 					else
-						_httpStatusResponse = "Resource created";
+						httpStatusResponse = "Resource created";
 					break;
 				case 304:
-					_httpStatusResponse = "Resource not modified";
+					httpStatusResponse = "Resource not modified";
 					break;
 				case 400:
-					_httpStatusResponse = "Invalid OAuth Security Token";
+					httpStatusResponse = "Invalid OAuth Security Token";
 					break;
 				case 401:
-					_httpStatusResponse = "API Fault, Invalid Signature.";
+					httpStatusResponse = "API Fault, Invalid Signature.";
 					break;
 				case 403:
-					_httpStatusResponse = "Invalid feed token";
+					httpStatusResponse = "Invalid feed token";
 					break;
 				case 404:
-					_httpStatusResponse = "Resource not found";
+					httpStatusResponse = "Resource not found";
 					break;
 				case 412:
 					//users/user_token/queues/disc and users/user_token/queues/instant
@@ -813,15 +813,15 @@ package com.netflix.webapis.services
 						type==QueueService.UPDATE_INSTANT_SERVICE||
 						type==QueueService.UPDATE_DISC_SERVICE
 					)
-						_httpStatusResponse = "Title already in queue";
+						httpStatusResponse = "Title already in queue";
 					else
-						_httpStatusResponse = "Precondition failed. Resource has been modified.";
+						httpStatusResponse = "Precondition failed. Resource has been modified.";
 					break;
 				case 422:
-					_httpStatusResponse = "Title has already been rated";
+					httpStatusResponse = "Title has already been rated";
 					break;
 				case 500:
-					_httpStatusResponse = "Internal error";
+					httpStatusResponse = "Internal error";
 					break;
 			}
 		}
@@ -847,7 +847,7 @@ package com.netflix.webapis.services
 				_resultFunction = null;
 				_urlLoader = null;
 			}
-			_httpStatusResponse = null;
+			httpStatusResponse = null;
 		}
 		//---------------------------------------------------------------------
 		//

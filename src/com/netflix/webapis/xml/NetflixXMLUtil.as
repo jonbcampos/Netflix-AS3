@@ -28,6 +28,7 @@ package com.netflix.webapis.xml
 	import com.netflix.webapis.models.ReviewItemModel;
 	import com.netflix.webapis.services.ServiceStorage;
 	import com.netflix.webapis.vo.AwardNominee;
+	import com.netflix.webapis.vo.AwardWinner;
 	import com.netflix.webapis.vo.CategoryItem;
 	import com.netflix.webapis.vo.FormatAvailability;
 	import com.netflix.webapis.vo.LangaugeFormat;
@@ -86,6 +87,7 @@ package com.netflix.webapis.xml
 		public static const PREFERRED_FORMAT:String = "preferred_format";
 		
 		public static const TITLE_FORMAT_SCHEME:String = "http://api.netflix.com/categories/title_formats";
+		public static const SCREEN_FORMAT_SCHEME:String = "http://api.netflix.com/categories/screen_formats";
 		public static const TITLE_STATE_SCHEME:String = "http://api.netflix.com/categories/title_states";
 		
 		public static const MPAA_RATINGS_SCHEME:String = "http://api.netflix.com/categories/mpaa_ratings";
@@ -185,12 +187,23 @@ package com.netflix.webapis.xml
 								model.awards = handleLink(resultNode);
 								if(resultNode.awards != undefined)
 								{
-									var list:Array = [];
+									model.awardsList = [];
 									for each(child in resultNode..award_winner)
-										list.push( handleAwards(child) );
+									{
+										if(!model.awardsWinnerList)
+											model.awardsWinnerList = [];
+										var awardWinner:AwardWinner = handleAwardsWinners(child);
+										model.awardsWinnerList.push( awardWinner );
+										model.awardsList.push( awardWinner );
+									}
 									for each(child in resultNode..award_nominee)
-										list.push( handleAwards(child) );
-									model.awardsList = list;
+									{
+										if(!model.awardsNomineeList)
+											model.awardsNomineeList = [];
+										var awardNominee:AwardNominee = handleAwardNominees(child);
+										model.awardsNomineeList.push( awardNominee );
+										model.awardsList.push( awardNominee );
+									}
 								}
 								break;
 							case FORMATS_ATTR:
@@ -218,9 +231,21 @@ package com.netflix.webapis.xml
 							break;
 							case SCREEN_FORMATS_ATTR:
 								model.screenFormats = handleLink(resultNode);
+								if(resultNode.screen_formats != undefined)
+								{
+									model.screenFormatsList = [];
+									for each(child in resultNode..screen_format)
+										model.screenFormatsList.push( handleScreenFormat(child) );
+								}
 							break;
 							case AUDIO_ATTR:
 								model.languagesAndAudio = handleLink(resultNode);
+								if(resultNode.languages_and_audio != undefined)
+								{
+									model.languagesAndAudioList = [];
+									for each(child in resultNode..language_audio_format)
+										model.languagesAndAudioList.push( handleLanguageAudioFormat(child) );
+								}
 							break;
 							case SEASONS_ATTR:
 								model.seasons = handleLink(resultNode);
@@ -455,12 +480,32 @@ package com.netflix.webapis.xml
 			return availability;
 		}
 		/**
-		 * Handles the parsing of Awards Results. 
+		 * Handles the parsing of Awards Nominee Results. 
 		 * @param xml
 		 * @return 
 		 * 
 		 */		
-		public static function handleAwards(xml:XML):AwardNominee
+		public static function handleAwardsWinners(xml:XML):AwardWinner
+		{
+			var award:AwardWinner = new AwardWinner();
+			award.year = xml.@year;
+			award.category = new CategoryItem();
+			award.category.scheme = xml.category.@scheme;
+			award.category.label = xml.category.@label;
+			award.category.term = xml.category.@term;
+			award.link = new LinkItem();
+			award.link.url = xml.link.@href;
+			award.link.rel = xml.link.@rel;
+			award.link.title = xml.link.@title;
+			return award;
+		}
+		/**
+		 * Handles the parsing of Awards Nominee Results. 
+		 * @param xml
+		 * @return 
+		 * 
+		 */		
+		public static function handleAwardNominees(xml:XML):AwardNominee
 		{
 			var award:AwardNominee = new AwardNominee();
 			award.year = xml.@year;
@@ -489,6 +534,10 @@ package com.netflix.webapis.xml
 				category.label = x.@label;
 				category.scheme = x.@scheme;
 				category.term = x.@term;
+				if(category.scheme == TITLE_FORMAT_SCHEME)
+					screenFormat.titleFormat = category.label;
+				else if(category.scheme == SCREEN_FORMAT_SCHEME)
+					screenFormat.screenFormat = category.label;
 				screenFormat.categories.push(category);
 			}
 			return screenFormat;
@@ -508,14 +557,20 @@ package com.netflix.webapis.xml
 			title.format.scheme = xml.category.@scheme;
 			title.format.term = xml.category.@term;
 			title.languages = [];
-			for each(var x:XML in xml.category){
+			
+			var children:XMLList = xml.category.children();
+			
+			for each(var x:XML in children){
 				var language:LangaugeFormat = new LangaugeFormat();
 				language.language = new CategoryItem();
 				language.language.label = x.@label;
 				language.language.scheme = x.@scheme;
 				language.language.term = x.@term;
 				language.audioFormats = [];
-				for each(var y:XML in y.category){
+				
+				var subchildren:XMLList = x.children();
+				
+				for each(var y:XML in subchildren){
 					var audio:CategoryItem = new CategoryItem();
 					audio.label = y.@label;
 					audio.scheme = y.@scheme;

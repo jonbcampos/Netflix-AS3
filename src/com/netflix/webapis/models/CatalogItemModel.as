@@ -555,6 +555,7 @@ package com.netflix.webapis.models
 		}
 		
 		private var _awardsWinnerList:Array;
+		
 		[Bindable(event="awardsChange")]
 		[ArrayElementType("com.netflix.webapis.vo.AwardWinner")]
 		/**
@@ -564,10 +565,16 @@ package com.netflix.webapis.models
 		 * 
 		 * @see com.netflix.webapis.vo.AwardWinner
 		 */
-		public function get awardsWinnerList():Array
+		public function get awardsWinnerList():Array { return _awardsWinnerList; }
+		
+		public function set awardsWinnerList(value:Array):void
 		{
-			return _awardsWinnerList;
+			if (_awardsWinnerList == value)
+				return;
+			_awardsWinnerList = value;
+			dispatchEvent(new ExpansionEvent(ExpansionEvent.AWARDS_CHANGE, value, null));
 		}
+		
 		
 		private var _awardsNomineeList:Array;
 		[Bindable(event="awardsChange")]
@@ -579,10 +586,16 @@ package com.netflix.webapis.models
 		 * 
 		 * @see com.netflix.webapis.vo.AwardNominee
 		 */
-		public function get awardsNomineeList():Array
+		public function get awardsNomineeList():Array { return _awardsNomineeList; }
+		
+		public function set awardsNomineeList(value:Array):void
 		{
-			return _awardsNomineeList;
+			if (_awardsNomineeList == value)
+				return;
+			_awardsNomineeList = value;
+			dispatchEvent(new ExpansionEvent(ExpansionEvent.AWARDS_CHANGE, value, null));
 		}
+		
 		
 		private var _awardsList:Array;
 		[Bindable(event="awardsChange")]
@@ -604,29 +617,6 @@ package com.netflix.webapis.models
 			if(_awardsList==value)
 				return;
 			_awardsList = value;
-			
-			_awardsNomineeList = null;
-			_awardsWinnerList = null;
-			if(value)
-			{
-				var i:int = -1;
-				var n:int = value.length;
-				while(++i<n)
-				{
-					if(value[i] is AwardNominee)
-					{
-						if(!_awardsNomineeList)
-							_awardsNomineeList = [];
-						_awardsNomineeList.push( value[i] );
-					} else if(value[i] is AwardWinner)
-					{
-						if(!_awardsWinnerList)
-							_awardsWinnerList = [];
-						_awardsWinnerList.push( value[i] );
-					}
-				}
-			}
-			
 			dispatchEvent(new ExpansionEvent(ExpansionEvent.AWARDS_CHANGE, value, null));
 		}
 		

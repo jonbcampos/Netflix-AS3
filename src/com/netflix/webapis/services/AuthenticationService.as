@@ -209,7 +209,7 @@ package com.netflix.webapis.services
 			_timeLoader.addEventListener(IOErrorEvent.IO_ERROR,_onTimeLoader_IOErrorHandler);
 			_timeLoader.addEventListener(Event.COMPLETE,_onTimeLoader_CompleteHandler);
 			
-			var tokenRequest:OAuthRequest = new OAuthRequest(ServiceBase.GET_REQUEST_METHOD,NETFLIX_BASE_URL+"oauth/clock/time",null,consumer);
+			var tokenRequest:OAuthRequest = new OAuthRequest(ServiceBase.GET_REQUEST_METHOD,NETFLIX_BASE_URL+"oauth/clock/time",null,consumer, accessToken);
 			var request:String = tokenRequest.buildRequest(SIG_METHOD, OAuthRequest.RESULT_TYPE_URL_STRING, "", timeOffset);
 			
 			if(enableTraceStatements)
