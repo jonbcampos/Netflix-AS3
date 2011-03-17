@@ -294,8 +294,12 @@ package com.netflix.webapis.services
 					_currentIndex = request.startIndex;
 					_resultsPerPage = request.maxResults;
 					_numberOfResults = NetflixOdataUtil.handleCount(returnedXML);
-					for each (resultNode in returnedXML..entry)
-						resultsArray.push( NetflixOdataUtil.handleOdataToCatalogItemModel(resultNode) );
+					var children:XMLList = returnedXML.children();
+					for each (resultNode in children)
+					{
+						if(resultNode.name() == "http://www.w3.org/2005/Atom::entry")
+							resultsArray.push( NetflixOdataUtil.handleOdataToCatalogItemModel(resultNode) );
+					}
 					break;
 			}
 			lastNetflixResult = resultsArray;
