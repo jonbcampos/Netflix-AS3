@@ -225,7 +225,7 @@ package com.netflix.webapis.services
 					if(TitlesParams(params).term && params.filter.length>0)
 						params.filter = " and "+params.filter;
 					if(TitlesParams(params).term)
-						params.filter = "substringof(trim('"+URLEncoding.encode(TitlesParams(params).term)+"'), Name)"+params.filter;
+						params.filter = "(Name eq trim('"+TitlesParams(params).term+"') or substringof(trim('"+TitlesParams(params).term+"'), Name))"+params.filter;
 					break;
 			}
 			
