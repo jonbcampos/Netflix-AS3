@@ -140,8 +140,9 @@ package com.netflix.webapis.xml
 			model.links = [];
 			var i:int = -1;
 			var n:int = -1;
+			var children:XMLList = xml.children();
 			
-			for each (resultNode in xml.children())
+			for each (resultNode in children)
 			{
 				var nodeType:String = String(resultNode.name());
 				switch (nodeType) {
@@ -350,8 +351,10 @@ package com.netflix.webapis.xml
 			var resultNode:XML;
 			var personVO:Person = new Person;
 			personVO.links = [];
+			var children:XMLList = xml.children();
 			
-			for each (resultNode in xml.children()) {
+			for each (resultNode in children)
+			{
 				var nodeType:String = String(resultNode.name());
 				switch (nodeType) {
 					case LINK:
@@ -389,7 +392,7 @@ package com.netflix.webapis.xml
 		 * 
 		 */		
 		public static function handleStringNode(xml:XML):String {
-			return xml.valueOf().toString();
+			return String(xml.valueOf());
 		}
 		
 		/**
@@ -414,16 +417,20 @@ package com.netflix.webapis.xml
 		 * 
 		 */		
 		public static function handleLink(xml:XML):LinkItem {
-			var linkVO:LinkItem = new LinkItem;
+			var linkVO:LinkItem = new LinkItem();
 			linkVO.url = xml.@href;
 			linkVO.rel = xml.@rel;
 			linkVO.title = xml.@title;
-			if (xml.children().length() > 0)
+			var children:XMLList = xml.children();
+			var n:int = children.length();
+			if(n > 0)
 			{
 				linkVO.expansion = [];
 				var childXML:XML = xml.children()[0] as XML;
 				linkVO.expansionTitle = String(childXML.name());
-				for each( var linkXML:XML in childXML.children()) {
+				var subchildren:XMLList = childXML.children();
+				for each( var linkXML:XML in subchildren)
+				{
 					if (linkXML.name() == LINK)
 						linkVO.expansion.push(handleLink(linkXML));
 				}
@@ -438,7 +445,7 @@ package com.netflix.webapis.xml
 		 * 
 		 */		
 		public static function handleCategory(xml:XML):CategoryItem{
-			var category:CategoryItem = new CategoryItem;
+			var category:CategoryItem = new CategoryItem();
 			category.scheme = xml.@scheme;
 			category.label = xml.@label;
 			category.term = xml.@term;
@@ -453,7 +460,7 @@ package com.netflix.webapis.xml
 		 */		
 		public static function handleDate(xml:XML):Date
 		{
-			return handleDateValue(xml.valueOf().toString());
+			return handleDateValue(String(xml.valueOf()));
 		}
 		
 		public static function handleDateValue(value:String):Date
@@ -612,7 +619,9 @@ package com.netflix.webapis.xml
 			itemVO.helpful = Number(xml.helpful);
 			itemVO.notHelpful = Number(xml.not_helpful);
 			
-			for each (resultNode in xml.children()) {
+			var children:XMLList = xml.children();
+			
+			for each (resultNode in children) {
 				var nodeType:String = String(resultNode.name());
 				switch (nodeType) {
 					case TITLE:
@@ -701,13 +710,14 @@ package com.netflix.webapis.xml
 				for each(var titleStateXML:XML in titleStates)
 				{
 					var titleStateItem:TitleStateItem = new TitleStateItem();
-					for each (var titleStateNode:XML in titleStateXML.children())
+					var titleStateChildren:XMLList = titleStateXML.children();
+					for each (var titleStateNode:XML in titleStateChildren)
 					{
 						var titleStateNodeType:String = String(titleStateNode.name());
 						switch(titleStateNodeType)
 						{
 							case LINK:
-								if(String(titleStateNode.@title).indexOf("item")>-1)
+								if(String(titleStateNode.@rel).indexOf("item")>-1)
 								{
 									titleStateItem.queueId = titleStateItem.url = titleStateNode.@href;
 									titleStateItem.rel = titleStateNode.@rel;
@@ -717,7 +727,8 @@ package com.netflix.webapis.xml
 							case FORMAT:
 								titleStateItem.formats = [];
 								var categoryItem:CategoryItem;
-								for each(var resultNode:XML in titleStateXML.format.children())
+								var formatChildren:XMLList = titleStateXML.format.children();
+								for each(var resultNode:XML in formatChildren)
 								{
 									var nodeType:String = String(resultNode.name());
 									switch(nodeType)
@@ -780,7 +791,7 @@ package com.netflix.webapis.xml
 			var items:Array = [];
 			var itemNode:XML;
 			for each(itemNode in xml..item){
-				items.push( itemNode.link.toString() );
+				items.push( String(itemNode.link) );
 			}
 			return items;
 		}
