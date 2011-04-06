@@ -194,7 +194,7 @@ package com.netflix.webapis.services
 					break;
 				case SET_ACTUAL_TITLE_RATINGS_SERVICE:
 					method = ServiceBase.PUT_REQUEST_METHOD;
-					sendQuery += "/" +ACTUAL_RATINGS_PART;
+					sendQuery += "/" +ACTUAL_RATINGS_PART+"/"+RatingParams(params).titleRef.netflixId;
 					break;
 				case GET_ACTUAL_TITLE_RATINGS_SERVICE:
 					if(!(params is RatingParams))
