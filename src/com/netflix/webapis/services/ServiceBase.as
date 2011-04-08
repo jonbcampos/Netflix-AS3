@@ -28,6 +28,7 @@ package com.netflix.webapis.services
 	import com.netflix.webapis.events.UsersResultEvent;
 	import com.netflix.webapis.params.ParamsBase;
 	import com.netflix.webapis.vo.NetflixUser;
+	import com.netflix.webapis.xml.NetflixXMLUtil;
 	
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
@@ -67,6 +68,10 @@ package com.netflix.webapis.services
 	 * HTTP Status Event. 
 	 */	
 	[Event(name="httpStatus",type="flash.events.HTTPStatusEvent")]
+	/**
+	 * Event fired when the server time is returned. 
+	 */	
+	[Event(name="serverTimeComplete",type="com.netflix.webapis.events.NetflixResultEvent")]
 	
 	/**
 	 * Base to all service classes.
@@ -343,12 +348,12 @@ package com.netflix.webapis.services
 		//---------------------
 		// time offset
 		//---------------------
-		protected function get timeOffset():Number
+		public function get timeOffset():Number
 		{
 			return storage.timeOffset;
 		}
 		
-		protected function set timeOffset(value:Number):void
+		public function set timeOffset(value:Number):void
 		{
 			storage.timeOffset = value;
 		}
@@ -467,7 +472,6 @@ package com.netflix.webapis.services
 		//-----------------------------
 		// urlLoader
 		//-----------------------------
-		private var _resultFunction:Function;
 		private var _urlLoader:URLLoader;
 		/**
 		 * Service URLLoader. 
@@ -637,6 +641,10 @@ package com.netflix.webapis.services
 			dispatchEvent(new NetflixFaultEvent(NetflixFaultEvent.FAULT,fault, _currentURL, _currentParams));
 		}
 		
+		private var _resultFunction:Function;
+		private var _storedSendQuery:String;
+		private var _storedParams:Object;
+		private var _storedHttpMethod:String;
 		/**
 		 * Creates and handles loading for requests. 
 		 * @param sendQuery
@@ -649,6 +657,11 @@ package com.netflix.webapis.services
 		{
 			//first clear
 			clearLoader();
+			//store in case of fault
+			_storedSendQuery = sendQuery;
+			_storedParams = params;
+			_storedHttpMethod = httpMethod;
+			_resultFunction = result;
 			//final http method
 			var finalHttpMethod:String = (httpMethod==DELETE_REQUEST_METHOD)?GET_REQUEST_METHOD:httpMethod;
 			//then create
@@ -660,7 +673,6 @@ package com.netflix.webapis.services
 			_urlLoader.addEventListener(HTTPStatusEvent.HTTP_STATUS, httpStatusHandler);
 			_urlLoader.addEventListener(ProgressEvent.PROGRESS, progressHandler);
 			_urlLoader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, securityErrorHandler);
-			_resultFunction = result;
 			//make final params
 			var finalParams:Object;
 			//null check
@@ -737,9 +749,14 @@ package com.netflix.webapis.services
 		{
 			if(enableTraceStatements)
 				trace(event.toString());
-			var errorText:String = (httpStatusResponse)?httpStatusResponse:event.text;
-			dispatchFault(new ServiceFault(event.type,"IO Service Error: "+type+ " Error",errorText, event.text));
-			clearLoader();
+			if(httpStatusResponse && httpStatusResponse=="API Fault, Invalid Signature." && isNaN(timeOffset))
+			{
+				getServerTimeOffset();
+			} else {
+				var errorText:String = (httpStatusResponse)?httpStatusResponse:event.text;
+				dispatchFault(new ServiceFault(event.type,"IO Service Error: "+type+ " Error",errorText, event.text));
+				clearLoader();
+			}
 		}
 		
 		/**
@@ -844,9 +861,14 @@ package com.netflix.webapis.services
 				_urlLoader.removeEventListener(ProgressEvent.PROGRESS, progressHandler);
 				if(_resultFunction!=null)
 					_urlLoader.removeEventListener(Event.COMPLETE,_resultFunction);
-				_resultFunction = null;
 				_urlLoader = null;
 			}
+			//release stored values
+			_resultFunction = null;
+			_storedHttpMethod = null;
+			_storedParams = null;
+			_storedSendQuery = null;
+			//release held response
 			httpStatusResponse = null;
 		}
 		//---------------------------------------------------------------------
@@ -990,6 +1012,68 @@ package com.netflix.webapis.services
 				lso.clear();
 				lso.flush();
 			}
+		}
+		
+		//---------------------------------------------------------------------
+		//
+		//  Time Loader
+		//
+		//---------------------------------------------------------------------
+		private var _timeLoader:URLLoader;
+		
+		protected function getServerTimeOffset():void
+		{
+			_clearTimeLoader();
+			
+			_timeLoader = new URLLoader();
+			_timeLoader.dataFormat = URLLoaderDataFormat.TEXT;
+			_timeLoader.addEventListener(HTTPStatusEvent.HTTP_STATUS, httpStatusHandler);
+			_timeLoader.addEventListener(IOErrorEvent.IO_ERROR,_onTimeLoader_IOErrorHandler);
+			_timeLoader.addEventListener(Event.COMPLETE,_onTimeLoader_CompleteHandler);
+			
+			var tokenRequest:OAuthRequest = new OAuthRequest(GET_REQUEST_METHOD,NETFLIX_BASE_URL+"oauth/clock/time",null,consumer, accessToken);
+			var request:String = tokenRequest.buildRequest(SIG_METHOD, OAuthRequest.RESULT_TYPE_URL_STRING, "", timeOffset);
+			
+			if(enableTraceStatements)
+				trace(request);
+			_timeLoader.load(new URLRequest(request));
+		}
+		
+		private function _clearTimeLoader():void
+		{
+			if(_timeLoader){
+				try{
+					_timeLoader.close();
+				} catch (e:Error){
+					//no stream open
+				}
+				_timeLoader.removeEventListener(HTTPStatusEvent.HTTP_STATUS, httpStatusHandler);
+				_timeLoader.removeEventListener(IOErrorEvent.IO_ERROR,_onTimeLoader_CompleteHandler);
+				_timeLoader.removeEventListener(Event.COMPLETE,_onTimeLoader_IOErrorHandler);
+				_timeLoader = null;
+			}
+		}
+		
+		private function _onTimeLoader_CompleteHandler(event:Event):void
+		{
+			var loader:URLLoader = event.target as URLLoader;
+			var result:XML = XML(loader.data);
+			_clearTimeLoader();
+			//find offset
+			var serverTime:Number = NetflixXMLUtil.handleNumber(result)*1000;
+			var cur:Date = new Date();
+			timeOffset =  serverTime - cur.time;
+			lastNetflixResult = {"time":serverTime};
+			dispatchEvent(new NetflixResultEvent(NetflixResultEvent.SERVER_TIME_COMPLETE, serverTime, null, result));
+			//reply last result
+			if(_resultFunction!=null)
+				createLoader(_storedSendQuery, _storedParams, _resultFunction, _storedHttpMethod);
+		}
+		
+		private function _onTimeLoader_IOErrorHandler(event:IOErrorEvent):void
+		{
+			_clearTimeLoader();
+			dispatchFault(new ServiceFault(event.type,"Server Time Error",event.text, lastHttpStatusResponse));
 		}
 	}
 }

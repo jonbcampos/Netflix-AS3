@@ -192,7 +192,7 @@ package com.netflix.webapis.services
 		//-----------------------------
 		//  server time offset
 		//-----------------------------
-		internal var timeOffset:Number = 0;
+		internal var timeOffset:Number = NaN;
 		
 		//-----------------------------
 		//  authorization url

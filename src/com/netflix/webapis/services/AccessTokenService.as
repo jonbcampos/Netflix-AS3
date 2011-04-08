@@ -23,6 +23,7 @@ package com.netflix.webapis.services
 {
 	import com.netflix.webapis.ServiceFault;
 	import com.netflix.webapis.events.AccessTokenResultEvent;
+	import com.netflix.webapis.events.NetflixResultEvent;
 	
 	import flash.events.Event;
 	import flash.events.IEventDispatcher;
@@ -139,7 +140,19 @@ package com.netflix.webapis.services
 		private function _accessTokenService_IOErrorHandler(event:IOErrorEvent):void
 		{
 			_clearLoader();
+			if(httpStatusResponse && httpStatusResponse=="API Fault, Invalid Signature." && isNaN(timeOffset))
+			{
+				addEventListener(NetflixResultEvent.SERVER_TIME_COMPLETE, _onServerTimeOffset_CompleteHandler);
+				getServerTimeOffset();
+				return;
+			}
 			dispatchFault(new ServiceFault(event.type,"Access Token Error",event.text));
+		}
+		
+		private function _onServerTimeOffset_CompleteHandler(event:NetflixResultEvent):void
+		{
+			removeEventListener(NetflixResultEvent.SERVER_TIME_COMPLETE, _onServerTimeOffset_CompleteHandler);
+			getAccessToken();
 		}
 		
 	}

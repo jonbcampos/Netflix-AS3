@@ -44,7 +44,6 @@ package com.netflix.webapis.services
 	* Result Event.
 	*/	
 	[Event(name="result",type="com.netflix.webapis.events.AuthenticationResultEvent")]
-	[Event(name="serverTimeComplete",type="com.netflix.webapis.events.NetflixResultEvent")]
 	
 	/**
 	 * Services to Authorize your application with Netflix.
@@ -129,7 +128,19 @@ package com.netflix.webapis.services
 		private function _authenticationService_IOErrorHandler(event:IOErrorEvent):void
 		{
 			_clearLoader();
+			if(httpStatusResponse && httpStatusResponse=="API Fault, Invalid Signature." && isNaN(timeOffset))
+			{
+				addEventListener(NetflixResultEvent.SERVER_TIME_COMPLETE, _onServerTimeOffset_CompleteHandler);
+				getServerTimeOffset();
+				return;
+			}
 			dispatchFault(new ServiceFault(event.type,"Token Request Error",event.text, lastHttpStatusResponse));
+		}
+		
+		private function _onServerTimeOffset_CompleteHandler(event:NetflixResultEvent):void
+		{
+			removeEventListener(NetflixResultEvent.SERVER_TIME_COMPLETE, _onServerTimeOffset_CompleteHandler);
+			requestToken(callBackUrl);
 		}
 		
 		/**
@@ -190,64 +201,6 @@ package com.netflix.webapis.services
 		public function getAuthorizationURL():String
 		{
 			return ServiceStorage.getInstance().authorizationURL;
-		}
-		
-		//---------------------------------------------------------------------
-		//
-		//  Time Loader
-		//
-		//---------------------------------------------------------------------
-		private var _timeLoader:URLLoader;
-		
-		public function setServerTimeOffset():void
-		{
-			_clearTimeLoader();
-			
-			_timeLoader = new URLLoader();
-			_timeLoader.dataFormat = URLLoaderDataFormat.TEXT;
-			_timeLoader.addEventListener(HTTPStatusEvent.HTTP_STATUS, httpStatusHandler);
-			_timeLoader.addEventListener(IOErrorEvent.IO_ERROR,_onTimeLoader_IOErrorHandler);
-			_timeLoader.addEventListener(Event.COMPLETE,_onTimeLoader_CompleteHandler);
-			
-			var tokenRequest:OAuthRequest = new OAuthRequest(ServiceBase.GET_REQUEST_METHOD,NETFLIX_BASE_URL+"oauth/clock/time",null,consumer, accessToken);
-			var request:String = tokenRequest.buildRequest(SIG_METHOD, OAuthRequest.RESULT_TYPE_URL_STRING, "", timeOffset);
-			
-			if(enableTraceStatements)
-				trace(request);
-			_timeLoader.load(new URLRequest(request));
-		}
-		
-		private function _clearTimeLoader():void
-		{
-			if(_timeLoader){
-				try{
-					_timeLoader.close();
-				} catch (e:Error){
-					//no stream open
-				}
-				_timeLoader.removeEventListener(HTTPStatusEvent.HTTP_STATUS, httpStatusHandler);
-				_timeLoader.removeEventListener(IOErrorEvent.IO_ERROR,_onTimeLoader_CompleteHandler);
-				_timeLoader.removeEventListener(Event.COMPLETE,_onTimeLoader_IOErrorHandler);
-				_timeLoader = null;
-			}
-		}
-		
-		private function _onTimeLoader_CompleteHandler(event:Event):void
-		{
-			var loader:URLLoader = event.target as URLLoader;
-			var result:XML = XML(loader.data);
-			_clearTimeLoader();
-			var serverTime:Number = NetflixXMLUtil.handleNumber(result)*1000;
-			var cur:Date = new Date();
-			timeOffset =  serverTime - cur.time;
-			lastNetflixResult = {"time":serverTime};
-			dispatchEvent(new NetflixResultEvent(NetflixResultEvent.SERVER_TIME_COMPLETE, serverTime, null, result));
-		}
-		
-		private function _onTimeLoader_IOErrorHandler(event:IOErrorEvent):void
-		{
-			_clearTimeLoader();
-			dispatchFault(new ServiceFault(event.type,"Server Time Error",event.text, lastHttpStatusResponse));
 		}
 		
 	}
