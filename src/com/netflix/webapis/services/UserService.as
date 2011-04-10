@@ -358,16 +358,6 @@ package com.netflix.webapis.services
 		}
 		
 		/**
-		 * Logout function, forgets userId and access token. 
-		 * 
-		 */	
-		static public function logout():void
-		{
-			if(ServiceStorage.getInstance().lso)
-				ServiceStorage.getInstance().lso.clear();
-		}
-		
-		/**
 		 * Gets the title states for a list of titles.
 		 * 
 		 * Handle <code>result</code> or <code>fault</code> via 

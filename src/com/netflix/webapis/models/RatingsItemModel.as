@@ -47,7 +47,7 @@ package com.netflix.webapis.models
 		/**
 		 * User Rating. 
 		 */		
-		public var userRating:Number;
+		public var userRating:int;
 		
 	}
 }

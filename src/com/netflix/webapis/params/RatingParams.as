@@ -136,6 +136,19 @@ package com.netflix.webapis.params
 			return o;
 		}
 		
+		override public function toPutObject():Object
+		{
+			var o:Object = super.toPutObject();
+			//rating
+			if(rating==-1)
+				o.rating = "no_opinion";
+			else if(rating==0)
+				o.rating = "not_interested";
+			else
+				o.rating = rating;
+			return o;
+		}
+		
 		/**
 		 * @inheritDoc
 		 */	

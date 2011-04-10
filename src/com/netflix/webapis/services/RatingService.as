@@ -35,6 +35,8 @@ package com.netflix.webapis.services
 	import flash.events.IEventDispatcher;
 	import flash.net.URLLoader;
 	
+	import org.iotashan.utils.URLEncoding;
+	
 	/**
 	 * Rating Services under the <i>Rating</i> category. 
 	 * @author jonbcampos
@@ -193,8 +195,14 @@ package com.netflix.webapis.services
 					sendQuery += "/" +ACTUAL_RATINGS_PART;
 					break;
 				case SET_ACTUAL_TITLE_RATINGS_SERVICE:
-					method = ServiceBase.PUT_REQUEST_METHOD;
-					sendQuery += "/" +ACTUAL_RATINGS_PART+"/"+RatingParams(params).titleRef.netflixId;
+					if(isNaN(RatingParams(params).ratingItem.userRating))
+					{
+						method = ServiceBase.POST_REQUEST_METHOD;
+						sendQuery += "/" +ACTUAL_RATINGS_PART;
+					} else {
+						method = ServiceBase.PUT_REQUEST_METHOD;
+						sendQuery = RatingParams(params).ratingItem.id.replace("title","title/actual");
+					}
 					break;
 				case GET_ACTUAL_TITLE_RATINGS_SERVICE:
 					if(!(params is RatingParams))
@@ -315,11 +323,12 @@ package com.netflix.webapis.services
 		 * @see com.netflix.webapis.events.NetflixFaultEvent#FAULT
 		 * @see com.netflix.webapis.models.RatingsItemModel
 		 */	
-		public function setActualTitleRatings(title:CatalogItemModel, rating:int):void
+		public function setActualTitleRatings(title:RatingsItemModel, rating:int):void
 		{
 			var params:RatingParams = new RatingParams();
 			params.rating = rating;
 			params.titleRef = title;
+			params.ratingItem = title;
 			setActualTitleRatingsService(params);
 		}
 		

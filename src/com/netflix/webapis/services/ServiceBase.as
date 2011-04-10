@@ -22,10 +22,8 @@
 package com.netflix.webapis.services
 {
 	import com.netflix.webapis.ServiceFault;
-	import com.netflix.webapis.events.AccessTokenResultEvent;
 	import com.netflix.webapis.events.NetflixFaultEvent;
 	import com.netflix.webapis.events.NetflixResultEvent;
-	import com.netflix.webapis.events.UsersResultEvent;
 	import com.netflix.webapis.params.ParamsBase;
 	import com.netflix.webapis.vo.NetflixUser;
 	import com.netflix.webapis.xml.NetflixXMLUtil;
@@ -43,14 +41,11 @@ package com.netflix.webapis.services
 	import flash.net.URLRequest;
 	import flash.net.URLVariables;
 	
-	import mx.utils.ObjectUtil;
-	
 	import org.iotashan.oauth.IOAuthSignatureMethod;
 	import org.iotashan.oauth.OAuthConsumer;
 	import org.iotashan.oauth.OAuthRequest;
 	import org.iotashan.oauth.OAuthSignatureMethod_HMAC_SHA1;
 	import org.iotashan.oauth.OAuthToken;
-	import org.iotashan.utils.URLEncoding;
 
 	/**
 	* Result Event.
@@ -663,7 +658,7 @@ package com.netflix.webapis.services
 			_storedHttpMethod = httpMethod;
 			_resultFunction = result;
 			//final http method
-			var finalHttpMethod:String = (httpMethod==DELETE_REQUEST_METHOD)?GET_REQUEST_METHOD:httpMethod;
+			var finalHttpMethod:String = (httpMethod==DELETE_REQUEST_METHOD || httpMethod==PUT_REQUEST_METHOD)?GET_REQUEST_METHOD:httpMethod;
 			//then create
 			_urlLoader = new URLLoader();
 			_urlLoader.dataFormat = URLLoaderDataFormat.TEXT;
@@ -680,8 +675,10 @@ package com.netflix.webapis.services
 				params = {};
 			//adjust params
 			if(params is ParamsBase){
-				if(finalHttpMethod==POST_REQUEST_METHOD || finalHttpMethod==PUT_REQUEST_METHOD)
+				if(finalHttpMethod==POST_REQUEST_METHOD)
 					finalParams = ParamsBase(params).toPostObject();
+				else if(httpMethod==PUT_REQUEST_METHOD)
+					finalParams = ParamsBase(params).toPutObject();
 				else
 					finalParams = ParamsBase(params).toObject();
 			} else {
@@ -689,7 +686,7 @@ package com.netflix.webapis.services
 			}
 			finalParams.method = httpMethod;
 			//store information
-			_currentParams = ObjectUtil.copy(finalParams);
+			_currentParams = finalParams;
 			_currentURL = sendQuery;
 			//make request
 			var requestString:String; 

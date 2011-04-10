@@ -314,7 +314,7 @@ package com.netflix.webapis.xml
 						break;
 					case USER_RATING:
 						if(model is RatingsItemModel)
-							(model as RatingsItemModel).userRating = handleNumber(resultNode);
+							(model as RatingsItemModel).userRating = handleUserRating(resultNode);
 						break;
 					case PREDICTED_RATING:
 						if(model is RatingsItemModel)
@@ -403,6 +403,17 @@ package com.netflix.webapis.xml
 		 */		
 		public static function handleNumber(xml:XML):Number {
 			return Number(xml.valueOf());
+		}
+		
+		public static function handleInt(xml:XML):int {
+			return int(xml.valueOf());
+		}
+		
+		public static function handleUserRating(xml:XML):int
+		{
+			if(xml.@value && xml.@value=="not_interested")
+				return -1;
+			return handleInt(xml);
 		}
 		
 		public static function handleBoolean(xml:XML):Boolean

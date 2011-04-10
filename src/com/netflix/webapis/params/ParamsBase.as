@@ -156,6 +156,17 @@ package com.netflix.webapis.params
 				o.expand = expansions;
 			return o;
 		}
+		/**
+		 * Creates an object the OAuthRequest object needs to generate the signature for PUT Methods.
+		 * @return object with key-value pairs
+		 * 
+		 */
+		public function toPutObject():Object
+		{
+			var o:Object = {};
+			o.oauth_version = "1.0";
+			return o;
+		}
 		
 		/**
 		 * Returns the defaultType for this service. 
