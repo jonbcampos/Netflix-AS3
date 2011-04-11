@@ -517,6 +517,7 @@ package com.netflix.webapis.services
 		private var _currentParams:Object;
 		
 		protected var httpStatusResponse:String;
+		protected var httpStatus:int;
 		protected function get lastHttpStatusResponse():String
 		{
 			return httpStatusResponse;
@@ -751,7 +752,7 @@ package com.netflix.webapis.services
 				getServerTimeOffset();
 			} else {
 				var errorText:String = (httpStatusResponse)?httpStatusResponse:event.text;
-				dispatchFault(new ServiceFault(event.type,"IO Service Error: "+type+ " Error",errorText, event.text));
+				dispatchFault(new ServiceFault(event.type,"IO Service Error: "+type+ " Error",errorText, event.text, httpStatus));
 				clearLoader();
 			}
 		}
@@ -789,6 +790,7 @@ package com.netflix.webapis.services
 		protected function httpStatusHandler(event:HTTPStatusEvent):void
 		{
 			dispatchEvent(event.clone());
+			httpStatus = event.status;
 			switch(event.status)
 			{
 				case 200:

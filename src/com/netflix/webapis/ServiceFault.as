@@ -28,6 +28,10 @@ package com.netflix.webapis
 	 */	
 	public class ServiceFault extends Error
 	{
+		
+		private var _httpStatus:int;
+		public function get httpStatus():int { return _httpStatus; }
+		
 		private var _faultCode:String;
 		/**
 		 * Fault Code from Service. 
@@ -68,13 +72,14 @@ package com.netflix.webapis
 		}
 
 		
-		public function ServiceFault(faultCode:String, faultString:String, faultDetail:String = null, faultMessage:String = null)
+		public function ServiceFault(faultCode:String, faultString:String, faultDetail:String = null, faultMessage:String = null, httpStatus:int=0)
 		{
 			super(faultCode);
 			_faultCode = faultCode;
 			_faultString = faultString;
 			_faultDetail = faultDetail;
 			_faultMessage = faultMessage;
+			_httpStatus = httpStatus;
 		}
 		
 		public function toString():String
@@ -82,7 +87,8 @@ package com.netflix.webapis
 			return "Code: "+faultCode+"\n" +
 				"String: "+faultString+"\n" +
 				"Detail: "+faultDetail+"\n" +
-				"Message: "+faultMessage+"\n";
+				"Message: "+faultMessage+"\n" +
+				"Http Status: "+httpStatus+"\n"
 		}
 		
 	}

@@ -94,6 +94,12 @@ package com.netflix.webapis.services
 		{
 			var loader:URLLoader = event.target as URLLoader;
 			var result:String = loader.data as String;
+			if(result=="Timestamp Is Invalid")
+			{
+				addEventListener(NetflixResultEvent.SERVER_TIME_COMPLETE, _onServerTimeOffset_CompleteHandler);
+				getServerTimeOffset();
+				return;
+			}
 			//_clearLoader();
 			var s:Array = String(result).split("&");  
 			var array:Array;  
@@ -134,7 +140,7 @@ package com.netflix.webapis.services
 				getServerTimeOffset();
 				return;
 			}
-			dispatchFault(new ServiceFault(event.type,"Token Request Error",event.text, lastHttpStatusResponse));
+			dispatchFault(new ServiceFault(event.type,"Token Request Error",event.text, lastHttpStatusResponse, httpStatus));
 		}
 		
 		private function _onServerTimeOffset_CompleteHandler(event:NetflixResultEvent):void
@@ -200,7 +206,7 @@ package com.netflix.webapis.services
 		 */		
 		public function getAuthorizationURL():String
 		{
-			return ServiceStorage.getInstance().authorizationURL;
+			return authorizationURL;
 		}
 		
 	}

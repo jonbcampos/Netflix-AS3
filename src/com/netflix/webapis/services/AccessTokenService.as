@@ -26,8 +26,11 @@ package com.netflix.webapis.services
 	import com.netflix.webapis.events.NetflixResultEvent;
 	
 	import flash.events.Event;
+	import flash.events.HTTPStatusEvent;
 	import flash.events.IEventDispatcher;
 	import flash.events.IOErrorEvent;
+	import flash.events.ProgressEvent;
+	import flash.events.SecurityErrorEvent;
 	import flash.net.URLLoader;
 	import flash.net.URLLoaderDataFormat;
 	import flash.net.URLRequest;
@@ -71,6 +74,9 @@ package com.netflix.webapis.services
 			//get access token
 			_urlLoader = new URLLoader();
 			_urlLoader.dataFormat = URLLoaderDataFormat.TEXT;
+			_urlLoader.addEventListener(HTTPStatusEvent.HTTP_STATUS, httpStatusHandler);
+			_urlLoader.addEventListener(ProgressEvent.PROGRESS, progressHandler);
+			_urlLoader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, securityErrorHandler);
 			_urlLoader.addEventListener(IOErrorEvent.IO_ERROR,_accessTokenService_IOErrorHandler);
 			_urlLoader.addEventListener(Event.COMPLETE,_accessTokenService_CompleteHandler);
 			
@@ -125,6 +131,9 @@ package com.netflix.webapis.services
 				} catch (e:Error){
 					//no stream open
 				}
+				_urlLoader.removeEventListener(ProgressEvent.PROGRESS, progressHandler);
+				_urlLoader.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, securityErrorHandler);
+				_urlLoader.removeEventListener(HTTPStatusEvent.HTTP_STATUS, httpStatusHandler);
 				_urlLoader.removeEventListener(IOErrorEvent.IO_ERROR,_accessTokenService_IOErrorHandler);
 				_urlLoader.removeEventListener(Event.COMPLETE,_accessTokenService_CompleteHandler);
 				_urlLoader = null;
@@ -146,7 +155,7 @@ package com.netflix.webapis.services
 				getServerTimeOffset();
 				return;
 			}
-			dispatchFault(new ServiceFault(event.type,"Access Token Error",event.text));
+			dispatchFault(new ServiceFault(event.type,"Access Token Error",event.text, httpStatusResponse, httpStatus));
 		}
 		
 		private function _onServerTimeOffset_CompleteHandler(event:NetflixResultEvent):void
