@@ -223,7 +223,9 @@ package com.netflix.webapis.services
 			var queryXML:XML = XML(loader.data);
 			clearLoader();
 			
-			if(queryXML.Error == undefined)
+			if(queryXML=="Timestamp Is Invalid")
+				getServerTimeOffset();
+			else if(queryXML.Error == undefined)
 				formatAndDispatch(queryXML);
 			else
 				dispatchFault(new ServiceFault(NetflixFaultEvent.API_RESPONSE, queryXML.Error, queryXML.Error.Message));
@@ -372,5 +374,6 @@ package com.netflix.webapis.services
 			params.expansions = expansions;
 			getPredictedRatingService(params);
 		}
+		
 	}
 }

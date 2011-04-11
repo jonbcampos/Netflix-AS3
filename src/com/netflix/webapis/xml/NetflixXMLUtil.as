@@ -391,7 +391,8 @@ package com.netflix.webapis.xml
 		 * @return 
 		 * 
 		 */		
-		public static function handleStringNode(xml:XML):String {
+		public static function handleStringNode(xml:XML):String
+		{
 			return String(xml.valueOf());
 		}
 		

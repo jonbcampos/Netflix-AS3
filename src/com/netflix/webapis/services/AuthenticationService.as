@@ -100,7 +100,7 @@ package com.netflix.webapis.services
 				getServerTimeOffset();
 				return;
 			}
-			//_clearLoader();
+			_clearLoader();
 			var s:Array = String(result).split("&");  
 			var array:Array;  
 			for each(var item:String in s)  

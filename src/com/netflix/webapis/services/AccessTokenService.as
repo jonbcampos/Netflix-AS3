@@ -99,6 +99,12 @@ package com.netflix.webapis.services
 		{
 			var loader:URLLoader = event.target as URLLoader;
 			var result:String = loader.data as String;
+			if(result=="Timestamp Is Invalid")
+			{
+				addEventListener(NetflixResultEvent.SERVER_TIME_COMPLETE, _onServerTimeOffset_CompleteHandler);
+				getServerTimeOffset();
+				return;
+			}
 			_clearLoader();
 			var a:Array = String(result).split("&");
 			var s:Array;

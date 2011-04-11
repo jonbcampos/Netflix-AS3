@@ -863,10 +863,12 @@ package com.netflix.webapis.services
 				_urlLoader = null;
 			}
 			//release stored values
+			/*
 			_resultFunction = null;
 			_storedHttpMethod = null;
 			_storedParams = null;
 			_storedSendQuery = null;
+			*/
 			//release held response
 			httpStatusResponse = null;
 		}
@@ -1065,14 +1067,19 @@ package com.netflix.webapis.services
 			lastNetflixResult = {"time":serverTime};
 			dispatchEvent(new NetflixResultEvent(NetflixResultEvent.SERVER_TIME_COMPLETE, serverTime, null, result));
 			//reply last result
-			if(_resultFunction!=null)
-				createLoader(_storedSendQuery, _storedParams, _resultFunction, _storedHttpMethod);
+			reRunLast();
 		}
 		
 		private function _onTimeLoader_IOErrorHandler(event:IOErrorEvent):void
 		{
 			_clearTimeLoader();
 			dispatchFault(new ServiceFault(event.type,"Server Time Error",event.text, lastHttpStatusResponse));
+		}
+		
+		protected function reRunLast():void
+		{
+			if(_resultFunction!=null)
+				createLoader(_storedSendQuery, _storedParams, _resultFunction, _storedHttpMethod);
 		}
 	}
 }
