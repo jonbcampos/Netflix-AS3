@@ -27,6 +27,7 @@ package com.netflix.webapis.services
 	import com.netflix.webapis.models.CatalogItemModel;
 	import com.netflix.webapis.params.ParamsBase;
 	import com.netflix.webapis.params.UserParams;
+	import com.netflix.webapis.vo.CategoryItem;
 	import com.netflix.webapis.vo.NetflixUser;
 	import com.netflix.webapis.xml.NetflixXMLUtil;
 	
@@ -184,12 +185,6 @@ package com.netflix.webapis.services
 					sendQuery = user.feedsLink;
 					break;
 				default:
-					//check if it exists, return current
-					if(user){
-						dispatchEvent(new UsersResultEvent(UsersResultEvent.USER_RESULT,user));
-						return
-					}
-					//create query
 					sendQuery = methodString + "/" + userId;
 					break;
 			}
@@ -261,11 +256,21 @@ package com.netflix.webapis.services
 					user.canInstantWatch = Boolean(returnedXML.can_instant_watch);
 					//preferred formats
 					user.preferredFormats = [];
+					user.canBlurayWatch = false;
+					user.canDvdWatch = false;
 					for each(var categoryXML:XML in returnedXML..category){
 						if(categoryXML.@scheme == NetflixXMLUtil.TITLE_FORMAT_SCHEME)
-							user.preferredFormats.push(NetflixXMLUtil.handleCategory(categoryXML));
-						else if(categoryXML.@scheme == NetflixXMLUtil.MATURITY_LEVEL_SCHEMA)
+						{
+							var preferredFormat:CategoryItem = NetflixXMLUtil.handleCategory(categoryXML);
+							if(preferredFormat.label=="Blu-ray")
+								user.canBlurayWatch = true;
+							if(preferredFormat.label=="DVD")
+								user.canDvdWatch = true;
+							user.preferredFormats.push(preferredFormat);
+						} else if(categoryXML.@scheme == NetflixXMLUtil.MATURITY_LEVEL_SCHEMA)
+						{
 							user.maxMaturityLevel = NetflixXMLUtil.handleCategory(categoryXML);
+						}
 					}
 					//links
 					for each(var linksXML:XML in returnedXML..link)

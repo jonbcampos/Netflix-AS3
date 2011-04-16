@@ -76,6 +76,14 @@ package com.netflix.webapis.vo
 		 * Can watch instant movies. 
 		 */		
 		public var canInstantWatch:Boolean = false;
+		/**
+		 * Can watch dvd movies. 
+		 */		
+		public var canDvdWatch:Boolean = false;
+		/**
+		 * Can watch bluray movies. 
+		 */		
+		public var canBlurayWatch:Boolean = false;
 		
 		[ArrayElementType("PreferredFormat")]
 		/**

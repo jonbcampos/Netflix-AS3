@@ -21,6 +21,7 @@
  * */
 package com.netflix.webapis.models
 {
+	import com.netflix.webapis.vo.CategoryItem;
 	import com.netflix.webapis.vo.LinkItem;
 	import com.netflix.webapis.xml.NetflixXMLUtil;
 	
@@ -39,6 +40,7 @@ package com.netflix.webapis.models
 		 */		
 		public var queuePosition:Number;
 		public var availabilityLabel:String;
+		public var format:String;
 		
 		public function QueueItemModel(target:IEventDispatcher=null)
 		{

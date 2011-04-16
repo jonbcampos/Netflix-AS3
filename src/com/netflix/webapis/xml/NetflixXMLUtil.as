@@ -306,8 +306,9 @@ package com.netflix.webapis.xml
 						else if(category.scheme == TV_RATING_SCHEME && category.label!="null")
 							model.rating = category.label;
 						else if(model is QueueItemModel && category.scheme == AVAILABILITY_SCHEME)
-							QueueItemModel(model).availabilityLabel = resultNode.valueOf();
-						
+							QueueItemModel(model).availabilityLabel = category.label;
+						else if(model is QueueItemModel && category.scheme == TITLE_FORMAT_SCHEME)
+							QueueItemModel(model).format = category.label;
 						break;
 					case AVERAGE_RATING:
 						model.averageRating = handleNumber(resultNode);

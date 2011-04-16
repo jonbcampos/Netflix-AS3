@@ -73,7 +73,7 @@ package com.netflix.webapis.params
 		
 		public function set maxResults(value:uint):void
 		{
-			if(value>100) value = 100;
+			if(value>500) value = 500;
 			if(value<1) value = 1;
 			_maxResults = value;
 		}

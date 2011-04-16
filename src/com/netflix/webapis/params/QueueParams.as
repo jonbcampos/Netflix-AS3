@@ -158,7 +158,6 @@ package com.netflix.webapis.params
 			if(!isNaN(position))
 				o.position = position;
 			//etag
-			//etag
 			switch(type)
 			{
 				case QueueService.DISC_QUEUE_SERVICE:

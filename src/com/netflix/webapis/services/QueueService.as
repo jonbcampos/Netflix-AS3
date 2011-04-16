@@ -483,16 +483,18 @@ package com.netflix.webapis.services
 		 * 
 		 * @param title
 		 * @param position
+		 * @param format
 		 * 
 		 * @see com.netflix.webapis.events.NetflixResultEvent#RESULT
 		 * @see com.netflix.webapis.events.NetflixFaultEvent#FAULT
 		 * @see com.netflix.webapis.models.CatalogItemModel
 		 */	
-		public function updateTitleInDiscQueue(title:CatalogItemModel,position:int=0):void
+		public function updateTitleInDiscQueue(title:CatalogItemModel,position:int=0, format:String=null):void
 		{
 			var params:QueueParams = new QueueParams();
 			params.titleRef = title;
 			params.position = position;
+			params.formatType = format;
 			updateDiscQueueService(params);
 		}
 		

@@ -179,7 +179,7 @@ package com.netflix.webapis.services
 		{
 			var reqUrl:String = NETFLIX_BASE_URL + "oauth/request_token";
 			var tokenRequest:OAuthRequest = new OAuthRequest(ServiceBase.GET_REQUEST_METHOD,reqUrl,null,consumer);
-			var request:String = tokenRequest.buildRequest(SIG_METHOD, OAuthRequest.RESULT_TYPE_URL_STRING, "", timeOffset);
+			var request:String = createRequestString(tokenRequest);
 			if(enableTraceStatements)
 				trace(request);
 			return request;

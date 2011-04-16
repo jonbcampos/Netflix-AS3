@@ -110,10 +110,6 @@ package com.netflix.webapis.models
 		public var netflixId:String;
 		public var groupId:String;
 		/**
-		 * Type of Catalog item such as movie, season, etc. 
-		 */		
-		public var titleType:String;
-		/**
 		 * Short Verison of Catalog Title. 
 		 */		
 		public var titleShort:String;

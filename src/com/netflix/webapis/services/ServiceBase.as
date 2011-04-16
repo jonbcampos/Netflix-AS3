@@ -694,7 +694,7 @@ package com.netflix.webapis.services
 			if(httpMethod!=ODATA_REQUEST_METHOD)
 			{
 				var tokenRequest:OAuthRequest = new OAuthRequest(finalHttpMethod,sendQuery,finalParams,consumer,accessToken);
-				requestString = tokenRequest.buildRequest(SIG_METHOD, OAuthRequest.RESULT_TYPE_URL_STRING, "", timeOffset);
+				requestString = createRequestString(tokenRequest);
 			} else {
 				requestString = sendQuery + ParamsBase(params).toOdataString();
 				finalHttpMethod = GET_REQUEST_METHOD;
@@ -719,6 +719,14 @@ package com.netflix.webapis.services
 			} catch (error:Error){
 				dispatchFault(new ServiceFault(error.errorID.toString(), error.name, error.message));
 			}
+		}
+		
+		protected function createRequestString(tokenRequest:OAuthRequest):String
+		{
+			var time:Number = 0;
+			if(isNaN(timeOffset)==false)
+				time = timeOffset;
+			return tokenRequest.buildRequest(SIG_METHOD, OAuthRequest.RESULT_TYPE_URL_STRING, "", time);
 		}
 		
 		/**
