@@ -27,22 +27,10 @@ package com.netflix.webapis.vo
 	 * 
 	 * @author jonbcampos
 	 */		
-	public class AwardNominee
+	public class AwardNominee extends AwardVO
 	{
 		public function AwardNominee()
 		{
 		}
-		/**
-		 * Year of award. 
-		 */		
-		public var year:int;
-		/**
-		 * Award category. 
-		 */		
-		public var category:CategoryItem;
-		/**
-		 * Award Link Item. 
-		 */		
-		public var link:LinkItem;
 	}
 }

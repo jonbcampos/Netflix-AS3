@@ -801,7 +801,7 @@ package com.netflix.webapis.models
 		/**
 		 * @inheritDoc
 		 */		
-		public function expandProperty(expandItem:String,params:TitlesParams=null, startIndex:uint=0, maxResults:uint=25, expansions:String=null):void
+		public function expandProperty(expandItem:String,params:TitlesParams=null, startIndex:int=0, maxResults:int=25, expansions:String=null):void
 		{
 			if(!params)
 				params = new TitlesParams();

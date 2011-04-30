@@ -741,7 +741,7 @@ package com.netflix.webapis.services
 		// No Params Quick Functions
 		//
 		//---------------------------------------------------------------------
-		public function getTop100(startIndex:uint=0, maxResults:uint=25, expansions:String = null):void
+		public function getTop100(startIndex:int=0, maxResults:int=25, expansions:String = null):void
 		{
 			var params:ParamsBase = new ParamsBase();
 			params.startIndex = startIndex;
@@ -750,7 +750,7 @@ package com.netflix.webapis.services
 			top100Service(params);
 		}
 		
-		public function getNewReleases(startIndex:uint=0, maxResults:uint=25, expansions:String = null):void
+		public function getNewReleases(startIndex:int=0, maxResults:int=25, expansions:String = null):void
 		{
 			var params:ParamsBase = new ParamsBase();
 			params.startIndex = startIndex;
@@ -759,7 +759,7 @@ package com.netflix.webapis.services
 			newReleasesService(params);
 		}
 		
-		public function getNewInstant(startIndex:uint=0, maxResults:uint=25, expansions:String = null):void
+		public function getNewInstant(startIndex:int=0, maxResults:int=25, expansions:String = null):void
 		{
 			var params:ParamsBase = new ParamsBase();
 			params.startIndex = startIndex;
@@ -768,7 +768,7 @@ package com.netflix.webapis.services
 			newInstantService(params);
 		}
 		
-		public function getFeedByName(feed:String, startIndex:uint=0, maxResults:uint=25, expansions:String = null):void
+		public function getFeedByName(feed:String, startIndex:int=0, maxResults:int=25, expansions:String = null):void
 		{
 			var params:ParamsBase = new ParamsBase();
 			params.netflixId = feed;

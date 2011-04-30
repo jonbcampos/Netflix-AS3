@@ -19,18 +19,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE. 
  * */
-package com.netflix.webapis.vo
+package com.netflix.webapis.models
 {
-	[RemoteClass(alias="com.netflix.webapis.vo.AwardWinner")]
+	import flash.events.IEventDispatcher;
+	
+	[RemoteClass(alias="com.netflix.webapis.models.RentalHistoryItemModel")]
 	/**
-	 * AwardWinnerVO returned as part of the <code>TitlesService</code> <i>awards</i> expansion.</code>. 
-	 * 
+	 * Rental History Item Model. 
 	 * @author jonbcampos
-	 */		
-	public class AwardWinner extends AwardVO
+	 * 
+	 */	
+	public class RentalHistoryItemModel extends AtHomeItemModel
 	{
-		public function AwardWinner()
+		public function RentalHistoryItemModel(target:IEventDispatcher=null)
 		{
+			super(target);
 		}
+		
+		public var watchedDate:Date;
+		public var viewedTime:String;
+		
+		public var returnedDate:Date;
 	}
 }

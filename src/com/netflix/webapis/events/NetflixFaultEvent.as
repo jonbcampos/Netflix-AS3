@@ -90,23 +90,35 @@ package com.netflix.webapis.events
 			return _params;
 		}
 		
+		private var _serviceResultType:String;
+		/**
+		 * Service Result Type. 
+		 * @return 
+		 * 
+		 */		
+		public function get serviceResultType():String
+		{
+			return _serviceResultType;
+		}
+		
 		/**
 		 * Fault Result Event from Netflix API. 
 		 * @param type
 		 * @param fault
 		 * 
 		 */		
-		public function NetflixFaultEvent(type:String, fault:ServiceFault = null, url:String = null, params:Object = null, bubbles:Boolean = false, cancelable:Boolean = false)
+		public function NetflixFaultEvent(type:String, fault:ServiceFault = null, url:String = null, params:Object = null, serviceResultType:String = null, bubbles:Boolean = false, cancelable:Boolean = false)
 		{
 			super(type, bubbles, cancelable);
 			_fault = fault;
 			_url = url;
 			_params = params;
+			_serviceResultType = serviceResultType;
 		}
 		
 		override public function clone():Event
 		{
-			return new NetflixFaultEvent(type, fault, url, params, bubbles, cancelable);
+			return new NetflixFaultEvent(type, fault, url, params, serviceResultType, bubbles, cancelable);
 		}
 		
 	}

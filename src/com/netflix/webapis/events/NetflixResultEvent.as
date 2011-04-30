@@ -102,9 +102,9 @@ package com.netflix.webapis.events
 			return _statusMessage;
 		}
 		
-		public function NetflixResultEvent(type:String, result:Object = null, serviceResultType:String = null, rawXML:XML = null, url:String = null, params:Object = null, statusMessage:String = null)
+		public function NetflixResultEvent(type:String, result:Object = null, serviceResultType:String = null, rawXML:XML = null, url:String = null, params:Object = null, statusMessage:String = null, bubbles:Boolean = false, cancelable:Boolean = false)
 		{
-			super(type);
+			super(type, bubbles, cancelable);
 			_result = result;
 			_serviceResultType = serviceResultType;
 			_rawXML = rawXML;
@@ -115,7 +115,7 @@ package com.netflix.webapis.events
 		
 		override public function clone():Event
 		{
-			return new NetflixResultEvent(type, result, serviceResultType, rawXML, url, params, statusMessage);
+			return new NetflixResultEvent(type, result, serviceResultType, rawXML, url, params, statusMessage, bubbles, cancelable);
 		}
 	}
 }

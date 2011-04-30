@@ -21,11 +21,12 @@
  * */
 package com.netflix.webapis.xml
 {
+	import com.netflix.webapis.models.AtHomeItemModel;
 	import com.netflix.webapis.models.CatalogItemModel;
 	import com.netflix.webapis.models.FilmographyItemModel;
 	import com.netflix.webapis.models.QueueItemModel;
 	import com.netflix.webapis.models.RatingsItemModel;
-	import com.netflix.webapis.models.ReviewItemModel;
+	import com.netflix.webapis.models.RentalHistoryItemModel;
 	import com.netflix.webapis.services.ServiceStorage;
 	import com.netflix.webapis.vo.AwardNominee;
 	import com.netflix.webapis.vo.AwardWinner;
@@ -58,6 +59,13 @@ package com.netflix.webapis.xml
 		public static const AVERAGE_RATING:String = "average_rating";
 		public static const USER_RATING:String = "user_rating";
 		public static const PREDICTED_RATING:String = "predicted_rating";
+		
+		public static const SHIPPED_DATE:String = "shipped_date";
+		public static const ESTIMATED_ARRIVAL_DATE:String = "estimated_arrival_date";
+		public static const RETURNED_DATE:String = "returned_date";
+		public static const WATCHED_DATE:String = "watched_date";
+		public static const VIEWED_TIME:String = "viewed_time";
+		
 		
 		public static const PERSON:String = "person";
 		public static const NAME:String = "name";
@@ -250,6 +258,12 @@ package com.netflix.webapis.xml
 							break;
 							case SEASONS_ATTR:
 								model.seasons = handleLink(resultNode);
+								if(resultNode.catalog_titles != undefined)
+								{
+									model.seasonsList = [];
+									for each(child in resultNode..link)
+										model.seasonsList.push( handleLink(child) );
+								}
 							break;
 							case EPISODES_ATTR:
 								model.episodes = handleLink(resultNode);
@@ -328,6 +342,26 @@ package com.netflix.webapis.xml
 					case UPDATED_NODE:
 						if (model is QueueItemModel)
 							(model as QueueItemModel).lastUpdated = handleDate(resultNode);
+						break;
+					case SHIPPED_DATE:
+						if(model is AtHomeItemModel)
+							(model as AtHomeItemModel).shippedDate = handleDate(resultNode);
+						break;
+					case ESTIMATED_ARRIVAL_DATE:
+						if(model is AtHomeItemModel)
+							(model as AtHomeItemModel).shippedDate = handleDate(resultNode);
+						break;
+					case WATCHED_DATE:
+						if(model is RentalHistoryItemModel)
+							(model as RentalHistoryItemModel).watchedDate = handleDate(resultNode);
+						break;
+					case RETURNED_DATE:
+						if(model is RentalHistoryItemModel)
+							(model as RentalHistoryItemModel).returnedDate = handleDate(resultNode);
+						break;
+					case VIEWED_TIME:
+						if(model is RentalHistoryItemModel)
+							(model as RentalHistoryItemModel).viewedTime = handleStringNode(resultNode);
 						break;
 				}
 			}
@@ -611,96 +645,6 @@ package com.netflix.webapis.xml
 		public static function handleFilmography(xml:XML):FilmographyItemModel
 		{
 			return NetflixXMLUtil.handleXMLToCatalogItemModel(xml) as FilmographyItemModel;
-		}
-		
-		/**
-		 * Handles the parsing of Review Results.
-		 * @param xml
-		 * @return 
-		 * 
-		 */		
-		public static function handleReviewNode(xml:XML):ReviewItemModel
-		{
-			var itemVO:ReviewItemModel = new ReviewItemModel();
-			var resultNode:XML;
-			itemVO.categories = [];
-			itemVO.links = [];
-			
-			itemVO.writeup = xml["write-up"];
-			itemVO.reviewId = xml.review_id;
-			itemVO.userRating = Number(xml.user_rating);
-			itemVO.helpful = Number(xml.helpful);
-			itemVO.notHelpful = Number(xml.not_helpful);
-			
-			var children:XMLList = xml.children();
-			
-			for each (resultNode in children) {
-				var nodeType:String = String(resultNode.name());
-				switch (nodeType) {
-					case TITLE:
-						itemVO.titleShort = resultNode.@short;
-						itemVO.titleRegular = resultNode.@regular;
-						break;
-					case BOX_ART:
-						itemVO.boxArtSmall = resultNode.@small;
-						itemVO.boxArtMedium = resultNode.@medium;
-						itemVO.boxArtLarge = resultNode.@large;
-						break;
-					case LINK:
-						var linkTitle:String = resultNode.@title;
-						switch (linkTitle) {
-							case SYNOPSIS_ATTR:
-								itemVO.synopsis = handleLink(resultNode);
-								break;
-							case CAST_ATTR:
-								itemVO.cast = handleLink(resultNode);
-								break;
-							case DIRECTOR_ATTR:
-								itemVO.directors = handleLink(resultNode);
-								break;
-							case FORMATS_ATTR:
-								itemVO.formats = handleLink(resultNode);
-								break;
-							case SCREEN_FORMATS_ATTR:
-								itemVO.screenFormats = handleLink(resultNode);
-								break;
-							case AUDIO_ATTR:
-								itemVO.languagesAndAudio = handleLink(resultNode);
-								break;
-							case SIMILARS_ATTR:
-								itemVO.similars = handleLink(resultNode);
-								break;
-							case AWARDS_ATTR:
-								itemVO.awards = handleLink(resultNode);
-								break;
-							case ALTERNATE_ATTR:
-								itemVO.alternate = handleLink(resultNode);
-								break;
-							default:
-								itemVO.links.push(handleLink(resultNode));
-								break;
-						}
-						
-						break;
-					case RELEASE_YEAR:
-						itemVO.releaseYear = handleNumber(resultNode);
-						break;
-					case CATEGORY:
-						itemVO.categories.push(handleCategory(resultNode));
-						break;
-					case AVERAGE_RATING:
-						itemVO.averageRating = handleNumber(resultNode);
-						break;
-					case USER_RATING:
-						itemVO.userRating = handleNumber(resultNode);
-						break;
-					case UPDATED_NODE:
-						itemVO.lastUpdated = handleDate(resultNode);
-						break;
-				}
-			}
-				
-			return itemVO;
 		}
 		
 		/**

@@ -483,20 +483,20 @@ package com.netflix.webapis.services
 		// Requests Storage
 		//
 		//---------------------------------------------------------------------
-		internal var _numberOfResults:uint;
+		internal var _numberOfResults:int;
 		/**
 		 * The total amount of results available 
 		 */
-		public function get numberOfResults():uint
+		public function get numberOfResults():int
 		{
 			return _numberOfResults;
 		}
 		
-		internal var _resultsPerPage:uint;
+		internal var _resultsPerPage:int;
 		/**
 		 * The total amount of results returned.
 		 */
-		public function get resultsPerPage():uint
+		public function get resultsPerPage():int
 		{
 			return _resultsPerPage;
 		}
@@ -523,11 +523,11 @@ package com.netflix.webapis.services
 			return httpStatusResponse;
 		}
 		
-		internal var _currentIndex:uint = 0;
+		internal var _currentIndex:int = 0;
 		/**
 		 * Current start index.
 		 */
-		public function get currentIndex():uint
+		public function get currentIndex():int
 		{
 			return _currentIndex;
 		}
@@ -634,7 +634,7 @@ package com.netflix.webapis.services
 		{
 			if(enableTraceStatements)
 				trace(fault.toString());
-			dispatchEvent(new NetflixFaultEvent(NetflixFaultEvent.FAULT,fault, _currentURL, _currentParams));
+			dispatchEvent(new NetflixFaultEvent(NetflixFaultEvent.FAULT,fault, _currentURL, _currentParams, type));
 		}
 		
 		private var _resultFunction:Function;
@@ -685,7 +685,9 @@ package com.netflix.webapis.services
 			} else {
 				finalParams = params;
 			}
-			finalParams.method = httpMethod;
+			//don't say what the method is if we handle it correctly
+			if(httpMethod != GET_REQUEST_METHOD || httpMethod != POST_REQUEST_METHOD)
+				finalParams.method = httpMethod;
 			//store information
 			_currentParams = finalParams;
 			_currentURL = sendQuery;
@@ -703,6 +705,7 @@ package com.netflix.webapis.services
 				trace(requestString);
 			//make request
 			var urlRequest:URLRequest = new URLRequest(requestString);
+			/*
 			if(finalHttpMethod==POST_REQUEST_METHOD)
 			{
 				var postVars:URLVariables = new URLVariables();
@@ -713,6 +716,7 @@ package com.netflix.webapis.services
 				urlRequest.data = postVars;
 				urlRequest.url = sendQuery;
 			}
+			*/
 			urlRequest.method = finalHttpMethod;
 			try{
 				_urlLoader.load(urlRequest);
@@ -723,10 +727,10 @@ package com.netflix.webapis.services
 		
 		protected function createRequestString(tokenRequest:OAuthRequest):String
 		{
-			var time:Number = 0;
+			var offset:Number = 0;
 			if(isNaN(timeOffset)==false)
-				time = timeOffset;
-			return tokenRequest.buildRequest(SIG_METHOD, OAuthRequest.RESULT_TYPE_URL_STRING, "", time);
+				offset = timeOffset;
+			return tokenRequest.buildRequest(SIG_METHOD, OAuthRequest.RESULT_TYPE_URL_STRING, "", offset);
 		}
 		
 		/**

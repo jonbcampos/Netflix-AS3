@@ -247,7 +247,7 @@ package com.netflix.webapis.services
 		 * @see com.netflix.webapis.events.NetflixFaultEvent#FAULT
 		 * @see com.netflix.webapis.vo.Person
 		 */	
-		public function getPeopleByName(name:String, startIndex:uint=0, maxResults:uint=25):void
+		public function getPeopleByName(name:String, startIndex:int=0, maxResults:int=25):void
 		{
 			var params:PeopleParams = new PeopleParams();
 			params.term = name;

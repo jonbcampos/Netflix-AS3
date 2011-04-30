@@ -189,6 +189,11 @@ package com.netflix.webapis.xml
 			return uint(xml.valueOf());
 		}
 		
+		public static function handleintNode(xml:XML):int
+		{
+			return int(xml.valueOf());
+		}
+		
 		public static function handleBooleanNode(xml:XML):Boolean
 		{
 			return (xml.valueOf()=="true")?true:false;
@@ -234,7 +239,7 @@ package com.netflix.webapis.xml
 			return format;
 		}
 		
-		public static function handleCount(xml:XML):uint
+		public static function handleCount(xml:XML):int
 		{
 			var resultNode:XML;
 			
@@ -244,7 +249,7 @@ package com.netflix.webapis.xml
 				switch(nodeType)
 				{
 					case COUNT:
-						return handleUintNode(resultNode);
+						return handleintNode(resultNode);
 						break;
 				}
 			}

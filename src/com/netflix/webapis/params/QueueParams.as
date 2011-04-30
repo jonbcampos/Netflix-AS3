@@ -128,7 +128,7 @@ package com.netflix.webapis.params
 			//queueId
 			if(queueId)
 				o.queueId = queueId;
-			//etag
+			/*
 			switch(type)
 			{
 				case QueueService.DISC_QUEUE_SERVICE:
@@ -142,6 +142,7 @@ package com.netflix.webapis.params
 					o.etag = ServiceStorage.getInstance().lastInstantQueueETag;
 					break;
 			}
+			*/
 			return o;
 		}
 		
@@ -157,7 +158,6 @@ package com.netflix.webapis.params
 				o.format = formatType;
 			if(!isNaN(position))
 				o.position = position;
-			//etag
 			switch(type)
 			{
 				case QueueService.DISC_QUEUE_SERVICE:

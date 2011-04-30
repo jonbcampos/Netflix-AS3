@@ -40,18 +40,18 @@ package com.netflix.webapis.params
 		//
 		//---------------------------------------------------------------------
 		
-		private var _startIndex:uint = 0;
+		private var _startIndex:int = 0;
 		/**
 		 * The zero-based offset into the results of the query. When used with 
 		 * the maxResults parameter, you can request successive pages of 
 		 * search results.
 		 */
-		public function get startIndex():uint
+		public function get startIndex():int
 		{
 			return _startIndex;
 		}
 		
-		public function set startIndex(value:uint):void
+		public function set startIndex(value:int):void
 		{
 			if(value<0) value = 0;
 			_startIndex = value;
@@ -60,18 +60,18 @@ package com.netflix.webapis.params
 		//---------------------------
 		// maxResults
 		//---------------------------
-		private var _maxResults:uint = 25;
+		private var _maxResults:int = 25;
 		/**
 		 * The maximum number of results to return. 
 		 * This number cannot be greater than 100. 
 		 * If maxResults is not specified, the default value is 25.
 		 */		
-		public function get maxResults():uint
+		public function get maxResults():int
 		{
 			return _maxResults;
 		}
 		
-		public function set maxResults(value:uint):void
+		public function set maxResults(value:int):void
 		{
 			if(value>500) value = 500;
 			if(value<1) value = 1;
@@ -149,8 +149,8 @@ package com.netflix.webapis.params
 		public function toPostObject():Object
 		{
 			var o:Object = {};
-			o.start_index = startIndex;
-			o.max_results = maxResults;
+			//o.start_index = startIndex;
+			//o.max_results = maxResults;
 			o.oauth_version = "1.0";
 			if(expansions)
 				o.expand = expansions;

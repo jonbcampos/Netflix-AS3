@@ -215,8 +215,9 @@ package com.netflix.webapis.services
 					break;
 				case GENRE_SERVICE:
 					method = ServiceBase.ODATA_REQUEST_METHOD;
-					var genre:String = TitlesParams(params).genre.replace(/\s/g,"%20");
-					sendQuery += "('"+URLEncoding.encode(genre)+"')/Titles/?";
+					//var genre:String = TitlesParams(params).genre.replace(/\s/g,"%20");
+					//sendQuery += "('"+URLEncoding.encode(genre)+"')/Titles/?";
+					sendQuery += "('"+TitlesParams(params).genre+"')/Titles/?";
 					break;
 				case ADVANCED_TITLE_SERVICE:
 					method = ServiceBase.ODATA_REQUEST_METHOD;
@@ -387,7 +388,7 @@ package com.netflix.webapis.services
 		 * @see com.netflix.webapis.events.NetflixFaultEvent#FAULT
 		 * @see com.netflix.webapis.vo.AutoCompleteItem
 		 */	
-		public function getListByAutoComplete(term:String, startIndex:uint=0, maxResults:uint=25):void
+		public function getListByAutoComplete(term:String, startIndex:int=0, maxResults:int=25):void
 		{
 			var params:TitlesParams = new TitlesParams();
 			params.term = term;
@@ -414,7 +415,7 @@ package com.netflix.webapis.services
 		 * @see com.netflix.webapis.events.NetflixFaultEvent#FAULT
 		 * @see com.netflix.webapis.models.CatalogItemModel
 		 */	
-		public function getCatalogListByTitle(term:String, startIndex:uint=0, maxResults:uint=25, expansions:String=null):void
+		public function getCatalogListByTitle(term:String, startIndex:int=0, maxResults:int=25, expansions:String=null):void
 		{
 			var params:TitlesParams = new TitlesParams();
 			params.term = term;
@@ -447,12 +448,12 @@ package com.netflix.webapis.services
 			titleService(params);
 		}
 		
-		public function getTitleExpansion(title:CatalogItemModel, expandItem:String, startIndex:uint=0, maxResults:uint=25, expansions:String=null):void
+		public function getTitleExpansion(title:CatalogItemModel, expandItem:String, startIndex:int=0, maxResults:int=25, expansions:String=null):void
 		{
 			getTitleExpansionByNetflixId(title.netflixId, expandItem, startIndex, maxResults, expansions);
 		}
 		
-		public function getTitleExpansionByNetflixId(netflixId:String, expandItem:String, startIndex:uint=0, maxResults:uint=25, expansions:String=null):void
+		public function getTitleExpansionByNetflixId(netflixId:String, expandItem:String, startIndex:int=0, maxResults:int=25, expansions:String=null):void
 		{
 			var params:TitlesParams = new TitlesParams();
 			params.expandItem = expandItem;
@@ -485,7 +486,7 @@ package com.netflix.webapis.services
 			titleService(params);
 		}
 		
-		public function getTitlesByGenre(genre:String, startIndex:uint=0, maxResults:uint=25, filter:String=null, orderBy:String=null, expansions:String=null):void
+		public function getTitlesByGenre(genre:String, startIndex:int=0, maxResults:int=25, filter:String=null, orderBy:String=null, expansions:String=null):void
 		{
 			var params:TitlesParams = new TitlesParams();
 			params.startIndex = startIndex;
@@ -497,7 +498,7 @@ package com.netflix.webapis.services
 			genreService(params);
 		}
 		
-		public function getTitlesByAdvancedSearch(term:String, startIndex:uint=0, maxResults:uint=25, filter:String=null, orderBy:String=null, expansions:String=null):void
+		public function getTitlesByAdvancedSearch(term:String, startIndex:int=0, maxResults:int=25, filter:String=null, orderBy:String=null, expansions:String=null):void
 		{
 			var params:TitlesParams = new TitlesParams();
 			params.startIndex = startIndex;

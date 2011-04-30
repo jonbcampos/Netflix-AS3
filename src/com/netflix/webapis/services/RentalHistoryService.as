@@ -24,7 +24,9 @@ package com.netflix.webapis.services
 	import com.netflix.webapis.ServiceFault;
 	import com.netflix.webapis.events.NetflixFaultEvent;
 	import com.netflix.webapis.events.NetflixResultEvent;
+	import com.netflix.webapis.models.AtHomeItemModel;
 	import com.netflix.webapis.models.CatalogItemModel;
+	import com.netflix.webapis.models.RentalHistoryItemModel;
 	import com.netflix.webapis.params.ParamsBase;
 	import com.netflix.webapis.params.RentalHistoryParams;
 	import com.netflix.webapis.xml.NetflixXMLUtil;
@@ -58,8 +60,6 @@ package com.netflix.webapis.services
 		public static const SHIPPED_SERVICE:String = "shipped";
 		public static const WATCHED_SERVICE:String = "watched";
 		public static const RETURNED_SERVICE:String = "returned";
-		
-		public static const GET_USER_REVIEWS_SERVICE:String = "getReviews";
 		//---------------------------------------------------------------------
 		//
 		// Public Methods
@@ -86,9 +86,6 @@ package com.netflix.webapis.services
 					break;
 				case RETURNED_SERVICE:
 					returnedService( parameters );
-					break;
-				case GET_USER_REVIEWS_SERVICE:
-					reviewsService( parameters );
 					break;
 			}
 		}
@@ -183,24 +180,6 @@ package com.netflix.webapis.services
 		}
 		
 		/**
-		 * This resource returns a subscriber's reviews and related title URLs.
-		 * 
-		 * Handle <code>result</code> or <code>fault</code> via 
-		 * <code>NetflixResultEvent.RESULT</code> or 
-		 * <code>NetflixFaultEvent.FAULT</code> respectively.
-		 * 
-		 * @param params
-		 * 
-		 * @see com.netflix.webapis.events.NetflixResultEvent#RESULT
-		 * @see com.netflix.webapis.events.NetflixFaultEvent#FAULT
-		 * @see com.netflix.webapis.models.ReviewItemModel
-		 */		
-		public function reviewsService(params:ParamsBase=null):void
-		{
-			handleServiceLoading(user.reviewsLink, determineParams(params, GET_USER_REVIEWS_SERVICE));
-		}
-		
-		/**
 		 * @inheritDoc
 		 */
 		override protected function handleServiceLoading(methodString:String, params:ParamsBase=null) : void
@@ -251,17 +230,13 @@ package com.netflix.webapis.services
 			{
 				case AT_HOME_SERVICE:
 					for each(resultNode in returnedXML..at_home_item)
-						resultsArray.push( NetflixXMLUtil.handleXMLToCatalogItemModel(resultNode) );
+						resultsArray.push( NetflixXMLUtil.handleXMLToCatalogItemModel(resultNode, new AtHomeItemModel()) );
 					break;
 				case SHIPPED_SERVICE:
 				case WATCHED_SERVICE:
 				case RETURNED_SERVICE:
 					for each(resultNode in returnedXML..rental_history_item)
-						resultsArray.push( NetflixXMLUtil.handleXMLToCatalogItemModel(resultNode) );
-					break;
-				case GET_USER_REVIEWS_SERVICE:
-					for each(resultNode in returnedXML..review)
-						resultsArray.push( NetflixXMLUtil.handleReviewNode(resultNode) );
+						resultsArray.push( NetflixXMLUtil.handleXMLToCatalogItemModel(resultNode, new RentalHistoryItemModel()) );
 					break;
 			}
 			
@@ -423,20 +398,5 @@ package com.netflix.webapis.services
 			returnedService(params);
 		}
 		
-		/**
-		 * This resource returns a subscriber's reviews and related title URLs.
-		 * 
-		 * Handle <code>result</code> or <code>fault</code> via 
-		 * <code>NetflixResultEvent.RESULT</code> or 
-		 * <code>NetflixFaultEvent.FAULT</code> respectively.
-		 * 
-		 * @see com.netflix.webapis.events.NetflixResultEvent#RESULT
-		 * @see com.netflix.webapis.events.NetflixFaultEvent#FAULT
-		 * @see com.netflix.webapis.models.ReviewItemModel
-		 */	
-		public function getReviewedItems():void
-		{
-			reviewsService();
-		}
 	}
 }
