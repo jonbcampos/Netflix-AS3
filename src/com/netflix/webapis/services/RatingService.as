@@ -44,9 +44,9 @@ package com.netflix.webapis.services
 	 */	
 	public class RatingService extends ServiceBase
 	{
-		public function RatingService(target:IEventDispatcher=null)
+		public function RatingService()
 		{
-			super(target);
+			super();
 		}
 		
 		//---------------------------------------------------------------------

@@ -46,9 +46,9 @@ package com.netflix.webapis.services
 	 */	
 	public class QueueService extends ServiceBase
 	{
-		public function QueueService(target:IEventDispatcher=null)
+		public function QueueService()
 		{
-			super(target);
+			super();
 		}
 		
 		//---------------------------------------------------------------------

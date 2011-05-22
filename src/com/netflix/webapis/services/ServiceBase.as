@@ -98,9 +98,9 @@ package com.netflix.webapis.services
 		 */		
 		private var storage:ServiceStorage;
 		
-		public function ServiceBase(target:IEventDispatcher=null)
+		public function ServiceBase()
 		{
-			super(target);
+			super();
 			_constructor();
 		}
 		
@@ -623,7 +623,8 @@ package com.netflix.webapis.services
 		 */	
 		protected function dispatchResult(result:Object, dispatchType:String, rawXML:XML = null):void
 		{
-			dispatchEvent(new NetflixResultEvent(NetflixResultEvent.RESULT, result, dispatchType, rawXML, _currentURL, _currentParams, httpStatusResponse));
+			if(hasEventListener(NetflixResultEvent.RESULT))
+				dispatchEvent(new NetflixResultEvent(NetflixResultEvent.RESULT, result, dispatchType, rawXML, _currentURL, _currentParams, httpStatusResponse));
 		}
 		/**
 		 * Dispatches Fault.
@@ -634,7 +635,8 @@ package com.netflix.webapis.services
 		{
 			if(enableTraceStatements)
 				trace(fault.toString());
-			dispatchEvent(new NetflixFaultEvent(NetflixFaultEvent.FAULT,fault, _currentURL, _currentParams, type));
+			if(hasEventListener(NetflixFaultEvent.FAULT))
+				dispatchEvent(new NetflixFaultEvent(NetflixFaultEvent.FAULT,fault, _currentURL, _currentParams, type));
 		}
 		
 		private var _resultFunction:Function;
@@ -764,7 +766,8 @@ package com.netflix.webapis.services
 				getServerTimeOffset();
 			} else {
 				var errorText:String = (httpStatusResponse)?httpStatusResponse:event.text;
-				dispatchFault(new ServiceFault(event.type,"IO Service Error: "+type+ " Error",errorText, event.text, httpStatus));
+				if(hasEventListener(event.type))
+					dispatchFault(new ServiceFault(event.type,"IO Service Error: "+type+ " Error",errorText, event.text, httpStatus));
 				clearLoader();
 			}
 		}
@@ -778,7 +781,8 @@ package com.netflix.webapis.services
 		{
 			if(enableTraceStatements)
 				trace(event.toString());
-			dispatchEvent(event.clone());
+			if(hasEventListener(event.type))
+				dispatchEvent(event.clone());
 		}
 		
 		/**
@@ -790,7 +794,8 @@ package com.netflix.webapis.services
 		{
 			if(enableTraceStatements)
 				trace(event.toString());
-			dispatchFault(new ServiceFault(event.type,"Security Service Error: "+type+ " Error",event.text, event.text));
+			if(hasEventListener(event.type))
+				dispatchFault(new ServiceFault(event.type,"Security Service Error: "+type+ " Error",event.text, event.text));
 			clearLoader();
 		}
 		
@@ -801,7 +806,8 @@ package com.netflix.webapis.services
 		 */		
 		protected function httpStatusHandler(event:HTTPStatusEvent):void
 		{
-			dispatchEvent(event.clone());
+			if(hasEventListener(event.type))
+				dispatchEvent(event.clone());
 			httpStatus = event.status;
 			switch(event.status)
 			{
@@ -1077,7 +1083,8 @@ package com.netflix.webapis.services
 			var cur:Date = new Date();
 			timeOffset =  serverTime - cur.time;
 			lastNetflixResult = {"time":serverTime};
-			dispatchEvent(new NetflixResultEvent(NetflixResultEvent.SERVER_TIME_COMPLETE, serverTime, null, result));
+			if(hasEventListener(NetflixResultEvent.SERVER_TIME_COMPLETE))
+				dispatchEvent(new NetflixResultEvent(NetflixResultEvent.SERVER_TIME_COMPLETE, serverTime, null, result));
 			//reply last result
 			reRunLast();
 		}

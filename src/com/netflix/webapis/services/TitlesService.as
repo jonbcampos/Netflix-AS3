@@ -44,9 +44,9 @@ package com.netflix.webapis.services
 	 */	
 	public class TitlesService extends ServiceBase
 	{
-		public function TitlesService(target:IEventDispatcher=null)
+		public function TitlesService()
 		{
-			super(target);
+			super();
 		}
 		
 		//---------------------------------------------------------------------

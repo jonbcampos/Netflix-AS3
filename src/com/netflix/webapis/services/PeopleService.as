@@ -48,9 +48,9 @@ package com.netflix.webapis.services
 		protected static const PEOPLE_URL:String = NETFLIX_BASE_URL+"catalog/people";
 		protected static const FILMOGRAPHY_PART:String = "filmography";
 
-		public function PeopleService(target:IEventDispatcher=null)
+		public function PeopleService()
 		{
-			super(target);
+			super();
 		}
 
 		//---------------------------------------------------------------------

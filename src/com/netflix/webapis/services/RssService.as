@@ -18,9 +18,9 @@ package com.netflix.webapis.services
 	
 	public class RssService extends ServiceBase
 	{
-		public function RssService(target:IEventDispatcher=null)
+		public function RssService()
 		{
-			super(target);
+			super();
 		}
 		
 		//---------------------------------------------------------------------

@@ -51,9 +51,9 @@ package com.netflix.webapis.services
 	 */	
 	public class AccessTokenService extends ServiceBase
 	{
-		public function AccessTokenService(target:IEventDispatcher=null)
+		public function AccessTokenService()
 		{
-			super(target);
+			super();
 		}
 		
 		private var _urlLoader:URLLoader;
@@ -126,7 +126,8 @@ package com.netflix.webapis.services
 			}
 			
 			lastNetflixResult = {"accessToken":accessToken,"userId":userId};
-			dispatchEvent(new AccessTokenResultEvent(AccessTokenResultEvent.RESULT,accessToken,userId));
+			if(hasEventListener(AccessTokenResultEvent.RESULT))
+				dispatchEvent(new AccessTokenResultEvent(AccessTokenResultEvent.RESULT,accessToken,userId));
 		}
 		
 		private function _clearLoader():void

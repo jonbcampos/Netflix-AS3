@@ -44,9 +44,9 @@ package com.netflix.webapis.services
 	 */	
 	public class CategoriesService extends ServiceBase
 	{
-		public function CategoriesService(target:IEventDispatcher=null)
+		public function CategoriesService()
 		{
-			super(target);
+			super();
 		}
 		
 		//---------------------------------------------------------------------

@@ -42,9 +42,9 @@ package com.netflix.webapis.services
 	 */	
 	public class RentalHistoryService extends ServiceBase
 	{
-		public function RentalHistoryService(target:IEventDispatcher=null)
+		public function RentalHistoryService()
 		{
-			super(target);
+			super();
 		}
 		
 		//---------------------------------------------------------------------

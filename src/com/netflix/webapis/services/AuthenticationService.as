@@ -53,9 +53,9 @@ package com.netflix.webapis.services
 	public class AuthenticationService extends ServiceBase
 	{
 		
-		public function AuthenticationService(target:IEventDispatcher=null)
+		public function AuthenticationService()
 		{
-			super(target);
+			super();
 		}
 		
 		private var _urlLoader:URLLoader;
@@ -128,7 +128,8 @@ package com.netflix.webapis.services
 				authorizationURL += "&oauth_callback=" + URLEncoding.encode(callBackUrl);
 				
 			lastNetflixResult = {"token":oauthToken, "tokenSecret":oauthTokenSecret, "applicationName":applicationName, "loginURL":loginURL,"key":consumer.key};
-			dispatchEvent(new AuthenticationResultEvent(AuthenticationResultEvent.RESULT, oauthToken, oauthTokenSecret, applicationName, loginURL, authorizationURL, ServiceStorage.getInstance().accessTokenExists));
+			if(hasEventListener(AuthenticationResultEvent.RESULT))
+				dispatchEvent(new AuthenticationResultEvent(AuthenticationResultEvent.RESULT, oauthToken, oauthTokenSecret, applicationName, loginURL, authorizationURL, ServiceStorage.getInstance().accessTokenExists));
 		}
 		
 		private function _authenticationService_IOErrorHandler(event:IOErrorEvent):void

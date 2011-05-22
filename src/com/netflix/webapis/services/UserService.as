@@ -48,9 +48,9 @@ package com.netflix.webapis.services
 	public class UserService extends ServiceBase
 	{
 
-		public function UserService(target:IEventDispatcher=null)
+		public function UserService()
 		{
-			super(target);
+			super();
 		}
 		
 		//---------------------------------------------------------------------
