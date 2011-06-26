@@ -48,10 +48,6 @@ package com.netflix.webapis.services
 	import org.iotashan.oauth.OAuthToken;
 
 	/**
-	* Result Event.
-	*/	
-	[Event(name="result",type="com.netflix.webapis.events.NetflixResultEvent")]
-	/**
 	* Fault Event.
 	*/	
 	[Event(name="fault",type="com.netflix.webapis.events.NetflixFaultEvent")]
@@ -623,8 +619,8 @@ package com.netflix.webapis.services
 		 */	
 		protected function dispatchResult(result:Object, dispatchType:String, rawXML:XML = null):void
 		{
-			if(hasEventListener(NetflixResultEvent.RESULT))
-				dispatchEvent(new NetflixResultEvent(NetflixResultEvent.RESULT, result, dispatchType, rawXML, _currentURL, _currentParams, httpStatusResponse));
+			if(hasEventListener(dispatchType+"Result"))
+				dispatchEvent(new NetflixResultEvent(dispatchType+"Result", result, rawXML, _currentURL, _currentParams, httpStatusResponse));
 		}
 		/**
 		 * Dispatches Fault.

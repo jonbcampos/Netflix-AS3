@@ -24,10 +24,10 @@ package com.netflix.webapis.services
 	import com.netflix.webapis.ServiceFault;
 	import com.netflix.webapis.events.NetflixFaultEvent;
 	import com.netflix.webapis.events.UsersResultEvent;
-	import com.netflix.webapis.models.CatalogItemModel;
+	import com.netflix.webapis.vo.CatalogItemVO;
 	import com.netflix.webapis.params.ParamsBase;
 	import com.netflix.webapis.params.UserParams;
-	import com.netflix.webapis.vo.CategoryItem;
+	import com.netflix.webapis.vo.CategoryItemVO;
 	import com.netflix.webapis.vo.NetflixUser;
 	import com.netflix.webapis.xml.NetflixXMLUtil;
 	
@@ -39,6 +39,10 @@ package com.netflix.webapis.services
 	* Result Event.
 	*/	
 	[Event(name="userResult",type="com.netflix.webapis.events.UsersResultEvent")]
+	
+	[Event(name="recommendationResult",type="com.netflix.webapis.events.NetflixResultEvent")]
+	[Event(name="titleStatesResult",type="com.netflix.webapis.events.NetflixResultEvent")]
+	[Event(name="userFeedsResult",type="com.netflix.webapis.events.NetflixResultEvent")]
 	
 	/**
 	 * User Services.
@@ -259,9 +263,9 @@ package com.netflix.webapis.services
 					user.canBlurayWatch = false;
 					user.canDvdWatch = false;
 					for each(var categoryXML:XML in returnedXML..category){
-						if(categoryXML.@scheme == NetflixXMLUtil.TITLE_FORMAT_SCHEME)
+						if(categoryXML.@scheme == NetflixXMLUtil.TITLE_FORMAT_SCHEMA)
 						{
-							var preferredFormat:CategoryItem = NetflixXMLUtil.handleCategory(categoryXML);
+							var preferredFormat:CategoryItemVO = NetflixXMLUtil.handleCategory(categoryXML);
 							if(preferredFormat.label=="Blu-ray")
 								user.canBlurayWatch = true;
 							if(preferredFormat.label=="DVD")

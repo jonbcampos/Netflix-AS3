@@ -21,34 +21,37 @@
  * */
 package com.netflix.webapis.vo
 {
-	[RemoteClass(alias="com.netflix.webapis.vo.CategoryItem")]
+	[RemoteClass(alias="com.netflix.webapis.vo.Person")]
 	/**
-	 * Category VO.
+	 * Person VO. 
+	 * @author jonbcampos
 	 * 
-	 * @author brianburck
-	 * 
-	 * @see com.netflix.webapis.services.TitlesService#catalogService()
-	 * @see com.netflix.webapis.services.TitlesService#titleService()
-	 * @see com.netflix.webapis.models.CatalogItemModel
-	 */
-	public class CategoryItem
+	 */	
+	public class PersonVO
 	{
 		/**
-		 * Catalog Item Scheme. 
+		 * Person Id. 
 		 */		
-		public var scheme:String;
+		public var id:String;
 		/**
-		 * Visual Label. 
+		 * Person's name. 
 		 */		
-		public var label:String;
+		public var name:String;
 		/**
-		 * Unique Term. 
+		 * Person's Bio. 
 		 */		
-		public var term:String;
-		
-		public function CategoryItem()
-		{
-		}
-
+		public var bio:String;
+		/**
+		 * Filmography Link. 
+		 */		
+		public var filmography:LinkItemVO;
+		/**
+		 * Person's webpage. 
+		 */		
+		public var webPage:LinkItemVO;
+		/**
+		 * List of links attached to person. 
+		 */		
+		public var links:Array;
 	}
 }

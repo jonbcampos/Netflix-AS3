@@ -24,17 +24,24 @@ package com.netflix.webapis.services
 	import com.netflix.webapis.ServiceFault;
 	import com.netflix.webapis.events.NetflixFaultEvent;
 	import com.netflix.webapis.events.NetflixResultEvent;
-	import com.netflix.webapis.models.CatalogItemModel;
-	import com.netflix.webapis.models.QueueItemModel;
+	import com.netflix.webapis.vo.CatalogItemVO;
+	import com.netflix.webapis.vo.QueueItemVO;
 	import com.netflix.webapis.params.ParamsBase;
 	import com.netflix.webapis.params.QueueParams;
-	import com.netflix.webapis.vo.TitleState;
-	import com.netflix.webapis.vo.TitleStateItem;
+	import com.netflix.webapis.vo.TitleStateVO;
+	import com.netflix.webapis.vo.TitleStateItemVO;
 	import com.netflix.webapis.xml.NetflixXMLUtil;
 	
 	import flash.events.Event;
 	import flash.events.IEventDispatcher;
 	import flash.net.URLLoader;
+	
+	[Event(name="discQueueResult",type="com.netflix.webapis.events.NetflixResultEvent")]
+	[Event(name="instantQueueResult",type="com.netflix.webapis.events.NetflixResultEvent")]
+	[Event(name="updateDiscQueueResult",type="com.netflix.webapis.events.NetflixResultEvent")]
+	[Event(name="updateInstantQueueResult",type="com.netflix.webapis.events.NetflixResultEvent")]
+	[Event(name="deleteDiscQueueResult",type="com.netflix.webapis.events.NetflixResultEvent")]
+	[Event(name="deleteInstantQueueResult",type="com.netflix.webapis.events.NetflixResultEvent")]
 	
 	/**
 	 * Services under the Queue Category, including adding items into a
@@ -323,7 +330,7 @@ package com.netflix.webapis.services
 					if (returnedXML..etag != null)
 						ServiceStorage.getInstance().lastDiscQueueETag = NetflixXMLUtil.handleStringNode(returnedXML..etag[0]);
 					for each (resultNode in returnedXML..queue_item) {
-						resultsArray.push( NetflixXMLUtil.handleXMLToCatalogItemModel(resultNode, new QueueItemModel()) );
+						resultsArray.push( NetflixXMLUtil.handleXMLToCatalogItemModel(resultNode, new QueueItemVO()) );
 					}
 					break;
 				case INSTANT_QUEUE_SERVICE:
@@ -331,7 +338,7 @@ package com.netflix.webapis.services
 					if (returnedXML..etag != null)
 						ServiceStorage.getInstance().lastInstantQueueETag = NetflixXMLUtil.handleStringNode(returnedXML..etag[0]);
 					for each (resultNode in returnedXML..queue_item) {
-						resultsArray.push( NetflixXMLUtil.handleXMLToCatalogItemModel(resultNode, new QueueItemModel()) );
+						resultsArray.push( NetflixXMLUtil.handleXMLToCatalogItemModel(resultNode, new QueueItemVO()) );
 					}
 					break;
 				case DELETE_DISC_SERVICE:
@@ -489,7 +496,7 @@ package com.netflix.webapis.services
 		 * @see com.netflix.webapis.events.NetflixFaultEvent#FAULT
 		 * @see com.netflix.webapis.models.CatalogItemModel
 		 */	
-		public function updateTitleInDiscQueue(title:CatalogItemModel,position:int=0, format:String=null):void
+		public function updateTitleInDiscQueue(title:CatalogItemVO,position:int=0, format:String=null):void
 		{
 			var params:QueueParams = new QueueParams();
 			params.titleRef = title;
@@ -512,7 +519,7 @@ package com.netflix.webapis.services
 		 * @see com.netflix.webapis.events.NetflixFaultEvent#FAULT
 		 * @see com.netflix.webapis.models.CatalogItemModel
 		 */	
-		public function updateTitleInInstantQueue(title:CatalogItemModel,position:int=0):void
+		public function updateTitleInInstantQueue(title:CatalogItemVO,position:int=0):void
 		{
 			var params:QueueParams = new QueueParams();
 			params.titleRef = title;
@@ -533,12 +540,12 @@ package com.netflix.webapis.services
 		 * @see com.netflix.webapis.events.NetflixFaultEvent#FAULT
 		 * @see com.netflix.webapis.models.CatalogItemModel
 		 */
-		public function deleteTitleFromDiscQueue(title:QueueItemModel):void
+		public function deleteTitleFromDiscQueue(title:QueueItemVO):void
 		{
 			deleteTitleFromDiscQueueById(title.id);
 		}
 		
-		public function deleteCatalogTitleFromDiscQueue(title:CatalogItemModel):void
+		public function deleteCatalogTitleFromDiscQueue(title:CatalogItemVO):void
 		{
 			var queueId:String = getDvdQueueId(title);
 			if(!queueId)
@@ -569,12 +576,12 @@ package com.netflix.webapis.services
 		 * @see com.netflix.webapis.events.NetflixFaultEvent#FAULT
 		 * @see com.netflix.webapis.models.CatalogItemModel
 		 */
-		public function deleteTitleFromInstantQueue(title:QueueItemModel):void
+		public function deleteTitleFromInstantQueue(title:QueueItemVO):void
 		{
 			deleteTitleFromInstantQueueById(title.id);
 		}
 		
-		public function deleteCatalogTitleFromInstantQueue(title:CatalogItemModel):void
+		public function deleteCatalogTitleFromInstantQueue(title:CatalogItemVO):void
 		{
 			var queueId:String = getInstantQueueId(title);
 			if(!queueId)
@@ -592,22 +599,22 @@ package com.netflix.webapis.services
 			deleteInstantQueueService(params);
 		}
 		
-		public static function getDvdQueueId(title:CatalogItemModel):String
+		public static function getDvdQueueId(title:CatalogItemVO):String
 		{
 			//double check it isn't a queueitemmodel
-			if(title is QueueItemModel)
-				return QueueItemModel(title).id;
+			if(title is QueueItemVO)
+				return QueueItemVO(title).id;
 			if(!title || !title.titleState)
 				return null;
 			//title state exists, continue
-			var titleState:TitleState = title.titleState;
+			var titleState:TitleStateVO = title.titleState;
 			var i:int = -1;
 			var n:int = titleState.titleStates.length;
 			while(++i<n)
 			{
-				if(titleState.titleStates[i] is TitleStateItem)
+				if(titleState.titleStates[i] is TitleStateItemVO)
 				{
-					var titleStateItem:TitleStateItem = titleState.titleStates[i] as TitleStateItem;
+					var titleStateItem:TitleStateItemVO = titleState.titleStates[i] as TitleStateItemVO;
 					if(titleStateItem.isDisc)
 					{
 						return titleStateItem.queueId;
@@ -617,22 +624,22 @@ package com.netflix.webapis.services
 			return null;
 		}
 		
-		public static function getInstantQueueId(title:CatalogItemModel):String
+		public static function getInstantQueueId(title:CatalogItemVO):String
 		{
 			//double check it isn't a queueitemmodel
-			if(title is QueueItemModel)
-				return QueueItemModel(title).id;
+			if(title is QueueItemVO)
+				return QueueItemVO(title).id;
 			if(!title || !title.titleState)
 				return null;
 			//title state exists, continue
-			var titleState:TitleState = title.titleState;
+			var titleState:TitleStateVO = title.titleState;
 			var i:int = -1;
 			var n:int = titleState.titleStates.length;
 			while(++i<n)
 			{
-				if(titleState.titleStates[i] is TitleStateItem)
+				if(titleState.titleStates[i] is TitleStateItemVO)
 				{
-					var titleStateItem:TitleStateItem = titleState.titleStates[i] as TitleStateItem;
+					var titleStateItem:TitleStateItemVO = titleState.titleStates[i] as TitleStateItemVO;
 					if(titleStateItem.isInstant)
 					{
 						return titleStateItem.queueId;

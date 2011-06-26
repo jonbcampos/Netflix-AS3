@@ -19,26 +19,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE. 
  * */
-package com.netflix.webapis.models
+package com.netflix.webapis.vo
 {
-	import flash.events.IEventDispatcher;
 	
-	[RemoteClass(alias="com.netflix.webapis.models.RentalHistoryItemModel")]
+	[RemoteClass(alias="com.netflix.webapis.vo.FilmographyItemVO")]
 	/**
-	 * Rental History Item Model. 
+	 * Filmography Item Model. 
 	 * @author jonbcampos
 	 * 
 	 */	
-	public class RentalHistoryItemModel extends AtHomeItemModel
+	public class FilmographyItemVO extends CatalogItemVO
 	{
-		public function RentalHistoryItemModel(target:IEventDispatcher=null)
+		public function FilmographyItemVO()
 		{
-			super(target);
+			super();
 		}
 		
-		public var watchedDate:Date;
-		public var viewedTime:String;
-		
-		public var returnedDate:Date;
 	}
 }

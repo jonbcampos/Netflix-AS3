@@ -21,15 +21,15 @@
  * */
 package com.netflix.webapis.vo
 {
-	[RemoteClass(alias="com.netflix.webapis.vo.AwardNominee")]
+	[RemoteClass(alias="com.netflix.webapis.vo.AwardWinner")]
 	/**
-	 * AwardNomineeVO returned as part of the <code>TitlesService</code> <i>awards</i> expansion.</code>. 
+	 * AwardWinnerVO returned as part of the <code>TitlesService</code> <i>awards</i> expansion.</code>. 
 	 * 
 	 * @author jonbcampos
 	 */		
-	public class AwardNominee extends AwardVO
+	public class AwardWinnerVO extends AwardVO
 	{
-		public function AwardNominee()
+		public function AwardWinnerVO()
 		{
 		}
 	}

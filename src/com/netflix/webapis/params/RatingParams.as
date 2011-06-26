@@ -21,8 +21,8 @@
  * */
 package com.netflix.webapis.params
 {
-	import com.netflix.webapis.models.CatalogItemModel;
-	import com.netflix.webapis.models.RatingsItemModel;
+	import com.netflix.webapis.vo.CatalogItemVO;
+	import com.netflix.webapis.vo.RatingsItemVO;
 	import com.netflix.webapis.services.RatingService;
 	
 	/**
@@ -59,12 +59,12 @@ package com.netflix.webapis.params
 		/**
 		 * One catalog title URLs for which to retrieve rental option state.
 		 */		
-		public var titleRef:CatalogItemModel;
+		public var titleRef:CatalogItemVO;
 		
 		/**
 		 * Rating item to update. 
 		 */		
-		public var ratingItem:RatingsItemModel;
+		public var ratingItem:RatingsItemVO;
 		
 		private var _rating:int;
 		/**
@@ -99,9 +99,9 @@ package com.netflix.webapis.params
 				var titleRefString:String = "";
 				for(var i:int=0;i<n;i++)
 				{
-					if(titleRefs[i] is CatalogItemModel)
+					if(titleRefs[i] is CatalogItemVO)
 					{
-						titleRefString += (titleRefs[i] as CatalogItemModel).netflixId;
+						titleRefString += (titleRefs[i] as CatalogItemVO).netflixId;
 						if(i<n-1)
 							titleRefString += ",";
 					} else if(titleRefs[i] && titleRefs[i] is String)

@@ -19,33 +19,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE. 
  * */
-package com.netflix.webapis.models
+package com.netflix.webapis.vo
 {
-	import com.netflix.webapis.vo.CategoryItem;
-	import com.netflix.webapis.vo.LinkItem;
-	import com.netflix.webapis.xml.NetflixXMLUtil;
+	import mx.collections.ArrayCollection;
 	
-	import flash.events.IEventDispatcher;
-	
-	[RemoteClass(alias="com.netflix.webapis.models.QueueItemModel")]
+	[RemoteClass(alias="com.netflix.webapis.vo.LinkItem")]
 	/**
-	 * Queue Item VO. 
-	 * @author jonbcampos
+	 * LinkItemVO provides a url, relationship, and title to additional content.
+	 * @author brianburck
 	 * 
-	 */	
-	public class QueueItemModel extends CatalogItemModel
+	 */
+	public class LinkItemVO
 	{
 		/**
-		 * Queue Position. 
+		 * URL. 
 		 */		
-		public var queuePosition:Number;
-		public var availabilityLabel:String;
-		public var format:String;
+		public var url:String;
+		/**
+		 * Schema info.
+		 */		
+		public var rel:String;
+		/**
+		 * Link Title. 
+		 */		
+		public var title:String;
+		/**
+		 * Expansion Title. 
+		 */		
+		public var expansionTitle:String;
+		/**
+		 * Expansions. 
+		 */		
+		public var expansion:Array;
 		
-		public function QueueItemModel(target:IEventDispatcher=null)
+		public function LinkItemVO()
 		{
-			super(target);
 		}
-		
+
 	}
 }

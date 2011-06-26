@@ -21,7 +21,7 @@
  * */
 package com.netflix.webapis.params
 {
-	import com.netflix.webapis.models.CatalogItemModel;
+	import com.netflix.webapis.vo.CatalogItemVO;
 	import com.netflix.webapis.services.UserService;
 	
 	/**
@@ -73,9 +73,14 @@ package com.netflix.webapis.params
 				var titleRefString:String = "";
 				for(var i:int=0;i<n;i++)
 				{
-					if(titleRefs[i] is CatalogItemModel)
+					if(titleRefs[i] is CatalogItemVO)
 					{
-						titleRefString += titleRefs[i].id;
+						if(titleRefs[i].id)
+							titleRefString += titleRefs[i].id;
+						else if(titleRefs[i].netflixId)
+							titleRefString += titleRefs[i].netflixId;
+						else
+							break;
 						if(i<n-1)
 							titleRefString += ",";
 					} else if(titleRefs[i] && titleRefs[i] is String)

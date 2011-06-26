@@ -21,26 +21,29 @@
  * */
 package com.netflix.webapis.vo
 {
-	[RemoteClass(alias="com.netflix.webapis.vo.TitleFormat")]
+	
+	[RemoteClass(alias="com.netflix.webapis.vo.RatingsItemModel")]
 	/**
-	 * TitleFormatVO returned as part of the <code>TitlesService</code> <i>formats</i> expansion.</code>. 
-	 * 
+	 * Ratings Item. 
 	 * @author jonbcampos
-	 */
-	public class TitleFormat
+	 * 
+	 */	
+	public class RatingsItemVO extends CatalogItemVO
 	{
-		public function TitleFormat()
+		public function RatingsItemVO()
 		{
+			super();
 		}
 		
 		/**
-		 * Format. 
+		 * Predicted Rating. 
 		 */		
-		public var format:CategoryItem;
+		public var predictedRating:Number;
+		
 		/**
-		 * Languages for this format. 
+		 * User Rating. 
 		 */		
-		public var languages:Array;
-
+		public var userRating:int;
+		
 	}
 }

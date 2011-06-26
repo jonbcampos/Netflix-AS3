@@ -21,29 +21,26 @@
  * */
 package com.netflix.webapis.vo
 {
-	[RemoteClass(alias="com.netflix.webapis.vo.AutoCompleteItem")]
+	[RemoteClass(alias="com.netflix.webapis.vo.TitleFormat")]
 	/**
-	 * AutoCompleteItemVO returned from the <code>TitlesService.autoCompleteService()</code> 
-	 * or a <code>TitlesService</code> with <code>CatalogParams.type</code> being <i>autoComplete</i>
-	 * or <code>TitlesService.AUTOCOMPLETE_SERVICE</code>. 
+	 * TitleFormatVO returned as part of the <code>TitlesService</code> <i>formats</i> expansion.</code>. 
 	 * 
 	 * @author jonbcampos
-	 * 
-	 * @see com.netflix.webapis.services.TitlesService#autoCompleteService()
-	 * @see com.netflix.webapis.services.TitlesService#AUTOCOMPLETE_SERVICE()
-	 * @see com.netflix.webapis.params.TitlesParams
-	 * 
-	 */	
-	public class AutoCompleteItem
+	 */
+	public class TitleFormatVO
 	{
-		public function AutoCompleteItem()
+		public function TitleFormatVO()
 		{
 		}
 		
 		/**
-		 * Tile of returned Catalog Item.
+		 * Format. 
 		 */		
-		public var title:String;
+		public var format:CategoryItemVO;
+		/**
+		 * Languages for this format. 
+		 */		
+		public var languages:Array;
 
 	}
 }

@@ -24,11 +24,11 @@ package com.netflix.webapis.services
 	import com.netflix.webapis.ServiceFault;
 	import com.netflix.webapis.events.NetflixFaultEvent;
 	import com.netflix.webapis.events.NetflixResultEvent;
-	import com.netflix.webapis.models.CatalogItemModel;
-	import com.netflix.webapis.models.RatingsItemModel;
+	import com.netflix.webapis.vo.CatalogItemVO;
+	import com.netflix.webapis.vo.RatingsItemVO;
 	import com.netflix.webapis.params.ParamsBase;
 	import com.netflix.webapis.params.RatingParams;
-	import com.netflix.webapis.vo.CategoryItem;
+	import com.netflix.webapis.vo.CategoryItemVO;
 	import com.netflix.webapis.xml.NetflixXMLUtil;
 	
 	import flash.events.Event;
@@ -36,6 +36,13 @@ package com.netflix.webapis.services
 	import flash.net.URLLoader;
 	
 	import org.iotashan.utils.URLEncoding;
+	
+	[Event(name="titleRatingsResult",type="com.netflix.webapis.events.NetflixResultEvent")]
+	[Event(name="getActualTitleRatingsResult",type="com.netflix.webapis.events.NetflixResultEvent")]
+	[Event(name="setActualTitleRatingsResult",type="com.netflix.webapis.events.NetflixResultEvent")]
+	[Event(name="getActualRatingResult",type="com.netflix.webapis.events.NetflixResultEvent")]
+	[Event(name="updateActualRatingResult",type="com.netflix.webapis.events.NetflixResultEvent")]
+	[Event(name="predictedRatingResult",type="com.netflix.webapis.events.NetflixResultEvent")]
 	
 	/**
 	 * Rating Services under the <i>Rating</i> category. 
@@ -250,7 +257,7 @@ package com.netflix.webapis.services
 				case PREDICTED_RATING_SERVICE:
 					for each (resultNode in returnedXML..ratings_item)
 					{
-						resultsArray.push( NetflixXMLUtil.handleXMLToCatalogItemModel(resultNode, new RatingsItemModel() ) );
+						resultsArray.push( NetflixXMLUtil.handleXMLToCatalogItemModel(resultNode, new RatingsItemVO() ) );
 					}
 					break;
 				case SET_ACTUAL_TITLE_RATINGS_SERVICE:
@@ -304,7 +311,7 @@ package com.netflix.webapis.services
 		 * @see com.netflix.webapis.events.NetflixFaultEvent#FAULT
 		 * @see com.netflix.webapis.models.RatingsItemModel
 		 */	
-		public function getActualTitleRatings(item:RatingsItemModel):void
+		public function getActualTitleRatings(item:RatingsItemVO):void
 		{
 			var params:RatingParams = new RatingParams();
 			params.ratingItem = item;
@@ -325,7 +332,7 @@ package com.netflix.webapis.services
 		 * @see com.netflix.webapis.events.NetflixFaultEvent#FAULT
 		 * @see com.netflix.webapis.models.RatingsItemModel
 		 */	
-		public function setActualTitleRatings(title:RatingsItemModel, rating:int):void
+		public function setActualTitleRatings(title:RatingsItemVO, rating:int):void
 		{
 			var params:RatingParams = new RatingParams();
 			params.rating = rating;

@@ -21,7 +21,7 @@
  * */
 package com.netflix.webapis.params
 {
-	import com.netflix.webapis.models.CatalogItemModel;
+	import com.netflix.webapis.vo.CatalogItemVO;
 
 	/**
 	 * Params for Tracking Service. 
@@ -80,7 +80,7 @@ package com.netflix.webapis.params
 				var titleRefString:String = "";
 				for(var i:int=0;i<n;i++)
 				{
-					if(titleRefs[i] is CatalogItemModel)
+					if(titleRefs[i] is CatalogItemVO)
 					{
 						titleRefString += titleRefs[i].id;
 						if(i<n-1)

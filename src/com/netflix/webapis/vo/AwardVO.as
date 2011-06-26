@@ -39,10 +39,10 @@ package com.netflix.webapis.vo
 		/**
 		 * Award category. 
 		 */		
-		public var category:CategoryItem;
+		public var category:CategoryItemVO;
 		/**
 		 * Award Link Item. 
 		 */		
-		public var link:LinkItem;
+		public var link:LinkItemVO;
 	}
 }

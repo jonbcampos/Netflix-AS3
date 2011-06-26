@@ -21,38 +21,21 @@
  * */
 package com.netflix.webapis.vo
 {
-	[RemoteClass(alias="com.netflix.webapis.vo.TitleStateItem")]
+	
+	[RemoteClass(alias="com.netflix.webapis.vo.AtHomeItemVO")]
 	/**
-	 * Individual title state returned from the <code>UserService.titleStatesService()</code> 
-	 * or a <code>UserService</code> with <code>UserParams.type</code> being <i>USER_TYPE_TITLE_STATES</i>
-	 * or <code>UserService.TITLES_STATES_SERVICE</code>.
-	 * 
+	 * Rental History Item Model. 
 	 * @author jonbcampos
 	 * 
-	 * @see com.netflix.webapis.services.UserService#titleStatesService()
-	 * @see com.netflix.webapis.services.UserService#TITLES_STATES_SERVICE
-	 * @see com.netflix.webapis.params.UserParams
 	 */	
-	public class TitleStateItem extends LinkItem
+	public class AtHomeItemVO extends CatalogItemVO
 	{
-		public function TitleStateItem()
+		public function AtHomeItemVO()
 		{
+			super();
 		}
 		
-		/**
-		 * Preferred format flag. 
-		 */		
-		public var preferredFormat:Boolean;
-		
-		[ArrayElementType("com.netflix.webapis.vo.CategoryItem")]
-		/**
-		 * The different formats of the states. 
-		 */		
-		public var formats:Array;
-		
-		public var isDisc:Boolean;
-		public var isInstant:Boolean;
-		public var queueId:String
-
+		public var shippedDate:Date;
+		public var estimatedArrivalDate:Date;
 	}
 }

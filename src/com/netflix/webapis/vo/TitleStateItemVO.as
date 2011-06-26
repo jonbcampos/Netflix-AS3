@@ -19,25 +19,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE. 
  * */
-package com.netflix.webapis.models
+package com.netflix.webapis.vo
 {
-	import com.netflix.webapis.vo.LinkItem;
-	import com.netflix.webapis.xml.NetflixXMLUtil;
-	
-	import flash.events.IEventDispatcher;
-	
-	[RemoteClass(alias="com.netflix.webapis.models.FilmographyItemModel")]
+	[RemoteClass(alias="com.netflix.webapis.vo.TitleStateItem")]
 	/**
-	 * Filmography Item Model. 
+	 * Individual title state returned from the <code>UserService.titleStatesService()</code> 
+	 * or a <code>UserService</code> with <code>UserParams.type</code> being <i>USER_TYPE_TITLE_STATES</i>
+	 * or <code>UserService.TITLES_STATES_SERVICE</code>.
+	 * 
 	 * @author jonbcampos
 	 * 
+	 * @see com.netflix.webapis.services.UserService#titleStatesService()
+	 * @see com.netflix.webapis.services.UserService#TITLES_STATES_SERVICE
+	 * @see com.netflix.webapis.params.UserParams
 	 */	
-	public class FilmographyItemModel extends CatalogItemModel
+	public class TitleStateItemVO extends LinkItemVO
 	{
-		public function FilmographyItemModel(target:IEventDispatcher=null)
+		public function TitleStateItemVO()
 		{
-			super(target);
 		}
 		
+		/**
+		 * Preferred format flag. 
+		 */		
+		public var preferredFormat:Boolean;
+		
+		[ArrayElementType("com.netflix.webapis.vo.CategoryItemVO")]
+		/**
+		 * The different formats of the states. 
+		 */		
+		public var formats:Array;
+		
+		public var watchedDate:Date;
+		public var isDisc:Boolean;
+		public var isInstant:Boolean;
+		public var isInQueue:Boolean;
+		public var queueId:String;
+
 	}
 }

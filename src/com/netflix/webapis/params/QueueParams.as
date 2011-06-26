@@ -21,8 +21,8 @@
  * */
 package com.netflix.webapis.params
 {
-	import com.netflix.webapis.models.CatalogItemModel;
-	import com.netflix.webapis.models.QueueItemModel;
+	import com.netflix.webapis.vo.CatalogItemVO;
+	import com.netflix.webapis.vo.QueueItemVO;
 	import com.netflix.webapis.services.QueueService;
 	import com.netflix.webapis.services.ServiceStorage;
 	
@@ -90,7 +90,7 @@ package com.netflix.webapis.params
 		/**
 		 * The catalog title to be added to the queue.
 		 */		
-		public var titleRef:CatalogItemModel;
+		public var titleRef:CatalogItemVO;
 		
 		[Inspectable(enumeration="DVD,Blu-ray")]
 		/**

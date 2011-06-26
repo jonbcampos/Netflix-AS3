@@ -24,10 +24,10 @@ package com.netflix.webapis.services
 	import com.netflix.webapis.ServiceFault;
 	import com.netflix.webapis.events.NetflixFaultEvent;
 	import com.netflix.webapis.events.NetflixResultEvent;
-	import com.netflix.webapis.models.CatalogItemModel;
 	import com.netflix.webapis.params.ParamsBase;
 	import com.netflix.webapis.params.TitlesParams;
-	import com.netflix.webapis.vo.AutoCompleteItem;
+	import com.netflix.webapis.vo.AutoCompleteItemVO;
+	import com.netflix.webapis.vo.CatalogItemVO;
 	import com.netflix.webapis.xml.NetflixOdataUtil;
 	import com.netflix.webapis.xml.NetflixXMLUtil;
 	
@@ -36,6 +36,12 @@ package com.netflix.webapis.services
 	import flash.net.URLLoader;
 	
 	import org.iotashan.utils.URLEncoding;
+	
+	[Event(name="autoCompleteResult",type="com.netflix.webapis.events.NetflixResultEvent")]
+	[Event(name="catalogResult",type="com.netflix.webapis.events.NetflixResultEvent")]
+	[Event(name="titleResult",type="com.netflix.webapis.events.NetflixResultEvent")]
+	[Event(name="genreResult",type="com.netflix.webapis.events.NetflixResultEvent")]
+	[Event(name="advancedTitleResult",type="com.netflix.webapis.events.NetflixResultEvent")]
 
 	/**
 	 * Catalog Services under the <i>Titles</i> category. This is the main catagory for retrieving movie and series information.
@@ -211,7 +217,10 @@ package com.netflix.webapis.services
 					else
 						sendQuery = TitlesParams(params).title.netflixId;
 					if(TitlesParams(params).retrieveExpansionOnly && TitlesParams(params).expandItem)
-						sendQuery += "/"+TitlesParams(params).expandItem;
+					{
+						var expansions:String = TitlesParams(params).expandItem.replace("@","");
+						sendQuery += "/"+expansions;
+					}
 					break;
 				case GENRE_SERVICE:
 					method = ServiceBase.ODATA_REQUEST_METHOD;
@@ -269,13 +278,13 @@ package com.netflix.webapis.services
 				case AUTOCOMPLETE_SERVICE:
 					for each(resultNode in returnedXML..autocomplete_item)
 					{
-						var autoCompleteVo:AutoCompleteItem = new AutoCompleteItem();
+						var autoCompleteVo:AutoCompleteItemVO = new AutoCompleteItemVO();
 						autoCompleteVo.title = resultNode.title.@short;
 						resultsArray.push(autoCompleteVo);
 					}
 				break;
 				case CATALOG_SERVICE:
-					for each (resultNode in returnedXML..catalog_title) {
+					for each (resultNode in returnedXML..catalog_item) {
 						resultsArray.push(NetflixXMLUtil.handleXMLToCatalogItemModel(resultNode));
 					}
 				break;
@@ -314,43 +323,49 @@ package com.netflix.webapis.services
 			var resultsArray:Array = [];
 			var resultNode:XML;
 			switch(TitlesParams(request).expandItem){
-				case CatalogItemModel.EXPAND_SYNOPSIS:
+				case CatalogItemVO.EXPAND_SYNOPSIS:
 					resultsArray.push(returnedXML.toString());
 				break;
-				case CatalogItemModel.EXPAND_FORMATS:
+				case CatalogItemVO.EXPAND_FORMATS:
 					for each(resultNode in returnedXML..availability)
 						resultsArray.push(NetflixXMLUtil.handleFormatAvailability(resultNode));
 				break;
-				case CatalogItemModel.EXPAND_SCREEN_FORMATS:
+				case CatalogItemVO.EXPAND_SCREEN_FORMATS:
 					for each(resultNode in returnedXML..screen_format)
 						resultsArray.push(NetflixXMLUtil.handleScreenFormat(resultNode));
 				break;
-				case CatalogItemModel.EXPAND_CAST:
-				case CatalogItemModel.EXPAND_DIRECTORS:
+				case CatalogItemVO.EXPAND_CAST:
+				case CatalogItemVO.EXPAND_DIRECTORS:
 					for each(resultNode in returnedXML..person)
 						resultsArray.push(NetflixXMLUtil.handlePerson(resultNode));
 				break;
-				case CatalogItemModel.EXPAND_LANGUAGES_AND_AUDIO:
+				case CatalogItemVO.EXPAND_LANGUAGES_AND_AUDIO:
 					for each(resultNode in returnedXML..language_audio_format)
 						resultsArray.push(NetflixXMLUtil.handleLanguageAudioFormat(resultNode))
 				break;
-				case CatalogItemModel.EXPAND_SEASONS:
-				case CatalogItemModel.EXPAND_EPISODES:
-				case CatalogItemModel.EXPAND_DISCS:
-					for each (resultNode in returnedXML..catalog_title)
-						resultsArray.push(NetflixXMLUtil.handleXMLToCatalogItemModel(resultNode));
+				case CatalogItemVO.EXPAND_SEASONS:
+				case CatalogItemVO.EXPAND_EPISODES:
+				case CatalogItemVO.EXPAND_DISCS:
+					var i:int = -1;
+					var children:XMLList = returnedXML.children();
+					var n:int = children.length();
+					while(++i<n)
+					{
+						var xml:XML = (children[i]..catalog_title as XMLList)[0];
+						resultsArray.push(NetflixXMLUtil.handleCatalogTitle(new CatalogItemVO(), xml));
+					}
 				break;
-				case CatalogItemModel.EXPAND_SIMILARS:
+				case CatalogItemVO.EXPAND_SIMILARS:
 					for each(resultNode in returnedXML..similars_item)
 						resultsArray.push(NetflixXMLUtil.handleXMLToCatalogItemModel(resultNode));
 				break;
-				case CatalogItemModel.EXPAND_FILMOGRAPHY:
+				case CatalogItemVO.EXPAND_FILMOGRAPHY:
 				break;
-				case CatalogItemModel.EXPAND_BONUS_MATERIALS:
+				case CatalogItemVO.EXPAND_BONUS_MATERIALS:
 					for each(resultNode in returnedXML..link)
 						resultsArray.push(NetflixXMLUtil.handleLink(resultNode));
 				break;
-				case CatalogItemModel.EXPAND_AWARDS:
+				case CatalogItemVO.EXPAND_AWARDS:
 					for each(resultNode in returnedXML..award_nominee)
 						resultsArray.push(NetflixXMLUtil.handleAwardNominees(resultNode));
 					for each(resultNode in returnedXML..award_nominee)
@@ -441,14 +456,14 @@ package com.netflix.webapis.services
 		 * @see com.netflix.webapis.events.NetflixFaultEvent#FAULT
 		 * @see com.netflix.webapis.models.CatalogItemModel
 		 */			
-		public function getTitleDetails(title:CatalogItemModel):void
+		public function getTitleDetails(title:CatalogItemVO):void
 		{
 			var params:TitlesParams = new TitlesParams();
 			params.title = title;
 			titleService(params);
 		}
 		
-		public function getTitleExpansion(title:CatalogItemModel, expandItem:String, startIndex:int=0, maxResults:int=25, expansions:String=null):void
+		public function getTitleExpansion(title:CatalogItemVO, expandItem:String, startIndex:int=0, maxResults:int=25, expansions:String=null):void
 		{
 			getTitleExpansionByNetflixId(title.netflixId, expandItem, startIndex, maxResults, expansions);
 		}

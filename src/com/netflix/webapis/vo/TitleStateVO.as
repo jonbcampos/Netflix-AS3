@@ -33,13 +33,13 @@ package com.netflix.webapis.vo
 	 * @see com.netflix.webapis.services.UserService#TITLES_STATES_SERVICE
 	 * @see com.netflix.webapis.params.UserParams
 	 */	
-	public class TitleState extends LinkItem
+	public class TitleStateVO extends LinkItemVO
 	{
-		public function TitleState()
+		public function TitleStateVO()
 		{
 		}
 		
-		[ArrayElementType("com.netflix.webapis.vo.TitleStateItem")]
+		[ArrayElementType("com.netflix.webapis.vo.TitleStateItemVO")]
 		/**
 		 * List of title states.
 		 */		

@@ -21,38 +21,32 @@
  * */
 package com.netflix.webapis.vo
 {
-	import mx.collections.ArrayCollection;
-	
-	[RemoteClass(alias="com.netflix.webapis.vo.LinkItem")]
+	[RemoteClass(alias="com.netflix.webapis.vo.CategoryItem")]
 	/**
-	 * LinkItemVO provides a url, relationship, and title to additional content.
+	 * Category VO.
+	 * 
 	 * @author brianburck
 	 * 
+	 * @see com.netflix.webapis.services.TitlesService#catalogService()
+	 * @see com.netflix.webapis.services.TitlesService#titleService()
+	 * @see com.netflix.webapis.models.CatalogItemModel
 	 */
-	public class LinkItem
+	public class CategoryItemVO
 	{
 		/**
-		 * URL. 
+		 * Catalog Item Scheme. 
 		 */		
-		public var url:String;
+		public var scheme:String;
 		/**
-		 * Schema info.
+		 * Visual Label. 
 		 */		
-		public var rel:String;
+		public var label:String;
 		/**
-		 * Link Title. 
+		 * Unique Term. 
 		 */		
-		public var title:String;
-		/**
-		 * Expansion Title. 
-		 */		
-		public var expansionTitle:String;
-		/**
-		 * Expansions. 
-		 */		
-		public var expansion:Array;
+		public var term:String;
 		
-		public function LinkItem()
+		public function CategoryItemVO()
 		{
 		}
 

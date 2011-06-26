@@ -19,24 +19,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE. 
  * */
-package com.netflix.webapis.models
+package com.netflix.webapis.vo
 {
-	import flash.events.IEventDispatcher;
-	
-	[RemoteClass(alias="com.netflix.webapis.models.AtHomeItemModel")]
+	[RemoteClass(alias="com.netflix.webapis.vo.ScreenFormat")]
 	/**
-	 * Rental History Item Model. 
-	 * @author jonbcampos
+	 * ScreenFormatVO returned as part of the <code>TitlesService</code> <i>screen formats</i> expansion.</code>. 
 	 * 
-	 */	
-	public class AtHomeItemModel extends CatalogItemModel
+	 * @author jonbcampos
+	 */
+	public class ScreenFormatVO
 	{
-		public function AtHomeItemModel(target:IEventDispatcher=null)
+		public function ScreenFormatVO()
 		{
-			super(target);
 		}
 		
-		public var shippedDate:Date;
-		public var estimatedArrivalDate:Date;
+		/**
+		 * Categories. 
+		 */		
+		public var categories:Array;
+		
+		public var titleFormat:String;
+		public var screenFormat:String;
+		
 	}
 }

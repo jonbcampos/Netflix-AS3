@@ -21,26 +21,22 @@
  * */
 package com.netflix.webapis.vo
 {
-	[RemoteClass(alias="com.netflix.webapis.vo.LangaugeFormat")]
+	[RemoteClass(alias="com.netflix.webapis.vo.RentalHistoryItemVO")]
 	/**
-	 * FormatAvailabilityVO returned as part of the <code>TitlesService</code> <i>languages and audio</i> expansion.</code>. 
-	 * 
+	 * Rental History Item Model. 
 	 * @author jonbcampos
-	 */
-	public class LangaugeFormat
+	 * 
+	 */	
+	public class RentalHistoryItemVO extends AtHomeItemVO
 	{
-		public function LangaugeFormat()
+		public function RentalHistoryItemVO()
 		{
+			super();
 		}
 		
-		/**
-		 * Languages. 
-		 */		
-		public var language:CategoryItem;
-		/**
-		 * Audio Formats. 
-		 */		
-		public var audioFormats:Array;
+		public var watchedDate:Date;
+		public var viewedTime:String;
 		
+		public var returnedDate:Date;
 	}
 }

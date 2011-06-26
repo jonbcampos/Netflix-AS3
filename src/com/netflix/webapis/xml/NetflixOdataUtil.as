@@ -1,7 +1,8 @@
 package com.netflix.webapis.xml
 {
-	import com.netflix.webapis.models.CatalogItemModel;
-	import com.netflix.webapis.vo.FormatAvailability;
+	import com.netflix.webapis.vo.CatalogItemVO;
+	import com.netflix.webapis.vo.FormatAvailabilityVO;
+	import com.netflix.webapis.vo.LinkItemVO;
 
 	public class NetflixOdataUtil
 	{
@@ -23,6 +24,7 @@ package com.netflix.webapis.xml
 		//
 		//---------------------------------------------------------------------
 		private static const SYNOPSIS:String = "http://schemas.microsoft.com/ado/2007/08/dataservices::Synopsis";
+		private static const SYNOPSIS_SHORT:String = "http://schemas.microsoft.com/ado/2007/08/dataservices::ShortSynopsis";
 		private static const AVERAGE_RATING:String = "http://schemas.microsoft.com/ado/2007/08/dataservices::AverageRating";
 		private static const RELEASE_YEAR:String = "http://schemas.microsoft.com/ado/2007/08/dataservices::ReleaseYear";
 		private static const NETFLIX_ID:String = "http://schemas.microsoft.com/ado/2007/08/dataservices::NetflixApiId";
@@ -30,7 +32,9 @@ package com.netflix.webapis.xml
 		private static const RATING:String = "http://schemas.microsoft.com/ado/2007/08/dataservices::Rating";
 		private static const SHORT_NAME:String = "http://schemas.microsoft.com/ado/2007/08/dataservices::ShortName";
 		private static const NAME:String = "http://schemas.microsoft.com/ado/2007/08/dataservices::Name";
-		private static const WEBSITE:String = "http://schemas.microsoft.com/ado/2007/08/dataservices::WebsiteUrl";
+		private static const WEBSITE:String = "http://schemas.microsoft.com/ado/2007/08/dataservices::Url";
+		private static const DATE_MODIFIED:String = "http://schemas.microsoft.com/ado/2007/08/dataservices::DateModified";
+		private static const TINY_URL:String = "http://schemas.microsoft.com/ado/2007/08/dataservices::TinyUrl";
 		
 		private static const BOX_ART:String = "http://schemas.microsoft.com/ado/2007/08/dataservices::BoxArt";
 		private static const SMALL_URL:String = "http://schemas.microsoft.com/ado/2007/08/dataservices::SmallUrl";
@@ -52,19 +56,19 @@ package com.netflix.webapis.xml
 		//  Methods
 		//
 		//---------------------------------------------------------------------
-		public static function handleOdataToCatalogItemModel(xml:XML, model:CatalogItemModel=null):CatalogItemModel
+		public static function handleOdataToCatalogItemModel(xml:XML, item:CatalogItemVO=null):CatalogItemVO
 		{
-			if(!model)
-				model = new CatalogItemModel();
+			if(!item)
+				item = new CatalogItemVO();
 			
 			var resultNode:XML;
 			var child:XML;
 			var subChild:XML;
 			var subChildName:String;
-			model.categories = [];
-			model.links = [];
+			item.categories = [];
+			item.links = [];
 			
-			var format:FormatAvailability;
+			var format:FormatAvailabilityVO;
 			
 			for each (resultNode in xml.children())
 			{
@@ -72,40 +76,59 @@ package com.netflix.webapis.xml
 				switch(nodeType)
 				{
 					case ID:
-						model.id = handleStringNode(resultNode);
+						item.id = handleStringNode(resultNode);
 						break;
 					case UPDATED:
-						model.lastUpdated = handleDateNode(resultNode);
+						item.lastUpdated = handleDateNode(resultNode);
 						break;
 					case PROPERTIES:
-						for each(child in resultNode.children())
+						var children:XMLList = resultNode.children();
+						for each(child in children)
 						{
 							var childName:String = String(child.name());
 							switch(childName)
 							{
 								case SYNOPSIS:
-									model.synopsisString = handleStringNode(child);
+									item.synopsisString = handleStringNode(child);
+									break;
+								case SYNOPSIS_SHORT:
+									item.synopsisShortString = handleStringNode(child);
 									break;
 								case AVERAGE_RATING:
-									model.averageRating = handleNumberNode(child);
+									item.averageRating = handleNumberNode(child);
 									break;
 								case RELEASE_YEAR:
-									model.releaseYear = handleNumberNode(child);
+									item.releaseYear = handleNumberNode(child);
 									break;
 								case NETFLIX_ID:
-									model.netflixId = handleStringNode(child);
+									item.netflixId = handleStringNode(child);
 									break;
 								case RUNTIME:
-									model.runtime = handleNumberNode(child);
+									item.runtime = handleNumberNode(child);
 									break;
 								case RATING:
-									model.rating = handleStringNode(child);
+									item.rating = handleStringNode(child);
+									break;
+								case UPDATED:
+									item.lastUpdated = handleDateNode(child);
+									break;
+								case WEBSITE:
+									var webPage:LinkItemVO = new LinkItemVO();
+									webPage.url = handleStringNode(child);
+									webPage.title = "Webpage";
+									item.webPage = webPage;
 									break;
 								case SHORT_NAME:
-									model.titleShort = handleStringNode(child);
+									item.titleShort = handleStringNode(child);
 									break;
 								case NAME:
-									model.titleRegular = handleStringNode(child);
+									item.titleRegular = handleStringNode(child);
+									break;
+								case TINY_URL:
+									var tinyUrl:LinkItemVO = new LinkItemVO();
+									tinyUrl.url = handleStringNode(child);
+									tinyUrl.title = "TinyUrl";
+									item.tinyUrl = tinyUrl;
 									break;
 								//box art
 								case BOX_ART:
@@ -115,54 +138,60 @@ package com.netflix.webapis.xml
 										switch(subChildName)
 										{
 											case SMALL_URL:
-												model.boxArtSmall = handleStringNode(subChild);
+												var smallUrl:String = handleStringNode(subChild);
+												item.boxArtTiny = smallUrl;
+												item.boxArt88 = smallUrl;
 												break;
 											case MEDIUM_URL:
-												model.boxArtMedium = handleStringNode(subChild);
+												var mediumUrl:String = handleStringNode(subChild);
+												item.boxArtSmall = mediumUrl;
+												item.boxArt124 = mediumUrl;
 												break;
 											case LARGE_URL:
-												model.boxArtLarge = handleStringNode(subChild);
+												var largeUrl:String = handleStringNode(subChild);
+												item.boxArtLarge = largeUrl;
+												item.boxArt150 = largeUrl;
 												break;
 										}
 									}
 									break;
 								case INSTANT:
-									if(!model.formatsList)
-										model.formatsList = [];
+									if(!item.formatsList)
+										item.formatsList = [];
 									format = handleDeliveryFormat(child);
 									
 									if(format)
 									{
-										model.formatsList.push(format);
+										item.formatsList.push(format);
 										
-										if(format.availableFromAvailable)
-											model.isInstant = true;
+										if(format.availableFrom)
+											item.isInstant = true;
 									}
 									break;
 								case DVD:
-									if(!model.formatsList)
-										model.formatsList = [];
+									if(!item.formatsList)
+										item.formatsList = [];
 									format = handleDeliveryFormat(child);
 									
 									if(format)
 									{
-										model.formatsList.push(format);
+										item.formatsList.push(format);
 										
-										if(format.availableFromAvailable)
-											model.isDvd = true;
+										if(format.availableFrom)
+											item.isDvd = true;
 									}
 									break;
 								case BLURAY:
-									if(!model.formatsList)
-										model.formatsList = [];
+									if(!item.formatsList)
+										item.formatsList = [];
 									format = handleDeliveryFormat(child);
 									
 									if(format)
 									{
-										model.formatsList.push(format);
+										item.formatsList.push(format);
 										
-										if(format.availableFromAvailable)
-											model.isBluray = true;
+										if(format.availableFrom)
+											item.isBluray = true;
 									}
 									break;
 							}
@@ -171,7 +200,7 @@ package com.netflix.webapis.xml
 				}
 			}
 			
-			return model;
+			return item;
 		}
 		
 		public static function handleStringNode(xml:XML):String
@@ -211,10 +240,10 @@ package com.netflix.webapis.xml
 			return new Date(cleanString);
 		}
 		
-		public static function handleDeliveryFormat(xml:XML):FormatAvailability
+		public static function handleDeliveryFormat(xml:XML):FormatAvailabilityVO
 		{
 			var resultNode:XML;
-			var format:FormatAvailability = new FormatAvailability();
+			var format:FormatAvailabilityVO = new FormatAvailabilityVO();
 			
 			for each (resultNode in xml.children())
 			{
@@ -223,16 +252,12 @@ package com.netflix.webapis.xml
 				{
 					case AVAILABLE_FROM:
 						format.availableFrom = handleDateNode(resultNode);
-						if(format.availableFrom)
-							format.availableFromAvailable = true;
 						break;
 					case AVAILABLE_TO:
 						format.availableUntil = handleDateNode(resultNode);
-						if(format.availableUntil)
-							format.availableUntilAvailable = true;
 						break;
 					case HIGH_DEFINITION_AVAILABLE:
-						format.highDefinitionAvailable = handleBooleanNode(resultNode);
+						//format.highDefinitionAvailable = handleBooleanNode(resultNode);
 						break;
 				}
 			}

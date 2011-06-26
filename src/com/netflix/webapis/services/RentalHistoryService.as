@@ -24,9 +24,9 @@ package com.netflix.webapis.services
 	import com.netflix.webapis.ServiceFault;
 	import com.netflix.webapis.events.NetflixFaultEvent;
 	import com.netflix.webapis.events.NetflixResultEvent;
-	import com.netflix.webapis.models.AtHomeItemModel;
-	import com.netflix.webapis.models.CatalogItemModel;
-	import com.netflix.webapis.models.RentalHistoryItemModel;
+	import com.netflix.webapis.vo.AtHomeItemVO;
+	import com.netflix.webapis.vo.CatalogItemVO;
+	import com.netflix.webapis.vo.RentalHistoryItemVO;
 	import com.netflix.webapis.params.ParamsBase;
 	import com.netflix.webapis.params.RentalHistoryParams;
 	import com.netflix.webapis.xml.NetflixXMLUtil;
@@ -34,6 +34,11 @@ package com.netflix.webapis.services
 	import flash.events.Event;
 	import flash.events.IEventDispatcher;
 	import flash.net.URLLoader;
+	
+	[Event(name="atHomeResult",type="com.netflix.webapis.events.NetflixResultEvent")]
+	[Event(name="shippedResult",type="com.netflix.webapis.events.NetflixResultEvent")]
+	[Event(name="watchedResult",type="com.netflix.webapis.events.NetflixResultEvent")]
+	[Event(name="returnedResult",type="com.netflix.webapis.events.NetflixResultEvent")]
 	
 	/**
 	 * Tracking Services under the <i>Tracking</i> category. 
@@ -230,13 +235,13 @@ package com.netflix.webapis.services
 			{
 				case AT_HOME_SERVICE:
 					for each(resultNode in returnedXML..at_home_item)
-						resultsArray.push( NetflixXMLUtil.handleXMLToCatalogItemModel(resultNode, new AtHomeItemModel()) );
+						resultsArray.push( NetflixXMLUtil.handleXMLToCatalogItemModel(resultNode, new AtHomeItemVO()) );
 					break;
 				case SHIPPED_SERVICE:
 				case WATCHED_SERVICE:
 				case RETURNED_SERVICE:
 					for each(resultNode in returnedXML..rental_history_item)
-						resultsArray.push( NetflixXMLUtil.handleXMLToCatalogItemModel(resultNode, new RentalHistoryItemModel()) );
+						resultsArray.push( NetflixXMLUtil.handleXMLToCatalogItemModel(resultNode, new RentalHistoryItemVO()) );
 					break;
 			}
 			

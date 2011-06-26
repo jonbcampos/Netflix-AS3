@@ -24,15 +24,19 @@ package com.netflix.webapis.services
 	import com.netflix.webapis.ServiceFault;
 	import com.netflix.webapis.events.NetflixFaultEvent;
 	import com.netflix.webapis.events.NetflixResultEvent;
-	import com.netflix.webapis.models.CatalogItemModel;
+	import com.netflix.webapis.vo.CatalogItemVO;
 	import com.netflix.webapis.params.ParamsBase;
 	import com.netflix.webapis.params.PeopleParams;
-	import com.netflix.webapis.vo.Person;
+	import com.netflix.webapis.vo.PersonVO;
 	import com.netflix.webapis.xml.NetflixXMLUtil;
 	
 	import flash.events.Event;
 	import flash.events.IEventDispatcher;
 	import flash.net.URLLoader;
+	
+	[Event(name="peopleResult",type="com.netflix.webapis.events.NetflixResultEvent")]
+	[Event(name="personResult",type="com.netflix.webapis.events.NetflixResultEvent")]
+	[Event(name="filmographyResult",type="com.netflix.webapis.events.NetflixResultEvent")]
 	
 	/**
 	 * Catalog Services under the <i>People</i> category.
@@ -156,7 +160,7 @@ package com.netflix.webapis.services
 				switch(type)
 				{
 					case PEOPLE_SERVICE:
-						//
+						params.version = "1.0";
 					break;
 					case PERSON_SERVICE:
 						PeopleParams(params).term = null;
@@ -317,7 +321,7 @@ package com.netflix.webapis.services
 		 * @see com.netflix.webapis.events.NetflixFaultEvent#FAULT
 		 * @see com.netflix.webapis.models.FilmographyItemModel
 		 */	
-		public function getFilmographyByPerson(person:Person, expansions:String=null):void
+		public function getFilmographyByPerson(person:PersonVO, expansions:String=null):void
 		{
 			getFilmographyByPersonId(person.id, expansions);
 		}

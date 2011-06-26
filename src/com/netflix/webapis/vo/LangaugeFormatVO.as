@@ -21,36 +21,26 @@
  * */
 package com.netflix.webapis.vo
 {
-	[RemoteClass(alias="com.netflix.webapis.vo.FormatAvailability")]
+	[RemoteClass(alias="com.netflix.webapis.vo.LangaugeFormat")]
 	/**
-	 * FormatAvailabilityVO returned as part of the <code>TitlesService</code> <i>formats</i> expansion.</code>. 
+	 * FormatAvailabilityVO returned as part of the <code>TitlesService</code> <i>languages and audio</i> expansion.</code>. 
 	 * 
 	 * @author jonbcampos
 	 */
-	public class FormatAvailability extends CategoryItem
+	public class LangaugeFormatVO
 	{
-		public function FormatAvailability()
+		public function LangaugeFormatVO()
 		{
 		}
 		
 		/**
-		 * From Date. 
+		 * Languages. 
 		 */		
-		public var availableFrom:Date;
+		public var language:String;
 		/**
-		 * Includes From Date. 
+		 * Audio Formats. 
 		 */		
-		public var availableFromAvailable:Boolean;
-		/**
-		 * To Date. 
-		 */		
-		public var availableUntil:Date;
-		/**
-		 * Includes To Date. 
-		 */		
-		public var availableUntilAvailable:Boolean;
+		public var audioFormats:Array;
 		
-		public var highDefinitionAvailable:Boolean;
-
 	}
 }

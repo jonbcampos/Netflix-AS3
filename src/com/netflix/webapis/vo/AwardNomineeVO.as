@@ -21,25 +21,16 @@
  * */
 package com.netflix.webapis.vo
 {
-	[RemoteClass(alias="com.netflix.webapis.vo.ScreenFormat")]
+	[RemoteClass(alias="com.netflix.webapis.vo.AwardNominee")]
 	/**
-	 * ScreenFormatVO returned as part of the <code>TitlesService</code> <i>screen formats</i> expansion.</code>. 
+	 * AwardNomineeVO returned as part of the <code>TitlesService</code> <i>awards</i> expansion.</code>. 
 	 * 
 	 * @author jonbcampos
-	 */
-	public class ScreenFormat
+	 */		
+	public class AwardNomineeVO extends AwardVO
 	{
-		public function ScreenFormat()
+		public function AwardNomineeVO()
 		{
 		}
-		
-		/**
-		 * Categories. 
-		 */		
-		public var categories:Array;
-		
-		public var titleFormat:String;
-		public var screenFormat:String;
-		
 	}
 }

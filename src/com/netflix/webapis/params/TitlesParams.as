@@ -21,7 +21,7 @@
  * */
 package com.netflix.webapis.params
 {
-	import com.netflix.webapis.models.CatalogItemModel;
+	import com.netflix.webapis.vo.CatalogItemVO;
 	import com.netflix.webapis.services.TitlesService;
 	
 	/**
@@ -67,7 +67,7 @@ package com.netflix.webapis.params
 		/**
 		 * Catalog Title to get details on. 
 		 */		
-		public var title:CatalogItemModel;
+		public var title:CatalogItemVO;
 		
 		public var expandItem:String;
 		

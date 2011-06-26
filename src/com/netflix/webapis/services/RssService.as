@@ -16,6 +16,11 @@ package com.netflix.webapis.services
 	import flash.net.URLLoaderDataFormat;
 	import flash.net.URLRequest;
 	
+	[Event(name="top100Result",type="com.netflix.webapis.events.NetflixResultEvent")]
+	[Event(name="newReleasesResult",type="com.netflix.webapis.events.NetflixResultEvent")]
+	[Event(name="newInstantResult",type="com.netflix.webapis.events.NetflixResultEvent")]
+	[Event(name="feedResult",type="com.netflix.webapis.events.NetflixResultEvent")]
+	
 	public class RssService extends ServiceBase
 	{
 		public function RssService()
@@ -695,7 +700,7 @@ package com.netflix.webapis.services
 			if(!_ratingService)
 			{
 				_ratingService = new RatingService();
-				_ratingService.addEventListener(NetflixResultEvent.RESULT, _onRatingService_ResultHandler);
+				_ratingService.addEventListener(NetflixResultEvent.PREDICTED_RATING_RESULT, _onRatingService_ResultHandler);
 				_ratingService.addEventListener(NetflixFaultEvent.FAULT, _onRatingService_FaultHandler);
 			}
 			

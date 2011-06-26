@@ -21,37 +21,25 @@
  * */
 package com.netflix.webapis.vo
 {
-	[RemoteClass(alias="com.netflix.webapis.vo.Person")]
+	[RemoteClass(alias="com.netflix.webapis.vo.QueueItemVO")]
 	/**
-	 * Person VO. 
+	 * Queue Item VO. 
 	 * @author jonbcampos
 	 * 
 	 */	
-	public class Person
+	public class QueueItemVO extends CatalogItemVO
 	{
 		/**
-		 * Person Id. 
+		 * Queue Position. 
 		 */		
-		public var id:String;
-		/**
-		 * Person's name. 
-		 */		
-		public var name:String;
-		/**
-		 * Person's Bio. 
-		 */		
-		public var bio:String;
-		/**
-		 * Filmography Link. 
-		 */		
-		public var filmography:LinkItem;
-		/**
-		 * Person's webpage. 
-		 */		
-		public var webPage:LinkItem;
-		/**
-		 * List of links attached to person. 
-		 */		
-		public var links:Array;
+		public var queuePosition:Number;
+		public var availabilityLabel:String;
+		public var format:String;
+		
+		public function QueueItemVO()
+		{
+			super();
+		}
+		
 	}
 }

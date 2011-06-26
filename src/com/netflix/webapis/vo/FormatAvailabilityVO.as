@@ -21,16 +21,50 @@
  * */
 package com.netflix.webapis.vo
 {
-	[RemoteClass(alias="com.netflix.webapis.vo.AwardWinner")]
+	[RemoteClass(alias="com.netflix.webapis.vo.FormatAvailability")]
 	/**
-	 * AwardWinnerVO returned as part of the <code>TitlesService</code> <i>awards</i> expansion.</code>. 
+	 * FormatAvailabilityVO returned as part of the <code>TitlesService</code> <i>formats</i> expansion.</code>. 
 	 * 
 	 * @author jonbcampos
-	 */		
-	public class AwardWinner extends AwardVO
+	 */
+	public class FormatAvailabilityVO extends CategoryItemVO
 	{
-		public function AwardWinner()
+		public function FormatAvailabilityVO()
 		{
 		}
+		
+		/**
+		 * From Date. 
+		 */		
+		public var availableFrom:Date;
+		/**
+		 * To Date. 
+		 */		
+		public var availableUntil:Date;
+		
+		public var runtime:Number;
+		
+		public var rating:String;
+		public var quality:String;
+		
+		/**
+		 * Catalog Item's Languages and Audio Link Item. 
+		 */		
+		public var languagesAndAudio:LinkItemVO;
+		
+		[ArrayElementType("com.netflix.webapis.vo.LangaugeFormatVO")]
+		/**
+		 * Catalog Item's Language and Audio List Expansion. Array of LangaugeFormat.
+		 * 
+		 * @return 
+		 * 
+		 * @see com.netflix.webapis.vo.LangaugeFormat
+		 */
+		public var languagesAndAudioList:Array;
+
+		public var subtitlesAndLanguages:LinkItemVO;
+		
+		[ArrayElementType("com.netflix.webapis.vo.SubtitleVO")]
+		public var subtitlesAndLanguagesList:Array;
 	}
 }

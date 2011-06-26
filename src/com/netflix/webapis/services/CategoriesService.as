@@ -23,7 +23,7 @@ package com.netflix.webapis.services
 {
 	import com.netflix.webapis.params.ParamsBase;
 	import com.netflix.webapis.ServiceFault;
-	import com.netflix.webapis.vo.CategoryItem;
+	import com.netflix.webapis.vo.CategoryItemVO;
 	import com.netflix.webapis.events.NetflixFaultEvent;
 	import com.netflix.webapis.events.NetflixResultEvent;
 	import com.netflix.webapis.xml.NetflixXMLUtil;
@@ -36,6 +36,12 @@ package com.netflix.webapis.services
 	import flash.net.URLRequest;
 	
 	import org.iotashan.oauth.OAuthRequest;
+	
+	[Event(name="genresResult",type="com.netflix.webapis.events.NetflixResultEvent")]
+	[Event(name="tvRatingsResult",type="com.netflix.webapis.events.NetflixResultEvent")]
+	[Event(name="mpaaRatingsResult",type="com.netflix.webapis.events.NetflixResultEvent")]
+	[Event(name="queueAvailabilityResult",type="com.netflix.webapis.events.NetflixResultEvent")]
+	[Event(name="titleFormatsResult",type="com.netflix.webapis.events.NetflixResultEvent")]
 
 	/**
 	 * Categories Service to retrieve category information. 

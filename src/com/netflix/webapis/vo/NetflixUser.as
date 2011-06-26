@@ -71,7 +71,7 @@ package com.netflix.webapis.vo
 		
 		public var nickName:String;
 		
-		public var maxMaturityLevel:CategoryItem;
+		public var maxMaturityLevel:CategoryItemVO;
 		/**
 		 * Can watch instant movies. 
 		 */		

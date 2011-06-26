@@ -19,35 +19,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE. 
  * */
-package com.netflix.webapis.models
+package com.netflix.webapis.vo
 {
-	import com.netflix.webapis.vo.LinkItem;
-	import com.netflix.webapis.xml.NetflixXMLUtil;
-	
-	import flash.events.IEventDispatcher;
-	
-	[RemoteClass(alias="com.netflix.webapis.models.RatingsItemModel")]
+	[RemoteClass(alias="com.netflix.webapis.vo.AutoCompleteItem")]
 	/**
-	 * Ratings Item. 
+	 * AutoCompleteItemVO returned from the <code>TitlesService.autoCompleteService()</code> 
+	 * or a <code>TitlesService</code> with <code>CatalogParams.type</code> being <i>autoComplete</i>
+	 * or <code>TitlesService.AUTOCOMPLETE_SERVICE</code>. 
+	 * 
 	 * @author jonbcampos
 	 * 
+	 * @see com.netflix.webapis.services.TitlesService#autoCompleteService()
+	 * @see com.netflix.webapis.services.TitlesService#AUTOCOMPLETE_SERVICE()
+	 * @see com.netflix.webapis.params.TitlesParams
+	 * 
 	 */	
-	public class RatingsItemModel extends CatalogItemModel
+	public class AutoCompleteItemVO
 	{
-		public function RatingsItemModel(target:IEventDispatcher=null)
+		public function AutoCompleteItemVO()
 		{
-			super(target);
 		}
 		
 		/**
-		 * Predicted Rating. 
+		 * Tile of returned Catalog Item.
 		 */		
-		public var predictedRating:Number;
-		
-		/**
-		 * User Rating. 
-		 */		
-		public var userRating:int;
-		
+		public var title:String;
+
 	}
 }

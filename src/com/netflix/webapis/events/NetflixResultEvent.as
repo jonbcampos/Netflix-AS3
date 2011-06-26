@@ -33,7 +33,49 @@ package com.netflix.webapis.events
 		/**
 		 * Result Event. 
 		 */		
-		public static const RESULT:String = "result";
+		public static const GENRES_RESULT:String = "genresResult";
+		public static const TV_RATINGS_RESULT:String = "tvRatingsResult";
+		public static const MPAA_RATINGS_RESULT:String = "mpaaRatingsResult";
+		public static const QUEUE_AVAILABILITY_RESULT:String = "queueAvailabilityResult";
+		public static const TITLE_FORMATS_RESULT:String = "titleFormatsResult";
+		
+		public static const PEOPLE_RESULT:String = "peopleResult";
+		public static const PERSON_RESULT:String = "personResult";
+		public static const FILMOGRAPHY_RESULT:String = "filmographyResult";
+		
+		public static const DISC_QUEUE_RESULT:String = "discQueueResult";
+		public static const INSTANT_QUEUE_RESULT:String = "instantQueueResult";
+		public static const UPDATE_DISC_QUEUE_RESULT:String = "updateDiscQueueResult";
+		public static const UPDATE_INSTANT_QUEUE_RESULT:String = "updateInstantQueueResult";
+		public static const DELETE_DISC_QUEUE_RESULT:String = "deleteDiscQueueResult";
+		public static const DELETE_INSTANT_QUEUE_RESULT:String = "deleteInstantQueueResult";
+		
+		public static const TITLE_RATINGS_RESULT:String = "titleRatingsResult";
+		public static const GET_ACTUAL_TITLE_RATINGS_RESULT:String = "getActualTitleRatingsResult";
+		public static const SET_ACTUAL_TITLE_RATINGS_RESULT:String = "setActualTitleRatingsResult";
+		public static const GET_ACTUAL_RATING_RESULT:String = "getActualRatingResult";
+		public static const UPDATE_ACTUAL_RATING_RESULT:String = "updateActualRatingResult";
+		public static const PREDICTED_RATING_RESULT:String = "predictedRatingResult";
+		
+		public static const AT_HOME_RESULT:String = "atHomeResult";
+		public static const SHIPPED_RESULT:String = "shippedResult";
+		public static const WATCHED_RESULT:String = "watchedResult";
+		public static const RETURNED_RESULT:String = "returnedResult";
+		
+		public static const TOP_100_RESULT:String = "top100Result";
+		public static const NEW_RELEASES_RESULT:String = "newReleasesResult";
+		public static const NEW_INSTANT_RESULT:String = "newInstantResult";
+		public static const FEED_RESULT:String = "feedResult";
+		
+		public static const AUTOCOMPLETE_RESULT:String = "autoCompleteResult";
+		public static const CATALOG_RESULT:String = "catalogResult";
+		public static const TITLE_RESULT:String = "titleResult";
+		public static const GENRE_RESULT:String = "genreResult";
+		public static const ADVANCED_TITLE_RESULT:String = "advancedTitleResult";
+		
+		public static const RECOMMENDATION_RESULT:String = "recommendationResult";
+		public static const TITLES_STATES_RESULT:String = "titleStatesResult";
+		public static const USER_FEEDS_RESULT:String = "userFeedsResult";
 		
 		public static const SERVER_TIME_COMPLETE:String = "serverTimeComplete";
 		
@@ -46,17 +88,6 @@ package com.netflix.webapis.events
 		public function get result():Object
 		{
 			return _result;
-		}
-		
-		private var _serviceResultType:String;
-		/**
-		 * Service Result Type. 
-		 * @return 
-		 * 
-		 */		
-		public function get serviceResultType():String
-		{
-			return _serviceResultType;
 		}
 		
 		private var _rawXML:XML;
@@ -102,11 +133,10 @@ package com.netflix.webapis.events
 			return _statusMessage;
 		}
 		
-		public function NetflixResultEvent(type:String, result:Object = null, serviceResultType:String = null, rawXML:XML = null, url:String = null, params:Object = null, statusMessage:String = null, bubbles:Boolean = false, cancelable:Boolean = false)
+		public function NetflixResultEvent(type:String, result:Object = null, rawXML:XML = null, url:String = null, params:Object = null, statusMessage:String = null, bubbles:Boolean = false, cancelable:Boolean = false)
 		{
 			super(type, bubbles, cancelable);
 			_result = result;
-			_serviceResultType = serviceResultType;
 			_rawXML = rawXML;
 			_url = url;
 			_params = params;
@@ -115,7 +145,7 @@ package com.netflix.webapis.events
 		
 		override public function clone():Event
 		{
-			return new NetflixResultEvent(type, result, serviceResultType, rawXML, url, params, statusMessage, bubbles, cancelable);
+			return new NetflixResultEvent(type, result, rawXML, url, params, statusMessage, bubbles, cancelable);
 		}
 	}
 }

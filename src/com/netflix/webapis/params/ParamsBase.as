@@ -97,6 +97,7 @@ package com.netflix.webapis.params
 		
 		public var orderBy:String;
 		
+		public var version:String = "2.0";
 		//---------------------------------------------------------------------
 		//
 		// Public Methods
@@ -137,6 +138,7 @@ package com.netflix.webapis.params
 			o.start_index = startIndex;
 			o.max_results = maxResults;
 			o.oauth_version = "1.0";
+			o.v = version;
 			if(expansions)
 				o.expand = expansions;
 			return o;
@@ -152,6 +154,7 @@ package com.netflix.webapis.params
 			//o.start_index = startIndex;
 			//o.max_results = maxResults;
 			o.oauth_version = "1.0";
+			o.v = version;
 			if(expansions)
 				o.expand = expansions;
 			return o;
@@ -165,6 +168,7 @@ package com.netflix.webapis.params
 		{
 			var o:Object = {};
 			o.oauth_version = "1.0";
+			o.v = version;
 			return o;
 		}
 		
