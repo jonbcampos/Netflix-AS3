@@ -142,6 +142,7 @@ package com.netflix.webapis.xml
 		public static const BCP_CODES_SCHEMA:String = "http://api.netflix.com/categories/bcp47_codes";
 		public static const QUALITY_SCHEMA:String = "http://api.netflix.com/categories/title_formats/quality";
 		public static const DISCS_SCHEMA:String = "http://schemas.netflix.com/catalog/titles.discs";
+		public static const LANGUAGES_SCHEMA:String = "http://api.netflix.com/categories/languages";
 		
 		public static const AVAILABILITY_SCHEMA:String = "http://api.netflix.com/categories/queue_availability";
 		public static const TITLE_SCHEMA:String = "http://schemas.netflix.com/catalog/title";

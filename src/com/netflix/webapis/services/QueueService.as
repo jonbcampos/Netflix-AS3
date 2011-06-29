@@ -24,12 +24,12 @@ package com.netflix.webapis.services
 	import com.netflix.webapis.ServiceFault;
 	import com.netflix.webapis.events.NetflixFaultEvent;
 	import com.netflix.webapis.events.NetflixResultEvent;
-	import com.netflix.webapis.vo.CatalogItemVO;
-	import com.netflix.webapis.vo.QueueItemVO;
 	import com.netflix.webapis.params.ParamsBase;
 	import com.netflix.webapis.params.QueueParams;
-	import com.netflix.webapis.vo.TitleStateVO;
+	import com.netflix.webapis.vo.CatalogItemVO;
+	import com.netflix.webapis.vo.QueueItemVO;
 	import com.netflix.webapis.vo.TitleStateItemVO;
+	import com.netflix.webapis.vo.TitleStateVO;
 	import com.netflix.webapis.xml.NetflixXMLUtil;
 	
 	import flash.events.Event;
@@ -496,12 +496,13 @@ package com.netflix.webapis.services
 		 * @see com.netflix.webapis.events.NetflixFaultEvent#FAULT
 		 * @see com.netflix.webapis.models.CatalogItemModel
 		 */	
-		public function updateTitleInDiscQueue(title:CatalogItemVO,position:int=0, format:String=null):void
+		public function updateTitleInDiscQueue(title:CatalogItemVO,position:int=0, format:String=null, expansions:String=null):void
 		{
 			var params:QueueParams = new QueueParams();
 			params.titleRef = title;
 			params.position = position;
 			params.formatType = format;
+			params.expansions = expansions;
 			updateDiscQueueService(params);
 		}
 		
@@ -519,11 +520,12 @@ package com.netflix.webapis.services
 		 * @see com.netflix.webapis.events.NetflixFaultEvent#FAULT
 		 * @see com.netflix.webapis.models.CatalogItemModel
 		 */	
-		public function updateTitleInInstantQueue(title:CatalogItemVO,position:int=0):void
+		public function updateTitleInInstantQueue(title:CatalogItemVO,position:int=0, expansions:String=null):void
 		{
 			var params:QueueParams = new QueueParams();
 			params.titleRef = title;
 			params.position = position;
+			params.expansions = expansions;
 			updateInstantQueueService(params);
 		}
 		

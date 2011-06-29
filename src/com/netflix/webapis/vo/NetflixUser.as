@@ -68,24 +68,30 @@ package com.netflix.webapis.vo
 		 * User Last Name. 
 		 */		
 		public var lastName:String;
-		
+		/**
+		 * User NickName. 
+		 */		
 		public var nickName:String;
 		
-		public var maxMaturityLevel:CategoryItemVO;
+		public var maxMaturityLevel:String;
 		/**
 		 * Can watch instant movies. 
 		 */		
-		public var canInstantWatch:Boolean = false;
+		public var canInstantWatch:Boolean;
 		/**
 		 * Can watch dvd movies. 
 		 */		
-		public var canDvdWatch:Boolean = false;
+		public var canDvdWatch:Boolean;
 		/**
 		 * Can watch bluray movies. 
 		 */		
-		public var canBlurayWatch:Boolean = false;
+		public var canBlurayWatch:Boolean;
 		
-		[ArrayElementType("PreferredFormat")]
+		public var isAccountOwner:Boolean;
+		public var accountMaxNumberOfDiscs:int;
+		public var canInstantWatchOnDevice:Boolean;
+		public var preferredLanguages:Array;
+		
 		/**
 		 * Preferred Format.s 
 		 */		

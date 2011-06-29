@@ -24,9 +24,9 @@ package com.netflix.webapis.services
 	import com.netflix.webapis.ServiceFault;
 	import com.netflix.webapis.events.NetflixFaultEvent;
 	import com.netflix.webapis.events.UsersResultEvent;
-	import com.netflix.webapis.vo.CatalogItemVO;
 	import com.netflix.webapis.params.ParamsBase;
 	import com.netflix.webapis.params.UserParams;
+	import com.netflix.webapis.vo.CatalogItemVO;
 	import com.netflix.webapis.vo.CategoryItemVO;
 	import com.netflix.webapis.vo.NetflixUser;
 	import com.netflix.webapis.xml.NetflixXMLUtil;
@@ -258,10 +258,11 @@ package com.netflix.webapis.services
 					user.lastName = returnedXML.last_name;
 					user.nickName = returnedXML.nickname;
 					user.canInstantWatch = Boolean(returnedXML.can_instant_watch);
+					user.isAccountOwner = Boolean(returnedXML.is_account_owner);
+					user.accountMaxNumberOfDiscs = int(returnedXML.account_max_number_of_discs);
+					user.canInstantWatchOnDevice = Boolean(returnedXML.can_instant_watch_on_device);
 					//preferred formats
 					user.preferredFormats = [];
-					user.canBlurayWatch = false;
-					user.canDvdWatch = false;
 					for each(var categoryXML:XML in returnedXML..category){
 						if(categoryXML.@scheme == NetflixXMLUtil.TITLE_FORMAT_SCHEMA)
 						{
@@ -270,10 +271,14 @@ package com.netflix.webapis.services
 								user.canBlurayWatch = true;
 							if(preferredFormat.label=="DVD")
 								user.canDvdWatch = true;
-							user.preferredFormats.push(preferredFormat);
+							user.preferredFormats.push(preferredFormat.label);
 						} else if(categoryXML.@scheme == NetflixXMLUtil.MATURITY_LEVEL_SCHEMA)
 						{
-							user.maxMaturityLevel = NetflixXMLUtil.handleCategory(categoryXML);
+							user.maxMaturityLevel = NetflixXMLUtil.handleCategory(categoryXML).label;
+						} else if(categoryXML.@scheme == NetflixXMLUtil.LANGUAGES_SCHEMA)
+						{
+							if(!user.preferredLanguages) user.preferredLanguages = [];
+							user.preferredLanguages.push(NetflixXMLUtil.handleCategory(categoryXML).label)
 						}
 					}
 					//links
