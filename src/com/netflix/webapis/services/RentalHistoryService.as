@@ -29,7 +29,7 @@ package com.netflix.webapis.services
 	import com.netflix.webapis.vo.RentalHistoryItemVO;
 	import com.netflix.webapis.params.ParamsBase;
 	import com.netflix.webapis.params.RentalHistoryParams;
-	import com.netflix.webapis.xml.NetflixXMLUtil;
+	import com.netflix.webapis.xml.NetflixXMLUtilV2;
 	
 	import flash.events.Event;
 	import flash.events.IEventDispatcher;
@@ -235,13 +235,13 @@ package com.netflix.webapis.services
 			{
 				case AT_HOME_SERVICE:
 					for each(resultNode in returnedXML..at_home_item)
-						resultsArray.push( NetflixXMLUtil.handleXMLToCatalogItemModel(resultNode, new AtHomeItemVO()) );
+						resultsArray.push( NetflixXMLUtilV2.handleXMLToCatalogItemVO(resultNode, new AtHomeItemVO()) );
 					break;
 				case SHIPPED_SERVICE:
 				case WATCHED_SERVICE:
 				case RETURNED_SERVICE:
 					for each(resultNode in returnedXML..rental_history_item)
-						resultsArray.push( NetflixXMLUtil.handleXMLToCatalogItemModel(resultNode, new RentalHistoryItemVO()) );
+						resultsArray.push( NetflixXMLUtilV2.handleXMLToCatalogItemVO(resultNode, new RentalHistoryItemVO()) );
 					break;
 			}
 			

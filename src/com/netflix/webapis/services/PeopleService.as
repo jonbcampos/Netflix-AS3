@@ -28,7 +28,7 @@ package com.netflix.webapis.services
 	import com.netflix.webapis.params.ParamsBase;
 	import com.netflix.webapis.params.PeopleParams;
 	import com.netflix.webapis.vo.PersonVO;
-	import com.netflix.webapis.xml.NetflixXMLUtil;
+	import com.netflix.webapis.xml.NetflixXMLUtilV2;
 	
 	import flash.events.Event;
 	import flash.events.IEventDispatcher;
@@ -213,15 +213,15 @@ package com.netflix.webapis.services
 			{
 				case PEOPLE_SERVICE:
 					for each(resultNode in returnedXML..person) {
-						resultsArray.push(NetflixXMLUtil.handlePerson(resultNode));
+						resultsArray.push(NetflixXMLUtilV2.handlePerson(resultNode));
 					}
 				break;
 				case PERSON_SERVICE:
-					resultsArray.push(NetflixXMLUtil.handlePerson(returnedXML));
+					resultsArray.push(NetflixXMLUtilV2.handlePerson(returnedXML));
 				break;
 				case FILMOGRAPHY_SERVICE:
 					for each(resultNode in returnedXML..filmography_item){
-						resultsArray.push(NetflixXMLUtil.handleXMLToCatalogItemModel(resultNode));
+						resultsArray.push(NetflixXMLUtilV2.handleXMLToCatalogItemVO(resultNode));
 					}
 			}
 			lastNetflixResult = resultsArray;

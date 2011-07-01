@@ -46,7 +46,7 @@ package com.netflix.webapis.xml
 	 * @author brianburck
 	 * 
 	 */
-	public class NetflixXMLUtil
+	public class NetflixXMLUtilV2
 	{
 		public static const ID:String = "id";
 		public static const CATALOG_TITLE:String = "catalog_title";
@@ -119,15 +119,8 @@ package com.netflix.webapis.xml
 		public static const BOX_ART_150_SCHEMA:String = "http://schemas.netflix.com/catalog/titles/box_art/150pix_w";
 		public static const BOX_ART_88_SCHEMA:String = "http://schemas.netflix.com/catalog/titles/box_art/88pix_w";
 		
-		public static const TITLE_FORMAT_SCHEMA:String = "http://api.netflix.com/categories/title_formats";
-		public static const SCREEN_FORMAT_SCHEMA:String = "http://api.netflix.com/categories/screen_formats";
-		public static const TITLE_STATE_SCHEMA:String = "http://api.netflix.com/categories/title_states";
-		
-		public static const MPAA_RATINGS_SCHEMA:String = "http://api.netflix.com/categories/mpaa_ratings";
 		public static const LANGUAGES_AND_AUDIO_SCHEMA:String = "http://schemas.netflix.com/catalog/titles/languages_and_audio";
 		public static const SUBTITLE_LANGUAGES_SCHEMA:String = "http://schemas.netflix.com/catalog/titles/subtitle_languages";
-		public static const TV_RATING_SCHEMA:String = "http://api.netflix.com/categories/tv_ratings";
-		public static const GENRES_SCHEMA:String = "http://api.netflix.com/categories/genres";
 		public static const FORMAT_AVAILABILITY_SCHEMA:String = "http://schemas.netflix.com/catalog/titles/format_availability";
 		public static const SCREEN_FORMATS_SCHEMA:String = "http://schemas.netflix.com/catalog/titles/screen_formats";
 		public static const CAST_SCHEMA:String = "http://schemas.netflix.com/catalog/people.cast";
@@ -138,17 +131,10 @@ package com.netflix.webapis.xml
 		public static const BONUS_MATERIALS_SCHEMA:String = "http://schemas.netflix.com/catalog/titles/bonus_materials";
 		public static const EPISODES_SCHEMA:String = "http://schemas.netflix.com/catalog/titles.programs";
 		public static const TINY_URL_SCHEMA:String = "http://schemas.netflix.com/catalog/title/ref.tiny";
-		public static const NARRATIVE_SCHEMA:String = "http://api.netflix.com/categories/narrative";
-		public static const BCP_CODES_SCHEMA:String = "http://api.netflix.com/categories/bcp47_codes";
-		public static const QUALITY_SCHEMA:String = "http://api.netflix.com/categories/title_formats/quality";
 		public static const DISCS_SCHEMA:String = "http://schemas.netflix.com/catalog/titles.discs";
-		public static const LANGUAGES_SCHEMA:String = "http://api.netflix.com/categories/languages";
-		
-		public static const AVAILABILITY_SCHEMA:String = "http://api.netflix.com/categories/queue_availability";
 		public static const TITLE_SCHEMA:String = "http://schemas.netflix.com/catalog/title";
 		public static const SERIES_TITLE_SCHEMA:String = "http://schemas.netflix.com/catalog/titles.series";
 		public static const AVAILABLE_QUEUE_SCHEMA:String = "http://schemas.netflix.com/queues.available";
-		public static const MATURITY_LEVEL_SCHEMA:String = "http://api.netflix.com/categories/maturity_level";
 		public static const SYNOPSIS_SCHEMA:String = "http://schemas.netflix.com/catalog/titles/synopsis";
 		public static const SYNOPSIS_SHORT_SCHEMA:String = "http://schemas.netflix.com/catalog/titles/synopsis.short";
 		public static const QUEUES_SCHEMA:String = "http://schemas.netflix.com/queues";
@@ -160,13 +146,39 @@ package com.netflix.webapis.xml
 		public static const AT_HOME_SCHEMA:String = "http://schemas.netflix.com/at_home";
 		public static const FEEDS_SCHEMA:String = "http://schemas.netflix.com/feeds";
 		
+		public static const MPAA_RATINGS_SCHEMA:String = "http://api.netflix.com/categories/mpaa_ratings";
+		public static const TV_RATING_SCHEMA:String = "http://api.netflix.com/categories/tv_ratings";
+		public static const GENRES_SCHEMA:String = "http://api.netflix.com/categories/genres";
+		public static const NARRATIVE_SCHEMA:String = "http://api.netflix.com/categories/narrative";
+		public static const BCP_CODES_SCHEMA:String = "http://api.netflix.com/categories/bcp47_codes";
+		public static const QUALITY_SCHEMA:String = "http://api.netflix.com/categories/title_formats/quality";
+		public static const LANGUAGES_SCHEMA:String = "http://api.netflix.com/categories/languages";
+		public static const AVAILABILITY_SCHEMA:String = "http://api.netflix.com/categories/queue_availability";
+		public static const MATURITY_LEVEL_SCHEMA:String = "http://api.netflix.com/categories/maturity_level";
+		public static const TITLE_FORMAT_SCHEMA:String = "http://api.netflix.com/categories/title_formats";
+		public static const SCREEN_FORMAT_SCHEMA:String = "http://api.netflix.com/categories/screen_formats";
+		public static const TITLE_STATE_SCHEMA:String = "http://api.netflix.com/categories/title_states";
+		
+		public static const MPAA_RATINGS_SCHEMA_NCCP:String = "http://api-nccp.netflix.com/categories/mpaa_ratings";
+		public static const TV_RATING_SCHEMA_NCCP:String = "http://api-nccp.netflix.com/categories/tv_ratings";
+		public static const GENRES_SCHEMA_NCCP:String = "http://api-nccp.netflix.com/categories/genres";
+		public static const NARRATIVE_SCHEMA_NCCP:String = "http://api-nccp.netflix.com/categories/narrative";
+		public static const BCP_CODES_SCHEMA_NCCP:String = "http://api-nccp.netflix.com/categories/bcp47_codes";
+		public static const QUALITY_SCHEMA_NCCP:String = "http://api-nccp.netflix.com/categories/title_formats/quality";
+		public static const LANGUAGES_SCHEMA_NCCP:String = "http://api-nccp.netflix.com/categories/languages";
+		public static const AVAILABILITY_SCHEMA_NCCP:String = "http://api-nccp.netflix.com/categories/queue_availability";
+		public static const MATURITY_LEVEL_SCHEMA_NCCP:String = "http://api-nccp.netflix.com/categories/maturity_level";
+		public static const TITLE_FORMAT_SCHEMA_NCCP:String = "http://api-nccp.netflix.com/categories/title_formats";
+		public static const SCREEN_FORMAT_SCHEMA_NCCP:String = "http://api-nccp.netflix.com/categories/screen_formats";
+		public static const TITLE_STATE_SCHEMA_NCCP:String = "http://api-nccp.netflix.com/categories/title_states";
+		
 		/**
 		 * Converts XML to Catalog Model. 
 		 * @param xml
 		 * @param model
 		 * @return CatalogItemModel
 		 */		
-		public static function handleXMLToCatalogItemModel(xml:XML,item:CatalogItemVO=null):CatalogItemVO
+		public static function handleXMLToCatalogItemVO(xml:XML,item:CatalogItemVO=null):CatalogItemVO
 		{
 			if(!item)
 				item = new CatalogItemVO();
@@ -329,6 +341,7 @@ package com.netflix.webapis.xml
 									item.synopsisShortString = resultNode.short_synopsis.toString()
 								break;
 							case SCREEN_FORMAT_SCHEMA:
+							case SCREEN_FORMAT_SCHEMA_NCCP:
 								item.screenFormats = handleLink(resultNode);
 								if(resultNode.screen_formats != undefined)
 								{
@@ -452,17 +465,17 @@ package com.netflix.webapis.xml
 		
 		private static function _handleCategoryNode(item:CatalogItemVO, category:CategoryItemVO):CatalogItemVO
 		{
-			if(category.scheme.indexOf(GENRES_SCHEMA)>-1)
+			if(category.scheme.indexOf(GENRES_SCHEMA)>-1 || category.scheme.indexOf(GENRES_SCHEMA_NCCP)>-1)
 				item.genres.push(category.label);
-			else if(category.scheme == MPAA_RATINGS_SCHEMA && category.label!="null")
+			else if((category.scheme == MPAA_RATINGS_SCHEMA || category.scheme == MPAA_RATINGS_SCHEMA_NCCP) && category.label!="null")
 				item.rating = category.label;
-			else if(category.scheme == TV_RATING_SCHEMA && category.label!="null")
+			else if((category.scheme == TV_RATING_SCHEMA || category.scheme == TV_RATING_SCHEMA_NCCP) && category.label!="null")
 				item.rating = category.label;
-			else if(item is QueueItemVO && category.scheme == AVAILABILITY_SCHEMA)
+			else if(item is QueueItemVO && (category.scheme == AVAILABILITY_SCHEMA || category.scheme == AVAILABILITY_SCHEMA_NCCP))
 				(item as QueueItemVO).availabilityLabel = category.label;
-			else if(item is QueueItemVO && category.scheme == TITLE_FORMAT_SCHEMA)
+			else if(item is QueueItemVO && (category.scheme == TITLE_FORMAT_SCHEMA || category.scheme == TITLE_FORMAT_SCHEMA_NCCP))
 				(item as QueueItemVO).format = category.label;
-			else if(category.scheme == MATURITY_LEVEL_SCHEMA)
+			else if(category.scheme == MATURITY_LEVEL_SCHEMA || category.scheme == MATURITY_LEVEL_SCHEMA_NCCP)
 				item.maturityLevel = category.label;
 			
 			return item;
@@ -679,12 +692,15 @@ package com.netflix.webapis.xml
 									switch(category.scheme)
 									{
 										case MPAA_RATINGS_SCHEMA:
+										case MPAA_RATINGS_SCHEMA_NCCP:
 											availability.rating = category.label;
 											break;
 										case TV_RATING_SCHEMA:
+										case TV_RATING_SCHEMA_NCCP:
 											availability.rating = category.label;
 											break;
 										case QUALITY_SCHEMA:
+										case QUALITY_SCHEMA_NCCP:
 											availability.quality = category.label;
 											break;
 									}
@@ -780,9 +796,9 @@ package com.netflix.webapis.xml
 			for each(var x:XML in xml..category)
 			{
 				var category:CategoryItemVO = handleCategory(x);
-				if(category.scheme == TITLE_FORMAT_SCHEMA)
+				if(category.scheme == TITLE_FORMAT_SCHEMA || category.scheme == TITLE_FORMAT_SCHEMA_NCCP)
 					screenFormat.titleFormat = category.label;
-				else if(category.scheme == SCREEN_FORMAT_SCHEMA)
+				else if(category.scheme == SCREEN_FORMAT_SCHEMA || category.scheme == SCREEN_FORMAT_SCHEMA_NCCP)
 					screenFormat.screenFormat = category.label;
 				screenFormat.categories.push(category);
 			}
@@ -801,9 +817,11 @@ package com.netflix.webapis.xml
 				switch(category.scheme)
 				{
 					case NARRATIVE_SCHEMA:
+					case NARRATIVE_SCHEMA_NCCP:
 						subtitle.primary = true;
 						break;
 					case BCP_CODES_SCHEMA:
+					case BCP_CODES_SCHEMA_NCCP:
 						subtitle.code = category.label;
 						break;
 				}
@@ -838,7 +856,7 @@ package com.netflix.webapis.xml
 		 */		
 		public static function handleFilmography(xml:XML):FilmographyItemVO
 		{
-			return NetflixXMLUtil.handleXMLToCatalogItemModel(xml) as FilmographyItemVO;
+			return NetflixXMLUtilV2.handleXMLToCatalogItemVO(xml) as FilmographyItemVO;
 		}
 		
 		/**
@@ -887,7 +905,7 @@ package com.netflix.webapis.xml
 										case CATEGORY:
 											categoryItem = handleCategory(resultNode);
 											titleStateItem.formats.push( categoryItem );
-											if(categoryItem.scheme==TITLE_FORMAT_SCHEMA)
+											if(categoryItem.scheme==TITLE_FORMAT_SCHEMA || categoryItem.scheme==TITLE_FORMAT_SCHEMA_NCCP)
 											{
 												if(categoryItem.term==TITLE_TYPE_DVD)
 													titleState.isDisc = titleStateItem.isDisc = true;

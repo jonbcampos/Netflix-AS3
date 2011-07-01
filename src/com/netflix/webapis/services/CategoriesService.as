@@ -26,7 +26,7 @@ package com.netflix.webapis.services
 	import com.netflix.webapis.vo.CategoryItemVO;
 	import com.netflix.webapis.events.NetflixFaultEvent;
 	import com.netflix.webapis.events.NetflixResultEvent;
-	import com.netflix.webapis.xml.NetflixXMLUtil;
+	import com.netflix.webapis.xml.NetflixXMLUtilV2;
 	
 	import flash.events.Event;
 	import flash.events.IEventDispatcher;
@@ -248,7 +248,7 @@ package com.netflix.webapis.services
 				case TITLE_FORMATS_SERVICE:
 				case QUEUE_AVAILABILITY_SERVICE:
 					for each(resultNode in returnedXML..category_item){
-						resultsArray.push( NetflixXMLUtil.handleCategory(resultNode) );
+						resultsArray.push( NetflixXMLUtilV2.handleCategory(resultNode) );
 					}
 				break;
 			}

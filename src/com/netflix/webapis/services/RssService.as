@@ -4,7 +4,7 @@ package com.netflix.webapis.services
 	import com.netflix.webapis.events.NetflixFaultEvent;
 	import com.netflix.webapis.events.NetflixResultEvent;
 	import com.netflix.webapis.params.ParamsBase;
-	import com.netflix.webapis.xml.NetflixXMLUtil;
+	import com.netflix.webapis.xml.NetflixXMLUtilV2;
 	
 	import flash.events.Event;
 	import flash.events.HTTPStatusEvent;
@@ -692,7 +692,7 @@ package com.netflix.webapis.services
 		
 		override protected function formatAndDispatch(returnedXML:XML):void
 		{
-			_getTitles( NetflixXMLUtil.handleRssResult(returnedXML) );
+			_getTitles( NetflixXMLUtilV2.handleRssResult(returnedXML) );
 		}
 		
 		private function _getTitles(list:Array):void

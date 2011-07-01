@@ -29,7 +29,7 @@ package com.netflix.webapis.services
 	import com.netflix.webapis.vo.CatalogItemVO;
 	import com.netflix.webapis.vo.CategoryItemVO;
 	import com.netflix.webapis.vo.NetflixUser;
-	import com.netflix.webapis.xml.NetflixXMLUtil;
+	import com.netflix.webapis.xml.NetflixXMLUtilV2;
 	
 	import flash.events.Event;
 	import flash.events.IEventDispatcher;
@@ -240,15 +240,15 @@ package com.netflix.webapis.services
 			{
 				case RECOMMENDATION_SERVICE:
 					for each (resultNode in returnedXML..recommendation)
-						resultsArray.push( NetflixXMLUtil.handleXMLToCatalogItemModel(resultNode) );
+						resultsArray.push( NetflixXMLUtilV2.handleXMLToCatalogItemVO(resultNode) );
 					break;
 				case TITLES_STATES_SERVICE:
 					for each (resultNode in returnedXML..title_state)
-						resultsArray.push( NetflixXMLUtil.handleTitleState(resultNode) );
+						resultsArray.push( NetflixXMLUtilV2.handleTitleState(resultNode) );
 					break;
 				case USER_FEEDS_SERVICE:
 					for each (resultNode in returnedXML..link)
-						resultsArray.push( NetflixXMLUtil.handleLink(resultNode) );
+						resultsArray.push( NetflixXMLUtilV2.handleLink(resultNode) );
 					break;
 				default:
 					user = new NetflixUser();
@@ -264,21 +264,21 @@ package com.netflix.webapis.services
 					//preferred formats
 					user.preferredFormats = [];
 					for each(var categoryXML:XML in returnedXML..category){
-						if(categoryXML.@scheme == NetflixXMLUtil.TITLE_FORMAT_SCHEMA)
+						if(categoryXML.@scheme == NetflixXMLUtilV2.TITLE_FORMAT_SCHEMA)
 						{
-							var preferredFormat:CategoryItemVO = NetflixXMLUtil.handleCategory(categoryXML);
+							var preferredFormat:CategoryItemVO = NetflixXMLUtilV2.handleCategory(categoryXML);
 							if(preferredFormat.label=="Blu-ray")
 								user.canBlurayWatch = true;
 							if(preferredFormat.label=="DVD")
 								user.canDvdWatch = true;
 							user.preferredFormats.push(preferredFormat.label);
-						} else if(categoryXML.@scheme == NetflixXMLUtil.MATURITY_LEVEL_SCHEMA)
+						} else if(categoryXML.@scheme == NetflixXMLUtilV2.MATURITY_LEVEL_SCHEMA)
 						{
-							user.maxMaturityLevel = NetflixXMLUtil.handleCategory(categoryXML).label;
-						} else if(categoryXML.@scheme == NetflixXMLUtil.LANGUAGES_SCHEMA)
+							user.maxMaturityLevel = NetflixXMLUtilV2.handleCategory(categoryXML).label;
+						} else if(categoryXML.@scheme == NetflixXMLUtilV2.LANGUAGES_SCHEMA)
 						{
 							if(!user.preferredLanguages) user.preferredLanguages = [];
-							user.preferredLanguages.push(NetflixXMLUtil.handleCategory(categoryXML).label)
+							user.preferredLanguages.push(NetflixXMLUtilV2.handleCategory(categoryXML).label)
 						}
 					}
 					//links
@@ -287,28 +287,28 @@ package com.netflix.webapis.services
 						var rel:String = linksXML.@rel;
 						switch(rel)
 						{
-							case NetflixXMLUtil.QUEUES_SCHEMA:
+							case NetflixXMLUtilV2.QUEUES_SCHEMA:
 								user.queuesLink = linksXML.@href;
 								break;
-							case NetflixXMLUtil.RENTAL_HISTORY_SCHEMA:
+							case NetflixXMLUtilV2.RENTAL_HISTORY_SCHEMA:
 								user.rentalHistoryLink = linksXML.@href;
 								break;
-							case NetflixXMLUtil.RECOMMENDATIONS_SCHEMA:
+							case NetflixXMLUtilV2.RECOMMENDATIONS_SCHEMA:
 								user.recommendationsLink = linksXML.@href;
 								break;
-							case NetflixXMLUtil.TITLE_STATES_SCHEMA:
+							case NetflixXMLUtilV2.TITLE_STATES_SCHEMA:
 								user.titleStatesLink = linksXML.@href;
 								break;
-							case NetflixXMLUtil.RATINGS_SCHEMA:
+							case NetflixXMLUtilV2.RATINGS_SCHEMA:
 								user.ratingsLink = linksXML.@href;
 								break;
-							case NetflixXMLUtil.REVIEWS_SCHEMA:
+							case NetflixXMLUtilV2.REVIEWS_SCHEMA:
 								user.reviewsLink = linksXML.@href;
 								break;
-							case NetflixXMLUtil.AT_HOME_SCHEMA:
+							case NetflixXMLUtilV2.AT_HOME_SCHEMA:
 								user.atHomeLink = linksXML.@href;
 								break;
-							case NetflixXMLUtil.FEEDS_SCHEMA:
+							case NetflixXMLUtilV2.FEEDS_SCHEMA:
 								user.feedsLink = linksXML.@href;
 								break;
 						}

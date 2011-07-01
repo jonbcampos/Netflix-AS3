@@ -29,7 +29,7 @@ package com.netflix.webapis.services
 	import com.netflix.webapis.params.ParamsBase;
 	import com.netflix.webapis.params.RatingParams;
 	import com.netflix.webapis.vo.CategoryItemVO;
-	import com.netflix.webapis.xml.NetflixXMLUtil;
+	import com.netflix.webapis.xml.NetflixXMLUtilV2;
 	
 	import flash.events.Event;
 	import flash.events.IEventDispatcher;
@@ -257,7 +257,7 @@ package com.netflix.webapis.services
 				case PREDICTED_RATING_SERVICE:
 					for each (resultNode in returnedXML..ratings_item)
 					{
-						resultsArray.push( NetflixXMLUtil.handleXMLToCatalogItemModel(resultNode, new RatingsItemVO() ) );
+						resultsArray.push( NetflixXMLUtilV2.handleXMLToCatalogItemVO(resultNode, new RatingsItemVO() ) );
 					}
 					break;
 				case SET_ACTUAL_TITLE_RATINGS_SERVICE:

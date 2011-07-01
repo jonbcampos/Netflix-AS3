@@ -108,7 +108,12 @@ package com.netflix.webapis.params
 			var returnString:String = "";
 			if(startIndex) returnString += "&$skip=" + URLEncoding.encode(startIndex.toString());
 			if(maxResults) returnString += "&$top=" + URLEncoding.encode(maxResults.toString());
-			if(expansions) returnString += "&$expand=" + URLEncoding.encode(expansions);
+			if(version=="2.0")
+			{
+				if(expansions) returnString += "&$expand=" + URLEncoding.encode(expansions);
+			} else {
+				if(expansions) returnString += "&$expand=" + URLEncoding.encode(expansions.replace(/@/g,""));
+			}
 			if(filter) returnString += "&$filter=" + URLEncoding.encode(filter);
 			if(orderBy) returnString += "&$orderby=" + URLEncoding.encode(orderBy);
 			returnString += "&$inlinecount=allpages";
@@ -124,7 +129,12 @@ package com.netflix.webapis.params
 			var returnString:String = "";
 			if(startIndex) returnString += "&start_index=" + escape(startIndex.toString());
 			if(maxResults) returnString += "&max_results=" + escape(maxResults.toString());
-			if(expansions) returnString += "&expand=" + expansions;
+			if(version=="2.0")
+			{
+				if(expansions) returnString += "&expand=" + expansions;
+			} else {
+				if(expansions) returnString += "&expand=" + URLEncoding.encode(expansions.replace(/@/g,""));
+			}
 			return returnString;
 		}
 		/**
@@ -139,8 +149,12 @@ package com.netflix.webapis.params
 			o.max_results = maxResults;
 			o.oauth_version = "1.0";
 			o.v = version;
-			if(expansions)
-				o.expand = expansions;
+			if(version=="2.0")
+			{
+				if(expansions) o.expand = expansions;
+			} else {
+				if(expansions) o.expand = expansions.replace(/@/g,"");
+			}
 			return o;
 		}
 		/**

@@ -29,7 +29,8 @@ package com.netflix.webapis.services
 	import com.netflix.webapis.vo.AutoCompleteItemVO;
 	import com.netflix.webapis.vo.CatalogItemVO;
 	import com.netflix.webapis.xml.NetflixOdataUtil;
-	import com.netflix.webapis.xml.NetflixXMLUtil;
+	import com.netflix.webapis.xml.NetflixXMLUtilV1;
+	import com.netflix.webapis.xml.NetflixXMLUtilV2;
 	
 	import flash.events.Event;
 	import flash.events.IEventDispatcher;
@@ -284,15 +285,20 @@ package com.netflix.webapis.services
 					}
 				break;
 				case CATALOG_SERVICE:
-					for each (resultNode in returnedXML..catalog_item) {
-						resultsArray.push(NetflixXMLUtil.handleXMLToCatalogItemModel(resultNode));
+					if(request.version=="2.0")
+					{
+						for each (resultNode in returnedXML..catalog_item)
+							resultsArray.push(NetflixXMLUtilV2.handleXMLToCatalogItemVO(resultNode));
+					} else {
+						for each (resultNode in returnedXML..catalog_title)
+							resultsArray.push(NetflixXMLUtilV1.handleXMLToCatalogItemVO(resultNode));
 					}
 				break;
 				case TITLE_SERVICE:
 					if(request && TitlesParams(request).retrieveExpansionOnly && TitlesParams(request).expandItem){
 						resultsArray = handleExpansionOptions(request,returnedXML);
 					} else {
-						resultsArray.push( NetflixXMLUtil.handleXMLToCatalogItemModel(returnedXML) );
+						resultsArray.push( NetflixXMLUtilV2.handleXMLToCatalogItemVO(returnedXML) );
 					}
 				break;
 				case GENRE_SERVICE:
@@ -328,20 +334,20 @@ package com.netflix.webapis.services
 				break;
 				case CatalogItemVO.EXPAND_FORMATS:
 					for each(resultNode in returnedXML..availability)
-						resultsArray.push(NetflixXMLUtil.handleFormatAvailability(resultNode));
+						resultsArray.push(NetflixXMLUtilV2.handleFormatAvailability(resultNode));
 				break;
 				case CatalogItemVO.EXPAND_SCREEN_FORMATS:
 					for each(resultNode in returnedXML..screen_format)
-						resultsArray.push(NetflixXMLUtil.handleScreenFormat(resultNode));
+						resultsArray.push(NetflixXMLUtilV2.handleScreenFormat(resultNode));
 				break;
 				case CatalogItemVO.EXPAND_CAST:
 				case CatalogItemVO.EXPAND_DIRECTORS:
 					for each(resultNode in returnedXML..person)
-						resultsArray.push(NetflixXMLUtil.handlePerson(resultNode));
+						resultsArray.push(NetflixXMLUtilV2.handlePerson(resultNode));
 				break;
 				case CatalogItemVO.EXPAND_LANGUAGES_AND_AUDIO:
 					for each(resultNode in returnedXML..language_audio_format)
-						resultsArray.push(NetflixXMLUtil.handleLanguageAudioFormat(resultNode))
+						resultsArray.push(NetflixXMLUtilV2.handleLanguageAudioFormat(resultNode))
 				break;
 				case CatalogItemVO.EXPAND_SEASONS:
 				case CatalogItemVO.EXPAND_EPISODES:
@@ -352,24 +358,24 @@ package com.netflix.webapis.services
 					while(++i<n)
 					{
 						var xml:XML = (children[i]..catalog_title as XMLList)[0];
-						resultsArray.push(NetflixXMLUtil.handleCatalogTitle(new CatalogItemVO(), xml));
+						resultsArray.push(NetflixXMLUtilV2.handleCatalogTitle(new CatalogItemVO(), xml));
 					}
 				break;
 				case CatalogItemVO.EXPAND_SIMILARS:
 					for each(resultNode in returnedXML..similars_item)
-						resultsArray.push(NetflixXMLUtil.handleXMLToCatalogItemModel(resultNode));
+						resultsArray.push(NetflixXMLUtilV2.handleXMLToCatalogItemVO(resultNode));
 				break;
 				case CatalogItemVO.EXPAND_FILMOGRAPHY:
 				break;
 				case CatalogItemVO.EXPAND_BONUS_MATERIALS:
 					for each(resultNode in returnedXML..link)
-						resultsArray.push(NetflixXMLUtil.handleLink(resultNode));
+						resultsArray.push(NetflixXMLUtilV2.handleLink(resultNode));
 				break;
 				case CatalogItemVO.EXPAND_AWARDS:
 					for each(resultNode in returnedXML..award_nominee)
-						resultsArray.push(NetflixXMLUtil.handleAwardNominees(resultNode));
+						resultsArray.push(NetflixXMLUtilV2.handleAwardNominees(resultNode));
 					for each(resultNode in returnedXML..award_nominee)
-						resultsArray.push( NetflixXMLUtil.handleAwardsWinners(resultNode) );	
+						resultsArray.push( NetflixXMLUtilV2.handleAwardsWinners(resultNode) );	
 				break;
 				default:
 					resultsArray = [];
@@ -430,13 +436,14 @@ package com.netflix.webapis.services
 		 * @see com.netflix.webapis.events.NetflixFaultEvent#FAULT
 		 * @see com.netflix.webapis.models.CatalogItemModel
 		 */	
-		public function getCatalogListByTitle(term:String, startIndex:int=0, maxResults:int=25, expansions:String=null):void
+		public function getCatalogListByTitle(term:String, startIndex:int=0, maxResults:int=25, expansions:String=null, version:String="2.0"):void
 		{
 			var params:TitlesParams = new TitlesParams();
 			params.term = term;
 			params.startIndex = startIndex;
 			params.maxResults = maxResults;
 			params.expansions = expansions;
+			params.version = version;
 			catalogService(params);
 		}
 		

@@ -26,7 +26,7 @@ package com.netflix.webapis.services
 	import com.netflix.webapis.events.NetflixResultEvent;
 	import com.netflix.webapis.params.ParamsBase;
 	import com.netflix.webapis.vo.NetflixUser;
-	import com.netflix.webapis.xml.NetflixXMLUtil;
+	import com.netflix.webapis.xml.NetflixXMLUtilV2;
 	
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
@@ -1075,7 +1075,7 @@ package com.netflix.webapis.services
 			var result:XML = XML(loader.data);
 			_clearTimeLoader();
 			//find offset
-			var serverTime:Number = NetflixXMLUtil.handleNumber(result)*1000;
+			var serverTime:Number = NetflixXMLUtilV2.handleNumber(result)*1000;
 			var cur:Date = new Date();
 			timeOffset =  serverTime - cur.time;
 			lastNetflixResult = {"time":serverTime};

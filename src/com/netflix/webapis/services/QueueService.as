@@ -30,7 +30,7 @@ package com.netflix.webapis.services
 	import com.netflix.webapis.vo.QueueItemVO;
 	import com.netflix.webapis.vo.TitleStateItemVO;
 	import com.netflix.webapis.vo.TitleStateVO;
-	import com.netflix.webapis.xml.NetflixXMLUtil;
+	import com.netflix.webapis.xml.NetflixXMLUtilV2;
 	
 	import flash.events.Event;
 	import flash.events.IEventDispatcher;
@@ -328,17 +328,17 @@ package com.netflix.webapis.services
 				case DISC_QUEUE_SERVICE:
 				case UPDATE_DISC_SERVICE:
 					if (returnedXML..etag != null)
-						ServiceStorage.getInstance().lastDiscQueueETag = NetflixXMLUtil.handleStringNode(returnedXML..etag[0]);
+						ServiceStorage.getInstance().lastDiscQueueETag = NetflixXMLUtilV2.handleStringNode(returnedXML..etag[0]);
 					for each (resultNode in returnedXML..queue_item) {
-						resultsArray.push( NetflixXMLUtil.handleXMLToCatalogItemModel(resultNode, new QueueItemVO()) );
+						resultsArray.push( NetflixXMLUtilV2.handleXMLToCatalogItemVO(resultNode, new QueueItemVO()) );
 					}
 					break;
 				case INSTANT_QUEUE_SERVICE:
 				case UPDATE_INSTANT_SERVICE:
 					if (returnedXML..etag != null)
-						ServiceStorage.getInstance().lastInstantQueueETag = NetflixXMLUtil.handleStringNode(returnedXML..etag[0]);
+						ServiceStorage.getInstance().lastInstantQueueETag = NetflixXMLUtilV2.handleStringNode(returnedXML..etag[0]);
 					for each (resultNode in returnedXML..queue_item) {
-						resultsArray.push( NetflixXMLUtil.handleXMLToCatalogItemModel(resultNode, new QueueItemVO()) );
+						resultsArray.push( NetflixXMLUtilV2.handleXMLToCatalogItemVO(resultNode, new QueueItemVO()) );
 					}
 					break;
 				case DELETE_DISC_SERVICE:
