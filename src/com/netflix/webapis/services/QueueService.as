@@ -26,6 +26,7 @@ package com.netflix.webapis.services
 	import com.netflix.webapis.events.NetflixResultEvent;
 	import com.netflix.webapis.params.ParamsBase;
 	import com.netflix.webapis.params.QueueParams;
+	import com.netflix.webapis.params.RatingParams;
 	import com.netflix.webapis.vo.CatalogItemVO;
 	import com.netflix.webapis.vo.QueueItemVO;
 	import com.netflix.webapis.vo.TitleStateItemVO;
@@ -79,6 +80,13 @@ package com.netflix.webapis.services
 		public static const DELETE_DISC_SERVICE:String = "deleteDiscQueue";
 		public static const DELETE_INSTANT_SERVICE:String = "deleteInstantQueue";
 		
+		//---------------------------------------------------------------------
+		//
+		//  Private Properties
+		//
+		//---------------------------------------------------------------------
+		private var _ratingService:RatingService;
+		private var _results:Array;
 		//---------------------------------------------------------------------
 		//
 		// Public Methods
@@ -307,6 +315,39 @@ package com.netflix.webapis.services
 				dispatchFault(new ServiceFault(NetflixFaultEvent.API_RESPONSE, queryXML.Error, queryXML.Error.Message));
 		}
 		
+		private function _onRatingService_ResultHandler(event:NetflixResultEvent):void
+		{
+			var results:Array = event.result as Array;
+			var resultsArray:Array = [];
+			if(results && results.length>0)
+			{
+				var i:int = -1;
+				var n:int = results.length;
+				while(++i<n)
+					resultsArray.push( NetflixXMLUtilV2.transformCatalogItemToQueueItem(results[i] as CatalogItemVO, _results[i] as QueueItemVO) );
+			}
+			lastNetflixResult = resultsArray;
+			dispatchResult(resultsArray,type, event.rawXML);
+			_results = null;
+		}
+		
+		private function _onRatingService_FaultHandler(event:NetflixFaultEvent):void
+		{
+			var resultsArray:Array =_results;
+			lastNetflixResult = _results;
+			dispatchResult(resultsArray,type, null);
+			_results = null;
+		}
+		
+		private function _createRatingService():void
+		{
+			if(!_ratingService)
+			{
+				_ratingService = new RatingService();
+				_ratingService.addEventListener(NetflixResultEvent.TITLE_RATINGS_RESULT, _onRatingService_ResultHandler);
+				_ratingService.addEventListener(NetflixFaultEvent.FAULT, _onRatingService_FaultHandler);
+			}
+		}
 		//---------------------------------------------------------------------
 		//
 		// Override Methods
@@ -332,6 +373,15 @@ package com.netflix.webapis.services
 					for each (resultNode in returnedXML..queue_item) {
 						resultsArray.push( NetflixXMLUtilV2.handleXMLToCatalogItemVO(resultNode, new QueueItemVO()) );
 					}
+					
+					if(type == UPDATE_DISC_SERVICE)
+					{
+						//get details
+						_createRatingService();
+						_results = resultsArray;
+						_ratingService.getTitlesRatings(resultsArray, request.expansions);
+						return;
+					}
 					break;
 				case INSTANT_QUEUE_SERVICE:
 				case UPDATE_INSTANT_SERVICE:
@@ -339,6 +389,15 @@ package com.netflix.webapis.services
 						ServiceStorage.getInstance().lastInstantQueueETag = NetflixXMLUtilV2.handleStringNode(returnedXML..etag[0]);
 					for each (resultNode in returnedXML..queue_item) {
 						resultsArray.push( NetflixXMLUtilV2.handleXMLToCatalogItemVO(resultNode, new QueueItemVO()) );
+					}
+					
+					if(type == UPDATE_INSTANT_SERVICE)
+					{
+						//get details
+						_createRatingService();
+						_results = resultsArray;
+						_ratingService.getTitlesRatings(resultsArray, request.expansions);
+						return;
 					}
 					break;
 				case DELETE_DISC_SERVICE:

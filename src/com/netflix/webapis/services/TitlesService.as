@@ -347,7 +347,7 @@ package com.netflix.webapis.services
 				break;
 				case CatalogItemVO.EXPAND_LANGUAGES_AND_AUDIO:
 					for each(resultNode in returnedXML..language_audio_format)
-						resultsArray.push(NetflixXMLUtilV2.handleLanguageAudioFormat(resultNode))
+						resultsArray.push(NetflixXMLUtilV2.handleLanguageAudioFormat(resultNode, true))
 				break;
 				case CatalogItemVO.EXPAND_SEASONS:
 				case CatalogItemVO.EXPAND_EPISODES:

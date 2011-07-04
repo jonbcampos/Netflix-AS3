@@ -43,6 +43,6 @@ package com.netflix.webapis.vo
 		/**
 		 * Award Link Item. 
 		 */		
-		public var link:LinkItemVO;
+		//public var link:LinkItemVO;
 	}
 }

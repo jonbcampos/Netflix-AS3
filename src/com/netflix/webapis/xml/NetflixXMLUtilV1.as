@@ -550,10 +550,10 @@ package com.netflix.webapis.xml
 			award.category.scheme = xml.category.@scheme;
 			award.category.label = xml.category.@label;
 			award.category.term = xml.category.@term;
-			award.link = new LinkItemVO();
-			award.link.url = xml.link.@href;
-			award.link.rel = xml.link.@rel;
-			award.link.title = xml.link.@title;
+			//award.link = new LinkItemVO();
+			//award.link.url = xml.link.@href;
+			//award.link.rel = xml.link.@rel;
+			//award.link.title = xml.link.@title;
 			return award;
 		}
 		/**
@@ -570,10 +570,10 @@ package com.netflix.webapis.xml
 			award.category.scheme = xml.category.@scheme;
 			award.category.label = xml.category.@label;
 			award.category.term = xml.category.@term;
-			award.link = new LinkItemVO();
-			award.link.url = xml.link.@href;
-			award.link.rel = xml.link.@rel;
-			award.link.title = xml.link.@title;
+			//award.link = new LinkItemVO();
+			//award.link.url = xml.link.@href;
+			//award.link.rel = xml.link.@rel;
+			//award.link.title = xml.link.@title;
 			return award;
 		}
 		/**

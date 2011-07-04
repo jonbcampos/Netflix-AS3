@@ -41,6 +41,7 @@ package com.netflix.webapis.vo
 		 * Audio Formats. 
 		 */		
 		public var audioFormats:Array;
+		public var isLangaugeNative:Boolean;
 		
 	}
 }

@@ -158,6 +158,7 @@ package com.netflix.webapis.xml
 		public static const TITLE_FORMAT_SCHEMA:String = "http://api.netflix.com/categories/title_formats";
 		public static const SCREEN_FORMAT_SCHEMA:String = "http://api.netflix.com/categories/screen_formats";
 		public static const TITLE_STATE_SCHEMA:String = "http://api.netflix.com/categories/title_states";
+		public static const IS_LANGUAGE_NATIVE_SCHEMA:String = "http://api.netflix.com/categories/is_language_native";
 		
 		public static const MPAA_RATINGS_SCHEMA_NCCP:String = "http://api-nccp.netflix.com/categories/mpaa_ratings";
 		public static const TV_RATING_SCHEMA_NCCP:String = "http://api-nccp.netflix.com/categories/tv_ratings";
@@ -171,6 +172,7 @@ package com.netflix.webapis.xml
 		public static const TITLE_FORMAT_SCHEMA_NCCP:String = "http://api-nccp.netflix.com/categories/title_formats";
 		public static const SCREEN_FORMAT_SCHEMA_NCCP:String = "http://api-nccp.netflix.com/categories/screen_formats";
 		public static const TITLE_STATE_SCHEMA_NCCP:String = "http://api-nccp.netflix.com/categories/title_states";
+		public static const IS_LANGUAGE_NATIVE_SCHEMA_NCCP:String = "http://api-nccp.netflix.com/categories/is_language_native";
 		
 		/**
 		 * Converts XML to Catalog Model. 
@@ -199,12 +201,13 @@ package com.netflix.webapis.xml
 						item.id = handleStringNode(resultNode);
 					break;
 					case LINK:
-						var linkTitle:String = resultNode.@rel;
-						switch (linkTitle) {
+						var link:LinkItemVO = handleLink(resultNode)
+						switch (link.rel) {
 							case TITLE_SCHEMA:
 								var titleChildren:XMLList = resultNode.children();
 								if(titleChildren && titleChildren.length()>0)
 									handleCatalogTitle(item, titleChildren[0]);
+								item.netflixId = link.url;
 								break;
 							/*
 							case OFFICIAL_SITE_ATTR:
@@ -212,7 +215,6 @@ package com.netflix.webapis.xml
 							break;
 							*/
 							default:
-								var link:LinkItemVO = handleLink(resultNode);
 								item.links.push(link);
 								
 								if(link.rel == TITLE_SCHEMA)
@@ -720,8 +722,21 @@ package com.netflix.webapis.xml
 												xmlList = subChild.language_audio_format.children();
 												j = -1;
 												m = xmlList.length();
+												var native:Boolean;
 												while(++j<m)
-													availability.languagesAndAudioList.push( handleLanguageAudioFormat(xmlList[j] as XML) );
+												{
+													var cat:CategoryItemVO = handleCategory(xmlList[j] as XML);
+													switch(cat.scheme)
+													{
+														case IS_LANGUAGE_NATIVE_SCHEMA:
+														case IS_LANGUAGE_NATIVE_SCHEMA_NCCP:
+															native = (cat.label=="true")?true:false;
+															break;
+														case LANGUAGES_SCHEMA:
+														case LANGUAGES_SCHEMA_NCCP:
+															availability.languagesAndAudioList.push( handleLanguageAudioFormat(xmlList[j] as XML, native) );
+													}
+												}
 											}
 											break;
 										case SUBTITLE_LANGUAGES_SCHEMA:
@@ -759,11 +774,13 @@ package com.netflix.webapis.xml
 		{
 			var award:AwardWinnerVO = new AwardWinnerVO();
 			award.year = xml.@year;
-			award.category = handleCategory(award.category as XML);
+			award.category = handleCategory(xml.category[0] as XML);
+			/*
 			award.link = new LinkItemVO();
 			award.link.url = xml.link.@href;
 			award.link.rel = xml.link.@rel;
 			award.link.title = xml.link.@title;
+			*/
 			return award;
 		}
 		/**
@@ -776,11 +793,11 @@ package com.netflix.webapis.xml
 		{
 			var award:AwardNomineeVO = new AwardNomineeVO();
 			award.year = xml.@year;
-			award.category = handleCategory(award.category as XML);
-			award.link = new LinkItemVO();
-			award.link.url = xml.link.@href;
-			award.link.rel = xml.link.@rel;
-			award.link.title = xml.link.@title;
+			award.category = handleCategory(xml.category[0] as XML);
+			//award.link = new LinkItemVO();
+			//award.link.url = xml.link.@href;
+			//award.link.rel = xml.link.@rel;
+			//award.link.title = xml.link.@title;
 			return award;
 		}
 		/**
@@ -835,12 +852,12 @@ package com.netflix.webapis.xml
 		 * @return 
 		 * 
 		 */		
-		public static function handleLanguageAudioFormat(xml:XML):LangaugeFormatVO
+		public static function handleLanguageAudioFormat(xml:XML, native:Boolean):LangaugeFormatVO
 		{
 			var language:LangaugeFormatVO = new LangaugeFormatVO();
 			language.language = handleCategory(xml).label;
 			language.audioFormats = [];
-			
+			language.isLangaugeNative = native;
 			var children:XMLList = xml.children();
 			for each(var x:XML in children)
 				language.audioFormats.push( handleCategory(x).label );
@@ -995,6 +1012,69 @@ package com.netflix.webapis.xml
 			var ratingsTitleUrlTemplate:String = "http://api.netflix.com/users/"+ServiceStorage.getInstance().user.userId+"/ratings/title?{-join|&amp;|title_refs}";
 			
 			return [];
+		}
+		
+		//-----------------------------
+		//  transform event
+		//-----------------------------
+		public static function transformCatalogItemToQueueItem(catalogItem:CatalogItemVO, queueItem:QueueItemVO):QueueItemVO
+		{
+			queueItem.averageRating = catalogItem.averageRating;
+			queueItem.awards = catalogItem.awards;
+			queueItem.awardsList = catalogItem.awardsList;
+			queueItem.awardsNomineeList = catalogItem.awardsNomineeList;
+			queueItem.awardsWinnerList = catalogItem.awardsWinnerList;
+			queueItem.bonusMaterialsList = catalogItem.bonusMaterialsList;
+			queueItem.boxArt124 = catalogItem.boxArt124;
+			queueItem.boxArt150 = catalogItem.boxArt150;
+			queueItem.boxArt88 = catalogItem.boxArt88;
+			queueItem.boxArtLarge = catalogItem.boxArtLarge;
+			queueItem.boxArtSmall = catalogItem.boxArtSmall;
+			queueItem.boxArtTiny = catalogItem.boxArtTiny;
+			queueItem.cast = catalogItem.cast;
+			queueItem.castList = catalogItem.castList;
+			queueItem.categories = catalogItem.categories;
+			queueItem.directorList = catalogItem.directorList;
+			queueItem.directors = catalogItem.directors;
+			queueItem.discs = catalogItem.discs;
+			queueItem.discsList = catalogItem.discsList;
+			queueItem.episodes = catalogItem.episodes;
+			queueItem.episodesList = catalogItem.episodesList;
+			queueItem.filmographyList = catalogItem.filmographyList;
+			queueItem.formats = catalogItem.formats;
+			queueItem.formatsList = catalogItem.formatsList;
+			queueItem.genres = catalogItem.genres;
+			queueItem.groupId = catalogItem.groupId;
+			//queueItem.id = catalogItem.id;
+			queueItem.isBluray = catalogItem.isBluray;
+			queueItem.isDvd = catalogItem.isDvd;
+			queueItem.isInstant = catalogItem.isInstant;
+			//queueItem.lastUpdated = catalogItem.lastUpdated;
+			queueItem.links = catalogItem.links;
+			queueItem.maturityLevel = catalogItem.maturityLevel;
+			queueItem.netflixId = catalogItem.netflixId;
+			queueItem.officialSite = catalogItem.officialSite;
+			queueItem.rating = catalogItem.rating;
+			queueItem.releaseYear = catalogItem.releaseYear;
+			queueItem.runtime = catalogItem.runtime;
+			queueItem.screenFormats = catalogItem.screenFormats;
+			queueItem.screenFormatsList = catalogItem.screenFormatsList;
+			queueItem.seasonNumber = catalogItem.seasonNumber;
+			queueItem.seasons = catalogItem.seasons;
+			queueItem.seasonsList = catalogItem.seasonsList;
+			queueItem.sequence = catalogItem.sequence;
+			queueItem.shortSynopsis = catalogItem.shortSynopsis;
+			queueItem.similars = catalogItem.similars;
+			queueItem.similarsList = catalogItem.similarsList;
+			queueItem.synopsis = catalogItem.synopsis;
+			queueItem.synopsisShortString = catalogItem.synopsisShortString;
+			queueItem.synopsisString = catalogItem.synopsisString;
+			queueItem.tinyUrl = catalogItem.tinyUrl;
+			queueItem.titleRegular = catalogItem.titleRegular;
+			queueItem.titleShort = catalogItem.titleShort;
+			//queueItem.titleState = catalogItem.titleState;
+			queueItem.webPage = catalogItem.webPage;
+			return queueItem;
 		}
 		
 	}
