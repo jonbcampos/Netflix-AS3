@@ -597,7 +597,9 @@ package com.netflix.webapis.services
 		 */
 		protected function handleServiceLoading(methodString:String, params:ParamsBase = null):void
 		{
-			//Do Nothing
+			//check that the type is set in the params
+			if(params && !params.type)
+				params.type = type;
 		}
 		/**
 		 * Formats the xml into typed objects and dispatches the final object in a result event.
@@ -703,7 +705,7 @@ package com.netflix.webapis.services
 				trace(requestString);
 			//make request
 			var urlRequest:URLRequest = new URLRequest(requestString);
-			/*
+			
 			if(finalHttpMethod==POST_REQUEST_METHOD)
 			{
 				var postVars:URLVariables = new URLVariables();
@@ -714,7 +716,7 @@ package com.netflix.webapis.services
 				urlRequest.data = postVars;
 				urlRequest.url = sendQuery;
 			}
-			*/
+			
 			urlRequest.method = finalHttpMethod;
 			try{
 				_urlLoader.load(urlRequest);
@@ -762,8 +764,7 @@ package com.netflix.webapis.services
 				getServerTimeOffset();
 			} else {
 				var errorText:String = (httpStatusResponse)?httpStatusResponse:event.text;
-				if(hasEventListener(event.type))
-					dispatchFault(new ServiceFault(event.type,"IO Service Error: "+type+ " Error",errorText, event.text, httpStatus));
+				dispatchFault(new ServiceFault(event.type,"IO Service Error: "+type+ " Error",errorText, event.text, httpStatus));
 				clearLoader();
 			}
 		}
@@ -986,13 +987,31 @@ package com.netflix.webapis.services
 		 * @return 
 		 * 
 		 */		
-		protected function checkForETag():Boolean
+		protected function checkForDiscETag():Boolean
 		{
 			if(checkForUser()==false)
 				return false;
-			if(!storage.lastDiscQueueETag || !storage.lastInstantQueueETag)
+			if(!storage.lastDiscQueueETag)
 			{
-				dispatchFault(new ServiceFault("fault","ETag Error","Missing Netflix Etag, use the Queue Service and discQueueService() and instantQueueService() prior to making this call."));
+				dispatchFault(new ServiceFault("fault","ETag Error","Missing Netflix Etag, use the Queue Service and discQueueService() prior to making this call."));
+				return false;
+			}
+			return true;
+		}
+		
+		/**
+		 * Checks for etag, returns true if exists, false if does not exist.
+		 *  
+		 * @return 
+		 * 
+		 */		
+		protected function checkForInstantETag():Boolean
+		{
+			if(checkForUser()==false)
+				return false;
+			if(!storage.lastInstantQueueETag)
+			{
+				dispatchFault(new ServiceFault("fault","ETag Error","Missing Netflix Etag, use the Queue Service and instantQueueService() prior to making this call."));
 				return false;
 			}
 			return true;

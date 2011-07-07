@@ -259,8 +259,8 @@ package com.netflix.webapis.services
 					user.nickName = returnedXML.nickname;
 					user.canInstantWatch = Boolean(returnedXML.can_instant_watch);
 					user.isAccountOwner = Boolean(returnedXML.is_account_owner);
-					user.accountMaxNumberOfDiscs = int(returnedXML.account_max_number_of_discs);
 					user.canInstantWatchOnDevice = Boolean(returnedXML.can_instant_watch_on_device);
+					user.accountMaxNumberOfDiscs = int(returnedXML.account_max_number_of_discs);
 					//preferred formats
 					user.preferredFormats = [];
 					for each(var categoryXML:XML in returnedXML..category){
@@ -280,6 +280,12 @@ package com.netflix.webapis.services
 							if(!user.preferredLanguages) user.preferredLanguages = [];
 							user.preferredLanguages.push(NetflixXMLUtilV2.handleCategory(categoryXML).label)
 						}
+					}
+					//double check for dvds
+					if(user.accountMaxNumberOfDiscs == 0)
+					{
+						user.canBlurayWatch = false;
+						user.canDvdWatch = false;
 					}
 					//links
 					for each(var linksXML:XML in returnedXML..link)

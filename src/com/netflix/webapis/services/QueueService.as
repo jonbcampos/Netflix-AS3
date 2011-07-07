@@ -268,13 +268,13 @@ package com.netflix.webapis.services
 					sendQuery += "/" + INSTANT_PART + _getStatus(params as QueueParams);
 					break;
 				case UPDATE_DISC_SERVICE:
-					if(checkForETag()==false)
+					if(checkForDiscETag()==false)
 						return;
 					sendQuery += "/" + DISC_PART;
 					method = ServiceBase.POST_REQUEST_METHOD;
 					break;
 				case UPDATE_INSTANT_SERVICE:
-					if(checkForETag()==false)
+					if(checkForInstantETag()==false)
 						return;
 					sendQuery += "/" + INSTANT_PART;
 					method = ServiceBase.POST_REQUEST_METHOD;
