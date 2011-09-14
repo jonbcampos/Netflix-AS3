@@ -634,6 +634,9 @@ package com.netflix.webapis.services
 			
 			if(!params)
 				return;
+			//protect again urls that are too long
+			if(params.maxResults>75)
+				params.maxResults = 75;
 			
 			switch(type)
 			{

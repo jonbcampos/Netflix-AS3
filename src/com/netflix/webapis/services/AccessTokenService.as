@@ -81,7 +81,9 @@ package com.netflix.webapis.services
 			_urlLoader.addEventListener(Event.COMPLETE,_accessTokenService_CompleteHandler);
 			
 			var requestToken:OAuthToken = new OAuthToken(oauthToken,oauthTokenSecret);
-			var tokenRequest:OAuthRequest = new OAuthRequest(ServiceBase.GET_REQUEST_METHOD,NETFLIX_BASE_URL+"oauth/access_token",null,consumer,requestToken);
+			var o:Object = {};
+			o.oauth_version = "1.0";
+			var tokenRequest:OAuthRequest = new OAuthRequest(ServiceBase.GET_REQUEST_METHOD,NETFLIX_BASE_URL+"oauth/access_token",o,consumer,requestToken);
 			var request:String = createRequestString(tokenRequest);
 			
 			if(enableTraceStatements)
@@ -116,7 +118,7 @@ package com.netflix.webapis.services
 			}
 			
 			token = o.oauth_token as String;
-			tokenSecret = o.oauth_token_secret as String;
+			tokenSecret = (o.oauth_token_secret as String);
 			userId = o.user_id;
 			if(autoSaveAuthorization)
 			{
