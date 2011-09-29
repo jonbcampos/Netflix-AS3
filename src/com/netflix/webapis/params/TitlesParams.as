@@ -100,6 +100,7 @@ package com.netflix.webapis.params
 		{
 			var o:Object = super.toObject();
 			if(term) o.term = term;
+			if(filter) o.filters = filter;
 			return o;
 		}
 		/**

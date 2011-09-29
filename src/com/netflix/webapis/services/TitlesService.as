@@ -74,8 +74,8 @@ package com.netflix.webapis.services
 		//---------------------------------------------------------------------
 		protected static const TITLES_AUTOCOMPLETE_URL:String = NETFLIX_BASE_URL+"catalog/titles/autocomplete";
 		protected static const TITLES_CATALOG_URL:String = NETFLIX_BASE_URL+"catalog/titles";
-		protected static const TITLES_GENRE_URL:String = "http://odata.netflix.com/Catalog/Genres";
-		protected static const ADVANCED_TITLES_CATALOG_URL:String = "http://odata.netflix.com/Catalog/Titles?";
+		protected static const TITLES_GENRE_URL:String = "http://odata.netflix.com/v2/Catalog/Genres";
+		protected static const ADVANCED_TITLES_CATALOG_URL:String = "http://odata.netflix.com/v2/Catalog/Titles?";
 		//---------------------------------------------------------------------
 		//
 		// Private Properties
@@ -436,7 +436,7 @@ package com.netflix.webapis.services
 		 * @see com.netflix.webapis.events.NetflixFaultEvent#FAULT
 		 * @see com.netflix.webapis.models.CatalogItemModel
 		 */	
-		public function getCatalogListByTitle(term:String, startIndex:int=0, maxResults:int=25, expansions:String=null, version:String="2.0"):void
+		public function getCatalogListByTitle(term:String, startIndex:int=0, maxResults:int=25, expansions:String=null, version:String="2.0", filter:String=null):void
 		{
 			var params:TitlesParams = new TitlesParams();
 			params.term = term;
@@ -444,6 +444,7 @@ package com.netflix.webapis.services
 			params.maxResults = maxResults;
 			params.expansions = expansions;
 			params.version = version;
+			params.filter = filter;
 			catalogService(params);
 		}
 		

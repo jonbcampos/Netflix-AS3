@@ -93,6 +93,10 @@ package com.netflix.webapis.vo
 		 */		
 		public var boxArtLarge:String;
 		/**
+		 * Box Art: 88x120. 
+		 */		
+		public var boxArt88:String;
+		/**
 		 * Box Art: 124x172. 
 		 */		
 		public var boxArt124:String;
@@ -100,10 +104,7 @@ package com.netflix.webapis.vo
 		 * Box Art: 150x214. 
 		 */		
 		public var boxArt150:String;
-		/**
-		 * Box Art: 88x120. 
-		 */		
-		public var boxArt88:String;
+		public var boxArtHiDef:String;
 		
 		public var maturityLevel:String;
 		

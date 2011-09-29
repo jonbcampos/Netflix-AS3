@@ -145,12 +145,16 @@ package com.netflix.webapis.xml
 											case MEDIUM_URL:
 												var mediumUrl:String = handleStringNode(subChild);
 												item.boxArtSmall = mediumUrl;
-												item.boxArt124 = mediumUrl;
 												break;
 											case LARGE_URL:
 												var largeUrl:String = handleStringNode(subChild);
 												item.boxArtLarge = largeUrl;
-												item.boxArt150 = largeUrl;
+												item.boxArt124 = largeUrl;
+												break;
+											case HIGH_DEFINITION_URL:
+												var hiDefUrl:String = handleStringNode(subChild);
+												item.boxArtHiDef = hiDefUrl;
+												item.boxArt150 = hiDefUrl;
 												break;
 										}
 									}
