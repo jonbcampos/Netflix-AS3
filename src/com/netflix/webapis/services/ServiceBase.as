@@ -692,7 +692,7 @@ package com.netflix.webapis.services
 			_currentParams = finalParams;
 			_currentURL = sendQuery;
 			//make request
-			var requestString:String; 
+			var requestString:String;
 			if(httpMethod!=ODATA_REQUEST_METHOD)
 			{
 				var tokenRequest:OAuthRequest = new OAuthRequest(finalHttpMethod,sendQuery,finalParams,consumer,accessToken);

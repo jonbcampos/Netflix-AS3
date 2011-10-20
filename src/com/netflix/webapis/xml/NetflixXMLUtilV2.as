@@ -922,7 +922,7 @@ package com.netflix.webapis.xml
 										case CATEGORY:
 											categoryItem = handleCategory(resultNode);
 											titleStateItem.formats.push( categoryItem );
-											if(categoryItem.scheme==TITLE_FORMAT_SCHEMA || categoryItem.scheme==TITLE_FORMAT_SCHEMA_NCCP)
+											if(categoryItem.scheme==TITLE_FORMAT_SCHEMA || categoryItem.scheme==TITLE_STATE_SCHEMA || categoryItem.scheme==TITLE_FORMAT_SCHEMA_NCCP)
 											{
 												if(categoryItem.term==TITLE_TYPE_DVD)
 													titleState.isDisc = titleStateItem.isDisc = true;

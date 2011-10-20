@@ -75,11 +75,41 @@ package com.netflix.webapis.params
 				{
 					if(titleRefs[i] is CatalogItemVO)
 					{
-						if(titleRefs[i].id)
-							titleRefString += titleRefs[i].id;
-						else if(titleRefs[i].netflixId)
+						if(titleRefs[i].netflixId)
 							titleRefString += titleRefs[i].netflixId;
 						else
+							titleRefString += titleRefs[i].id;
+							break;
+						if(i<n-1)
+							titleRefString += ",";
+					} else if(titleRefs[i] && titleRefs[i] is String)
+					{
+						titleRefString += titleRefs[i] as String;
+						if(i<n-1)
+							titleRefString += ",";
+					}
+				}
+				o.title_refs = titleRefString;
+			}
+			
+			return o;
+		}
+		
+		override public function toPostObject():Object
+		{
+			var o:Object = super.toPostObject();
+			//titlerefs
+			if(titleRefs&&titleRefs.length>0){
+				var n:int = titleRefs.length;
+				var titleRefString:String = "";
+				for(var i:int=0;i<n;i++)
+				{
+					if(titleRefs[i] is CatalogItemVO)
+					{
+						if(titleRefs[i].netflixId)
+							titleRefString += titleRefs[i].netflixId;
+						else
+							titleRefString += titleRefs[i].id;
 							break;
 						if(i<n-1)
 							titleRefString += ",";
