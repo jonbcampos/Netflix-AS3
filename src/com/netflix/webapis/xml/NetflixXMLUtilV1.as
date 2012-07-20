@@ -532,7 +532,7 @@ package com.netflix.webapis.xml
 			availability.label = xml.category.@label;
 			availability.term = xml.category.@term;
 			availability.scheme = xml.category.@scheme;
-			availability.availableUntil = (xml.@available_until!=undefined)?handleDateValue(xml.@available_until):null;
+			//availability.availableUntil = (xml.@available_until!=undefined)?handleDateValue(xml.@available_until):null;
 			availability.availableFrom = (xml.@available_from!=undefined)?handleDateValue(xml.@available_from):null;
 			return availability;
 		}

@@ -257,9 +257,11 @@ package com.netflix.webapis.xml
 					case AVAILABLE_FROM:
 						format.availableFrom = handleDateNode(resultNode);
 						break;
+					/*
 					case AVAILABLE_TO:
 						format.availableUntil = handleDateNode(resultNode);
 						break;
+					*/
 					case HIGH_DEFINITION_AVAILABLE:
 						//format.highDefinitionAvailable = handleBooleanNode(resultNode);
 						break;

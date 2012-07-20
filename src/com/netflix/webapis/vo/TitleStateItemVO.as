@@ -50,6 +50,12 @@ package com.netflix.webapis.vo
 		 */		
 		public var formats:Array;
 		
+		[Deprecated("Netflix is removing this service after September 15, 2012.")]
+		/**
+		 * Watched Date.
+		 * 
+		 * @see http://developer.netflix.com/blog/read/Upcoming_Changes_to_the_Netflix_API_Program 
+		 */		
 		public var watchedDate:Date;
 		public var isDisc:Boolean;
 		public var isInstant:Boolean;

@@ -71,7 +71,7 @@ package com.netflix.webapis.services
 	 */	
 	public class ServiceBase extends EventDispatcher
 	{
-		public static const NETFLIX_BASE_URL:String = "http://api.netflix.com/";
+		public static const NETFLIX_BASE_URL:String = "http://api-public.netflix.com/";
 		public static const GET_REQUEST_METHOD:String = "GET";
 		public static const POST_REQUEST_METHOD:String = "POST";
 		public static const PUT_REQUEST_METHOD:String = "PUT";

@@ -24,15 +24,13 @@ package com.netflix.webapis.services
 	import com.netflix.webapis.ServiceFault;
 	import com.netflix.webapis.events.NetflixFaultEvent;
 	import com.netflix.webapis.events.NetflixResultEvent;
-	import com.netflix.webapis.vo.AtHomeItemVO;
-	import com.netflix.webapis.vo.CatalogItemVO;
-	import com.netflix.webapis.vo.RentalHistoryItemVO;
 	import com.netflix.webapis.params.ParamsBase;
 	import com.netflix.webapis.params.RentalHistoryParams;
+	import com.netflix.webapis.vo.AtHomeItemVO;
+	import com.netflix.webapis.vo.RentalHistoryItemVO;
 	import com.netflix.webapis.xml.NetflixXMLUtilV2;
 	
 	import flash.events.Event;
-	import flash.events.IEventDispatcher;
 	import flash.net.URLLoader;
 	
 	[Event(name="atHomeResult",type="com.netflix.webapis.events.NetflixResultEvent")]
@@ -40,10 +38,12 @@ package com.netflix.webapis.services
 	[Event(name="watchedResult",type="com.netflix.webapis.events.NetflixResultEvent")]
 	[Event(name="returnedResult",type="com.netflix.webapis.events.NetflixResultEvent")]
 	
+	[Deprecated("Netflix is removing this service after September 15, 2012.")]
 	/**
 	 * Tracking Services under the <i>Tracking</i> category. 
 	 * @author jonbcampos
 	 * 
+	 * @see http://developer.netflix.com/blog/read/Upcoming_Changes_to_the_Netflix_API_Program
 	 */	
 	public class RentalHistoryService extends ServiceBase
 	{

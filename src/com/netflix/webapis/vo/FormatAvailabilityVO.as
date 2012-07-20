@@ -39,8 +39,10 @@ package com.netflix.webapis.vo
 		public var availableFrom:Date;
 		/**
 		 * To Date. 
-		 */		
-		public var availableUntil:Date;
+		 */
+		//Removed by Netflix
+		// see http://developer.netflix.com/blog/read/Upcoming_Changes_to_the_Netflix_API_Program
+		//public var availableUntil:Date;
 		
 		public var runtime:Number;
 		
