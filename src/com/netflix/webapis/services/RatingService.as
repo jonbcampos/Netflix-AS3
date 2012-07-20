@@ -24,18 +24,13 @@ package com.netflix.webapis.services
 	import com.netflix.webapis.ServiceFault;
 	import com.netflix.webapis.events.NetflixFaultEvent;
 	import com.netflix.webapis.events.NetflixResultEvent;
-	import com.netflix.webapis.vo.CatalogItemVO;
-	import com.netflix.webapis.vo.RatingsItemVO;
 	import com.netflix.webapis.params.ParamsBase;
 	import com.netflix.webapis.params.RatingParams;
-	import com.netflix.webapis.vo.CategoryItemVO;
+	import com.netflix.webapis.vo.RatingsItemVO;
 	import com.netflix.webapis.xml.NetflixXMLUtilV2;
 	
 	import flash.events.Event;
-	import flash.events.IEventDispatcher;
 	import flash.net.URLLoader;
-	
-	import org.iotashan.utils.URLEncoding;
 	
 	[Event(name="titleRatingsResult",type="com.netflix.webapis.events.NetflixResultEvent")]
 	[Event(name="getActualTitleRatingsResult",type="com.netflix.webapis.events.NetflixResultEvent")]

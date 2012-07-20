@@ -33,10 +33,7 @@ package com.netflix.webapis.services
 	import com.netflix.webapis.xml.NetflixXMLUtilV2;
 	
 	import flash.events.Event;
-	import flash.events.IEventDispatcher;
 	import flash.net.URLLoader;
-	
-	import org.iotashan.utils.URLEncoding;
 	
 	[Event(name="autoCompleteResult",type="com.netflix.webapis.events.NetflixResultEvent")]
 	[Event(name="catalogResult",type="com.netflix.webapis.events.NetflixResultEvent")]

@@ -31,7 +31,6 @@ package com.netflix.webapis.services
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.HTTPStatusEvent;
-	import flash.events.IEventDispatcher;
 	import flash.events.IOErrorEvent;
 	import flash.events.ProgressEvent;
 	import flash.events.SecurityErrorEvent;
@@ -97,12 +96,6 @@ package com.netflix.webapis.services
 		public function ServiceBase()
 		{
 			super();
-			_constructor();
-		}
-		
-		private function _constructor():void
-		{
-			// get storage
 			storage = ServiceStorage.getInstance();
 		}
 		

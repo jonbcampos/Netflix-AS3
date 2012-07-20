@@ -21,21 +21,14 @@
  * */
 package com.netflix.webapis.services
 {
-	import com.netflix.webapis.params.ParamsBase;
 	import com.netflix.webapis.ServiceFault;
-	import com.netflix.webapis.vo.CategoryItemVO;
 	import com.netflix.webapis.events.NetflixFaultEvent;
 	import com.netflix.webapis.events.NetflixResultEvent;
+	import com.netflix.webapis.params.ParamsBase;
 	import com.netflix.webapis.xml.NetflixXMLUtilV2;
 	
 	import flash.events.Event;
-	import flash.events.IEventDispatcher;
-	import flash.events.IOErrorEvent;
 	import flash.net.URLLoader;
-	import flash.net.URLLoaderDataFormat;
-	import flash.net.URLRequest;
-	
-	import org.iotashan.oauth.OAuthRequest;
 	
 	[Event(name="genresResult",type="com.netflix.webapis.events.NetflixResultEvent")]
 	[Event(name="tvRatingsResult",type="com.netflix.webapis.events.NetflixResultEvent")]

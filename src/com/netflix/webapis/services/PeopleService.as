@@ -24,14 +24,12 @@ package com.netflix.webapis.services
 	import com.netflix.webapis.ServiceFault;
 	import com.netflix.webapis.events.NetflixFaultEvent;
 	import com.netflix.webapis.events.NetflixResultEvent;
-	import com.netflix.webapis.vo.CatalogItemVO;
 	import com.netflix.webapis.params.ParamsBase;
 	import com.netflix.webapis.params.PeopleParams;
 	import com.netflix.webapis.vo.PersonVO;
 	import com.netflix.webapis.xml.NetflixXMLUtilV2;
 	
 	import flash.events.Event;
-	import flash.events.IEventDispatcher;
 	import flash.net.URLLoader;
 	
 	[Event(name="peopleResult",type="com.netflix.webapis.events.NetflixResultEvent")]

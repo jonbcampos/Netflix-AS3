@@ -26,7 +26,6 @@ package com.netflix.webapis.services
 	import com.netflix.webapis.events.NetflixResultEvent;
 	import com.netflix.webapis.params.ParamsBase;
 	import com.netflix.webapis.params.QueueParams;
-	import com.netflix.webapis.params.RatingParams;
 	import com.netflix.webapis.vo.CatalogItemVO;
 	import com.netflix.webapis.vo.QueueItemVO;
 	import com.netflix.webapis.vo.TitleStateItemVO;
@@ -34,7 +33,6 @@ package com.netflix.webapis.services
 	import com.netflix.webapis.xml.NetflixXMLUtilV2;
 	
 	import flash.events.Event;
-	import flash.events.IEventDispatcher;
 	import flash.net.URLLoader;
 	
 	[Event(name="discQueueResult",type="com.netflix.webapis.events.NetflixResultEvent")]

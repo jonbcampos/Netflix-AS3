@@ -37,7 +37,6 @@ package com.netflix.webapis.xml
 	import com.netflix.webapis.vo.RentalHistoryItemVO;
 	import com.netflix.webapis.vo.ScreenFormatVO;
 	import com.netflix.webapis.vo.SubtitleVO;
-	import com.netflix.webapis.vo.TitleFormatVO;
 	import com.netflix.webapis.vo.TitleStateItemVO;
 	import com.netflix.webapis.vo.TitleStateVO;
 	

@@ -79,9 +79,7 @@ package com.netflix.webapis.params
 		override public function toString():String
 		{
 			var returnString:String = super.toString();
-			
 			if(term && term!="") returnString+="&term=" + escape(term);
-			
 			return returnString;
 		}
 		/**

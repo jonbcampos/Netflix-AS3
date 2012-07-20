@@ -24,18 +24,15 @@ package com.netflix.webapis.services
 	import com.netflix.webapis.ServiceFault;
 	import com.netflix.webapis.events.AuthenticationResultEvent;
 	import com.netflix.webapis.events.NetflixResultEvent;
-	import com.netflix.webapis.xml.NetflixXMLUtilV2;
 	
 	import flash.events.Event;
 	import flash.events.HTTPStatusEvent;
-	import flash.events.IEventDispatcher;
 	import flash.events.IOErrorEvent;
 	import flash.events.ProgressEvent;
 	import flash.net.URLLoader;
 	import flash.net.URLLoaderDataFormat;
 	import flash.net.URLRequest;
 	import flash.net.navigateToURL;
-	import flash.sampler.stopSampling;
 	
 	import org.iotashan.oauth.OAuthRequest;
 	import org.iotashan.utils.URLEncoding;

@@ -26,13 +26,11 @@ package com.netflix.webapis.services
 	import com.netflix.webapis.events.UsersResultEvent;
 	import com.netflix.webapis.params.ParamsBase;
 	import com.netflix.webapis.params.UserParams;
-	import com.netflix.webapis.vo.CatalogItemVO;
 	import com.netflix.webapis.vo.CategoryItemVO;
 	import com.netflix.webapis.vo.NetflixUser;
 	import com.netflix.webapis.xml.NetflixXMLUtilV2;
 	
 	import flash.events.Event;
-	import flash.events.IEventDispatcher;
 	import flash.net.URLLoader;
 
 	/**
